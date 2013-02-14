@@ -8,8 +8,52 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <header>
+    <div class='user'>
+      <ul class='user'>
+        <li class='pull-right'><a href="#">Logout</a></li>
+        <li class='pull-right'>Hi <a href="#">Mary</a>&nbsp;|&nbsp;</li>
+      </ul>
+    </div>
 
-<%= yield %>
+    <div class='image'>
+      <img src="/assets/inbloom.png" />
+    </div>
 
+    <div class='grade-slider'>
+      <ul>
+        <li>K</li>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+        <li>7</li>
+        <li>8</li>
+        <li>9</li>
+        <li>10</li>
+        <li>11</li>
+        <li>12</li>
+      </ul>
+    </div>
+
+  </header>
+
+  <div class='featured'>
+
+  </div>
+
+  <div class='content'>
+    <%= yield %>
+  </div>
+
+  <footer>
+    <ul>
+      <li class='pull-right'><a href="#">Privacy Policy</a></li>
+      <li class='pull-right'><a href="#">Terms of Use</a>&nbsp;|&nbsp;</li>
+      <li class='font-opensans'>inBloom is a Trademark of inBloom, Inc.</li>
+    </ul>
+  </footer>
 </body>
 </html>
