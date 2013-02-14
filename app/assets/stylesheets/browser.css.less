@@ -32,7 +32,6 @@ header {
     li {
       display: inline;
       color: #ffffff;
-      line-height: 32px;
       a {
         color: #0099cc;
       }
@@ -48,14 +47,50 @@ header {
 
   div.user {
     float: right;
+    ul li {
+      line-height: 70px;
+    }
+  }
+
+  div.grade {
+    height: 50px;
+    text-align: center;
+    ul {
+      position: relative;
+      top: 25px;
+      z-index: 1000;
+      li {
+        margin: 0 10px;
+        color: #aaaaaa;
+        &.selected {
+          color: #ffffff;
+        }
+      }
+    }
+  }
+
+  div.slider-handle-left,
+  div.slider-handle-right {
+    z-index: 1005;
+    position: absolute;
+    top: 10px;
+    width: 20px;
+    height: 15px;
+    background: url(/assets/gradeslider-arrows.png) no-repeat;
+    &.snapping {
+      padding-left: 1px;
+    }
   }
 
   div.grade-slider {
-    text-align: center;
-    ul li {
-      padding: 0 10px;
-      line-height: 70px;
-      color: #cccccc;
+    position: absolute;
+    top: 0;
+    z-index: 100;
+    .inner {
+      height: 50px;
+      margin-left: 16px;
+      margin-right: 16px;
+      background: url(/assets/gradeslider-gradient.png) repeat-x;
     }
   }
 
