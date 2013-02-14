@@ -19,7 +19,7 @@ $(function() {
         12 : {'minimum':-27,'maximum':46, 'leftBoundary': 411, 'rightBoundary': 455}
     }
     // Now turn on all grade items
-    setTimeout(function(){ setGradeRangeSlider(gradeRanges); },100);
+    setTimeout(function(){ setGradeRangeSlider(gradeRanges); },500);
 
     // Make Left Handle Draggable
     $('div.slider-handle-left').draggable({
