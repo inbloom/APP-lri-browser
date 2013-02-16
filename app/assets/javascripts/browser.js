@@ -96,8 +96,8 @@ function setGradeRangeSlider(ranges) {
     $('.grade-slider').offset({ 'left': slider_left });
     $('.grade-slider').width(slider_right);
     // Set the handles locations
-    $('.slider-handle-left').offset({ 'left': slider_left + 6 });
-    $('.slider-handle-right').offset({ 'left': slider_right + slider_left - 26 });
+    $('.slider-handle-left').offset({ 'left': slider_left + 6 }).show();
+    $('.slider-handle-right').offset({ 'left': slider_right + slider_left - 26 }).show();
     // Set ranges back so we have them.
     gradeRanges = ranges;
 }
