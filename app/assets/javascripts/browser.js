@@ -1,7 +1,9 @@
 // Now set some stuff on ready
 $(function() {
-    // Grade Range Variable Scopes
+    // Some initial values
     gradeRanges = { 'minimum': 0, 'maximum': 12 }
+    subject = 'math';
+    
     // Some position helpers K-12
     loc_offsets = {
         0 : {'minimum':-27,'maximum':39, 'leftBoundary': 10, 'rightBoundary': 43},
@@ -18,8 +20,12 @@ $(function() {
         11 : {'minimum':-27,'maximum':46, 'leftBoundary': 371, 'rightBoundary': 411},
         12 : {'minimum':-27,'maximum':46, 'leftBoundary': 411, 'rightBoundary': 455}
     }
-    // Now turn on all grade items
-    setTimeout(function(){ setGradeRangeSlider(gradeRanges); },500);
+
+    // Now turn on the UI and set defaults
+    setTimeout(function(){
+        setGradeRange(gradeRanges);
+        setSubject(subject);
+    },500);
 
     // Make Left Handle Draggable
     $('div.slider-handle-left').draggable({
@@ -30,12 +36,12 @@ $(function() {
             for (i in loc_offsets) {
                 if (i > gradeRanges.maximum) continue;
                 if (position < (loc_offsets[i].leftBoundary+10) && position > (loc_offsets[i].leftBoundary-10)) {
-                    setGradeRangeSlider({'minimum':i});
+                    setGradeRange({'minimum':i});
                 }
             }
         },
         stop: function(event, ui) {
-            setGradeRangeSlider();
+            setGradeRange();
         }
     });
 
@@ -48,33 +54,46 @@ $(function() {
             for (i in loc_offsets) {
                 if (i < gradeRanges.minimum) continue;
                 if (position < (loc_offsets[i].rightBoundary+10) && position > (loc_offsets[i].rightBoundary-10)) {
-                    setGradeRangeSlider({'maximum':i});
+                    setGradeRange({'maximum':i});
                 }
             }
         },
         stop: function(event, ui) {
-            setGradeRangeSlider();
+            setGradeRange();
+        }
+    });
+
+    // Make subjects clickable So that it selects between them -- only one can be selected.
+    $('div.subjects li a').click(function(e) {
+        var a = $(e.target);
+        var li = a.parent();
+        if (li.hasClass('disabled')) return false;
+        setSubject(a.html());
+        return false;
+    });
+
+    // Click to open/close the featured stuff
+    $('div.divider a').click(function(e) {
+        var a = $(e.target);
+        if (a.hasClass('closed')) {
+            $('div.featured').animate({ height: 'show' }, 600, 'easeInOutCubic', function() {
+                a.removeClass('closed');
+            });
+        } else {
+            $('div.featured').animate({ height: 'hide' }, 600, 'easeInOutCubic', function() {
+                a.addClass('closed');
+            });
         }
     });
 
     // Set onresize handlers
     $(window).resize(function() {
-        setGradeRangeSlider(gradeRanges);
+        setGradeRange(gradeRanges);
     });
 });
 
-// Set grade range but not slider
-function setGradeRange(ranges) {
-    $('div.grade li').removeClass('selected');
-    for (i=ranges.minimum;i<=ranges.maximum;i++) {
-        $('li._'+i).addClass('selected');
-    }
-    // Set ranges
-    gradeRanges = ranges;
-}
-
 // Set grade range and the slider
-function setGradeRangeSlider(ranges) {
+function setGradeRange(ranges) {
     // Allow some or all arguments to be blank
     if (ranges == undefined) ranges = gradeRanges;
     if (ranges.minimum == undefined) ranges.minimum = gradeRanges.minimum;
@@ -88,7 +107,16 @@ function setGradeRangeSlider(ranges) {
         'right' : Math.ceil($('li._12').offset().left + loc_offsets[12].maximum)
     };
     // First set the ranges
-    setGradeRange(ranges);
+    $('div.grade li').removeClass('selected');
+    for (i=ranges.minimum;i<=ranges.maximum;i++) {
+        $('li._'+i).addClass('selected');
+    }
+    // Set ranges back to variable
+    gradeRanges = ranges;
+    // Set them to the form
+    $('#form-grade-minimum').attr('value', ranges.minimum);
+    $('#form-grade-maximum').attr('value', ranges.maximum);
+    // Now position the sliders
     // Some helpers to set width
     var slider_left = Math.ceil($('li._'+ranges.minimum).offset().left + loc_offsets[ranges.minimum].minimum);
     var slider_right = Math.ceil(($('li._'+ranges.maximum).offset().left - slider_left) + loc_offsets[ranges.maximum].maximum);
@@ -96,8 +124,26 @@ function setGradeRangeSlider(ranges) {
     $('.grade-slider').offset({ 'left': slider_left });
     $('.grade-slider').width(slider_right);
     // Set the handles locations
+
     $('.slider-handle-left').offset({ 'left': slider_left + 6 }).show();
     $('.slider-handle-right').offset({ 'left': slider_right + slider_left - 26 }).show();
-    // Set ranges back so we have them.
-    gradeRanges = ranges;
+}
+
+// Set the subject and move the cursor accordingly
+function setSubject(subject) {
+    if ($('div.subjects li._'+subject).length == 1) {
+        $('div.subjects li').removeClass('selected');
+        $('div.subjects li._'+subject).addClass('selected');
+        $('#form-subject').attr('value', subject);
+
+        var tWidth = $('div.subjects li._'+subject).width();
+        var tLeft = $('div.subjects li._'+subject).offset().left;
+        var tCenter = tLeft + (tWidth /2);
+        var cPosition = tCenter - ($('div.subject-cursor').width()/2) + 3;
+
+        $('div.subject-cursor').animate({'left': cPosition}, 300, 'easeInOutCubic', function() {
+            $('div.subject-cursor').show();
+        });
+    }
+
 }

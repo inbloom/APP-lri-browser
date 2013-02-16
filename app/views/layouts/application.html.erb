@@ -8,68 +8,96 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <header>
-    <div class='container'>
+  <form>
+    <input type='hidden' name='grade[minimum]' id='form-grade-minimum' />
+    <input type='hidden' name='grade[maximum]' id='form-grade-maximum' />
+    <input type='hidden' name='subject' id='form-subject' />
 
-      <div class='user'>
-        <ul class='user'>
-          <li class='pull-right'><a href="#">Logout</a></li>
-          <li class='pull-right'>Hi <a href="#">Mary</a>&nbsp;|&nbsp;</li>
-        </ul>
-      </div>
+    <header>
+      <div class='container'>
 
-      <div class='image'>
-        <img src="/assets/inbloom.png" />
-      </div>
+        <div class='user'>
+          <ul class='user'>
+            <li class='pull-right'><a href="#">Logout</a></li>
+            <li class='pull-right'>Hi <a href="#">Mary</a>&nbsp;|&nbsp;</li>
+          </ul>
+        </div>
 
-      <div class='grade'>
+        <div class='image'>
+          <img src="/assets/inbloom.png" />
+        </div>
 
-        <ul>
-          <li class='_0'>K</li>
-          <li class='_1'>1</li>
-          <li class='_2'>2</li>
-          <li class='_3'>3</li>
-          <li class='_4'>4</li>
-          <li class='_5'>5</li>
-          <li class='_6'>6</li>
-          <li class='_7'>7</li>
-          <li class='_8'>8</li>
-          <li class='_9'>9</li>
-          <li class='_10'>10</li>
-          <li class='_11'>11</li>
-          <li class='_12'>12</li>
-        </ul>
+        <div class='grade'>
 
-        <div class='slider-handle-left'></div>
-        <div class='slider-handle-right'></div>
-        <div class='grade-slider'>
-          <div class='inner'>
+          <ul>
+            <li class='_0'>K</li>
+            <li class='_1'>1</li>
+            <li class='_2'>2</li>
+            <li class='_3'>3</li>
+            <li class='_4'>4</li>
+            <li class='_5'>5</li>
+            <li class='_6'>6</li>
+            <li class='_7'>7</li>
+            <li class='_8'>8</li>
+            <li class='_9'>9</li>
+            <li class='_10'>10</li>
+            <li class='_11'>11</li>
+            <li class='_12'>12</li>
+          </ul>
+
+          <div class='slider-handle-left'></div>
+          <div class='slider-handle-right'></div>
+          <div class='grade-slider'>
+            <div class='inner'>
+            </div>
           </div>
+
         </div>
 
       </div>
+    </header>
 
+    <div class='middle'>
+      <div class='container'>
+        <div class='subjects'>
+          <div class='subject-cursor'></div>
+          <ul>
+            <li class='disabled watermark'><strong>LRI</strong>Browser</li>
+            <li class='_math'><a href="#">math</a></li>
+            <li class='_english'><a href="#">english</a></li>
+            <li class='_science disabled'><a href="#">science</a></li>
+            <li class='_history disabled'><a href="#">history</a></li>
+            <li class='_other disabled'><a href="#">other</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class='container'>
+        <div class='featured'>
+          <img src='/assets/tmp.png' />
+        </div>
+      </div>
+
+      <div class='divider'>
+        <a href="#">&nbsp;</a>
+      </div>
+
+      <div class='container'>
+        <div class='content'>
+          <%= yield %>
+        </div>
+      </div>
     </div>
-  </header>
 
-  <div class='container'>
-    <div class='featured'>
-
-    </div>
-
-    <div class='content'>
-      <%= yield %>
-    </div>
-  </div>
-
-  <footer>
-    <div class='container'>
-      <ul>
-        <li class='pull-right'><a href="#">Privacy Policy</a></li>
-        <li class='pull-right'><a href="#">Terms of Use</a>&nbsp;|&nbsp;</li>
-        <li class='font-opensans'>inBloom is a Trademark of inBloom, Inc.</li>
-      </ul>
-    </div>
-  </footer>
+    <footer>
+      <div class='container'>
+        <ul>
+          <li class='pull-right'><a href="#">Privacy Policy</a></li>
+          <li class='pull-right'><a href="#">Terms of Use</a>&nbsp;|&nbsp;</li>
+          <li class='font-opensans'>inBloom is a Trademark of inBloom, Inc.</li>
+        </ul>
+      </div>
+    </footer>
+  </form>
 </body>
 </html>

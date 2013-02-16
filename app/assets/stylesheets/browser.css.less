@@ -9,8 +9,6 @@
 body {
   margin:0;
   padding:0;
-  background-image: url(/assets/background.png);
-  background-size: 100% 100%;
 }
 
 div.container {
@@ -101,6 +99,86 @@ header {
       margin-left: 16px;
       margin-right: 16px;
       background: url(/assets/gradeslider-gradient.png) repeat-x;
+    }
+  }
+
+}
+
+div.middle {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 30px;
+  background-image: url(/assets/background.png);
+  background-size: 100% 100%;
+
+  div.subjects {
+    text-align: center;
+    margin-bottom: 10px;
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: 16px;
+      font-family: 'Open Sans', sans-serif;
+      text-shadow: 1px 1px 1px #eeeeee;
+      li {
+        z-index: 100;
+        display:inline;
+        height: 60px;
+        line-height: 60px;
+        margin: 0 30px;
+        &.disabled {
+          color: #ababab;
+        }
+        &.selected {
+          color: #0099cc;
+        }
+        &.watermark {
+          float: left;
+          font-size: 22px;
+          font-weight: 200;
+          margin-right: -120px;
+          strong {
+            font-weight: 600;
+          }
+        }
+        a {
+          color: inherit;
+          text-decoration: none;
+        }
+      }
+    }
+    div.subject-cursor {
+      display: none;
+      z-index: 50;
+      position: absolute;
+      top: 45px;
+      left: 0;
+      width: 156px;
+      height: 12px;
+      background: url(/assets/subject-cursor.png) no-repeat;
+    }
+  }
+
+  div.featured {
+    text-align: center;
+  }
+
+  div.divider {
+    margin-top: 15px;
+    background: url(/assets/page-divider.png) repeat-x top;
+    text-align: center;
+    a {
+      display: inline-block;
+      margin-top: 3px;
+      width: 89px;
+      height: 19px;
+      background: url(/assets/page-tab-close.png) no-repeat;
+      &.closed {
+        background: url(/assets/page-tab-open.png) no-repeat;
+      }
     }
   }
 
