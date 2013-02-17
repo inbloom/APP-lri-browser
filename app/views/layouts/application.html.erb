@@ -19,7 +19,13 @@
         <div class='user'>
           <ul class='user'>
             <li class='pull-right'><a href="#">Logout</a></li>
-            <li class='pull-right'>Hi <a href="#">Mary</a>&nbsp;|&nbsp;</li>
+            <li class='pull-right'><% if current_user %>
+              Hi, <%= current_user.full_name %> | <%= link_to "Sign Out", signout_path, :class => "muted" %>
+              <%= @slc_request %>
+            <% else %>
+              <%= link_to "Sign in with inBloom", "/auth/slc" %>
+            <% end %>
+            &nbsp;|&nbsp;</li>
           </ul>
         </div>
 
