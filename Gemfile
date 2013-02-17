@@ -30,6 +30,12 @@ gem "possessive"
 gem "draper"
 # Agnostic Enum Simulator
 gem 'enum_simulator'
+# OAuth Gems for inbloom/slc
+gem 'omniauth'
+gem 'omniauth-slc', '0.0.2'
+gem 'oauth'
+# HTTP Party Rockin
+gem 'httparty'
 
 # Dev/Test env only please
 group :development, :test do
