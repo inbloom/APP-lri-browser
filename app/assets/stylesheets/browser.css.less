@@ -105,7 +105,7 @@ header {
 }
 
 div.middle {
-  position: absolute;
+  position: fixed;
   top: 50px;
   left: 0;
   right: 0;
@@ -182,6 +182,115 @@ div.middle {
     }
   }
 
+  div.content {
+    margin: 0 28px;
+    ul.tabs {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: 9px;
+      font-family: 'Open Sans', sans-serif;
+      text-transform: uppercase;
+      li {
+        position: relative;
+        z-index: 10;
+        width: 85px;
+        height: 17px;
+        display: inline-block;
+        text-align: center;
+        background: url(/assets/tab-inactive.png) no-repeat;
+        &.browse {
+          left: -20px;
+        }
+        a {
+          color: #333333;
+          font-weight: 800;
+          line-height: 8px;
+          text-decoration: none;
+          vertical-align: bottom;
+        }
+        &.active {
+          z-index: 100;
+          background: url(/assets/tab-active.png) no-repeat;
+          a {
+            color: #ffffff;
+          }
+        }
+      }
+    }
+    div.main {
+      float: left;
+      border: 1px solid black;
+      width: 743px;
+      height: 333px;
+      margin-right: 23px;
+    }
+    div.collections {
+      float:left;
+      border: 1px solid black;
+      width: 198px;
+      height: 333px;
+      div.title {
+        border-bottom: 1px solid #000000;
+        border-top: 1px solid #ececec;
+        display: block;
+        padding-left: 6px;
+        line-height: 22px;
+        height: 23px;
+        font-size: 14px;
+        font-family: 'Open Sans', sans-serif;
+        text-shadow: 1px 1px 1px #ffffff;
+        font-style: italic;
+        font-weight: 500px;
+        background: #cccccc;
+      }
+      div.pagination {
+        border-top: 1px solid #ececec;
+        display: block;
+        padding-left: 6px;
+        line-height: 22px;
+        height: 23px;
+        font-size: 14px;
+        font-family: 'Open Sans', sans-serif;
+        text-shadow: 1px 1px 1px #ffffff;
+        font-style: italic;
+        font-weight: 500px;
+        background: #cccccc;
+      }
+    }
+  }
+}
+
+div.item {
+  margin: 0;
+  padding: 0;
+  height: 70px;
+  width: 198px;
+  background: #e7e8e9;
+  display: inline-block;
+  border-top: 1px solid black;
+  div.inner {
+    border-top: 1px solid #ececec;
+  }
+  &.landingzone {
+    color: #666666;
+    font-size: 12px;
+    font-family: 'Open Sans', sans-serif;
+    text-shadow: 1px 1px 1px #ffffff;
+    font-style: italic;
+    text-align: center;
+    background: #cccccc;
+    span {
+      color: #333333;
+      font-size: 14px;
+      font-family: 'Open Sans', sans-serif;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    div {
+      padding-top: 16px;
+    }
+  }
 }
 
 footer {

@@ -82,9 +82,38 @@
         <a href="#">&nbsp;</a>
       </div>
 
-      <div class='container'>
-        <div class='content'>
-          <%= yield %>
+      <div class='bottom'>
+        <div class='container'>
+          <div class='content'>
+            <ul class='tabs'>
+              <li class='active search'><a href="#">Search</a></li>
+              <li class='inactive browse'><a href="#">Browse</a></li>
+            </ul>
+            <div class='main'>
+              <%= yield %>
+            </div>
+            <div class='collections'>
+              <div class='title'>
+                My School Collections
+              </div>
+              <div class='pagination'>
+
+              </div>
+              <div class='item landingzone'>
+                <div class='inner'><span>Drag Course Here</span><br />to add to your collection</div>
+              </div>
+              <div class='item landingzone'>
+                <div class='inner'><span>Drag Course Here</span><br />to add to your collection</div>
+              </div>
+              <div class='item landingzone'>
+                <div class='inner'><span>Drag Course Here</span><br />to add to your collection</div>
+              </div>
+              <div class='item landingzone'>
+                <div class='inner'><span>Drag Course Here</span><br />to add to your collection</div>
+              </div>
+
+            </div>
+          </div>
         </div>
       </div>
     </div>
