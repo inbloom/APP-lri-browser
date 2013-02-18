@@ -44,5 +44,6 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'capybara'
+  gem 'faker'
   gem 'thin'
 end
