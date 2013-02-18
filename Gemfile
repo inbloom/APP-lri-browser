@@ -40,5 +40,9 @@ gem 'httparty'
 # Dev/Test env only please
 group :development, :test do
 # Use thin as webserver
+  gem 'factory_girl_rails'
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
+  gem 'capybara'
   gem 'thin'
 end
