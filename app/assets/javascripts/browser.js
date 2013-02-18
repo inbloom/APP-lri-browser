@@ -81,10 +81,17 @@ $(function() {
             });
         } else {
             $('div.featured').animate({ height: 'hide' }, 600, 'easeInOutCubic', function() {
+                $.cookie('hideFeatured', true);
+                $.removeCookie('showFeatured');
                 a.addClass('closed');
             });
         }
     });
+
+    if ($.cookie('hideFeatured') == "true") {
+        $('div.featured').hide();
+        $('div.divider a').addClass('closed');
+    }
 
     // Set onresize handlers
     $(window).resize(function() {
@@ -146,4 +153,8 @@ function setSubject(subject) {
         });
     }
 
+}
+
+function test() {
+    console.log('test was called');
 }
