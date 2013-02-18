@@ -1,5 +1,12 @@
 class User < ActiveRecord::Base
-  attr_accessible :email, :name, :provider, :uid
+  attr_accessible :email, :external_id, :full_name, :provider, :user_id, :tenant_id, :realm
+  
+  validates :email, :presence => true
+  validates :full_name, :presence => true
+  validates :provider, :presence => true
+  validates :user_id, :presence => true
+  validates :tenant_id, :presence => true
+  validates :realm, :presence => true
   
   has_many :collectables
   
