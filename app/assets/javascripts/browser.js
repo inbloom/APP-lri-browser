@@ -87,15 +87,42 @@ $(function() {
             });
         }
     });
-
+    // Set state of featured slider with cookie
     if ($.cookie('hideFeatured') == "true") {
         $('div.featured').hide();
         $('div.divider a').addClass('closed');
     }
 
+    // Initialization of the accordion
+    $("#accordion").accordion({
+        heightStyle:"fill",
+        animate: "easeInOutCubic"
+    });
+
+    // Make items that aren't landing zones draggable using a live event!
+    $(document).on("mouseover", 'div.item:not(.landingzone):not(.collected)', function() {
+        $(this).draggable({
+            helper: 'clone',
+            opacity: 0.7,
+            revert: 'invalid'
+        });
+    });
+    // Setup landing zones
+    $('div.item.landingzone').droppable({
+        hoverClass: 'hovering',
+        drop: function(e,u) {
+            var clone = u.draggable.clone().addClass('collected').hide().prependTo('div.collections span.zone');
+            clone.animate({height:'show'}, 600, 'easeInOutCubic', function(obj) {
+                collectItem(this);
+            });
+            $('div.collections span.zone div.item:nth-child(4)').animate({height:'hide'}, 600, 'easeInOutCubic');
+        }
+    });
+
     // Set onresize handlers
     $(window).resize(function() {
         setGradeRange(gradeRanges);
+        $("#accordion").accordion("refresh");
     });
 });
 
@@ -155,6 +182,10 @@ function setSubject(subject) {
 
 }
 
-function test() {
-    console.log('test was called');
+// Set object to the server as being saved in a collection
+function collectItem(item) {
+    // Here we will send to the server the item id we are saving.
+    // We need to get an updated pagination here and send that back tot he collections div.
+console.log(item);
 }
+
