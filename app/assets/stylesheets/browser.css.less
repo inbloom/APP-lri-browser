@@ -229,9 +229,13 @@ div.middle {
       position: relative;
       float: left;
       border: 1px solid black;
-      width: 743px;
-      height: 333px;
-      margin-right: 23px;
+      width: 747px;
+      height: 331px;
+      margin-right: 19px;
+
+      div.item:nth-child(3n+3) {
+        border-right: 0;
+      }
 
       div.accordion {
         position: absolute;
@@ -240,6 +244,27 @@ div.middle {
         bottom: 0;
         width: 150px;
         border-right: 1px solid #000000;
+        div#accordion {
+          h3 {
+            cursor: pointer;
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            font-style: italic;
+            font-family: 'Open Sans', sans-serif;
+            line-height: 23px;
+            margin: 0;
+            padding: 0 10px;
+            border-bottom: 1px solid #000000;
+            outline: none;
+            &:last-of-type {
+              border: 0;
+            }
+          }
+          div {
+            background: #000000;
+          }
+        }
       }
       div.notaccordion {
         position: absolute;
@@ -247,6 +272,53 @@ div.middle {
         left: 151px;
         right: 0;
         bottom: 0;
+        div.search {
+          height: 23px;
+          border-bottom: 1px solid #000000;
+          div.search-input {
+            float: left;
+            width: 401px;
+            border-right: 1px solid #000000;
+            input {
+              border: 0;
+              padding: 0 5px;
+              margin: 0;
+              height: 23px;
+              width: 100%;
+              outline: none;
+            }
+          }
+          div.search-buttons {
+            float: left;
+            button {
+              height: 23px;
+              width: 97px;
+              border: 1px solid #f5f5f5;
+              background: #000000;
+              margin: 0;
+              padding: 0;
+              color: #ffffff;
+              font-family: 'Open Sans', sans-serif;
+              font-weight: 600;
+              text-transform: uppercase;
+              font-size: 9px;
+              &:first-of-type {
+                border-right: 0;
+              }
+            }
+          }
+        }
+        div.pagination {
+          clear: left;
+          height: 23px;
+          line-height: 22px;
+          text-align: center;
+          border-bottom: 1px solid #000000;
+          font-family: 'Open Sans', sans-serif;
+          text-transform: uppercase;
+          font-weight: 600;
+          font-size: 11px;
+        }
       }
 
     }
@@ -254,7 +326,8 @@ div.middle {
       float:left;
       border: 1px solid black;
       width: 198px;
-      height: 333px;
+      height: 331px;
+      overflow: hidden;
       div.title {
         border-bottom: 1px solid #000000;
         border-top: 1px solid #ececec;
@@ -287,15 +360,50 @@ div.middle {
 }
 
 div.item {
-  margin: 0;
+  float:left;
+  margin: -1px 0 0 -1px;
   padding: 0;
   height: 70px;
   width: 198px;
   background: #e7e8e9;
   display: inline-block;
-  border-top: 1px solid black;
+  border: 1px solid black;
+  cursor: pointer;
   div.inner {
+    position: relative;
     border-top: 1px solid #ececec;
+    & > img {
+      float: left;
+      border: 1px solid #999999;
+      width: 64px;
+      height: 64px;
+      margin: 1px 5px 0 2px;
+    }
+    h3 {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin: 0;
+      padding: 0;
+      color: #333333;
+    }
+    h4 {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 200;
+      font-style: italic;
+      margin: 0;
+      padding: 0;
+      color: #999999;
+    }
+    hr {
+      height: 0px;
+      border: 0;
+      margin-right: 6px;
+      border-top: 1px solid #cccccc;
+      border-bottom: 1px solid #fafafa;
+    }
   }
   &.landingzone {
     color: #666666;
@@ -315,6 +423,12 @@ div.item {
     div {
       padding-top: 16px;
     }
+    &.hovering {
+      background: #eee;
+    }
+  }
+  &.ui-draggable-dragging {
+    z-index: 5000;
   }
 }
 
