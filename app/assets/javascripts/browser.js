@@ -111,12 +111,32 @@ $(function() {
     $('div.item.landingzone').droppable({
         hoverClass: 'hovering',
         drop: function(e,u) {
+            // @TODO Test to see if the dragged item exists in collections already
             var clone = u.draggable.clone().addClass('collected').hide().prependTo('div.collections span.zone');
-            clone.animate({height:'show'}, 600, 'easeInOutCubic', function(obj) {
+            clone.animate({height:'show'}, 600, 'easeInOutCubic', function() {
                 collectItem(this);
             });
-            $('div.collections span.zone div.item:nth-child(4)').animate({height:'hide'}, 600, 'easeInOutCubic');
+            $('div.collections span.zone div.item:nth-child(4)').animate({height:'hide'}, 600, 'easeInOutCubic', function() {
+                $(this).remove();
+            });
         }
+    });
+
+    // Make form work via ajax post
+    $(document).on('submit', '#superform', function() {
+        var request = $.ajax({
+            url: $(this).attr('action'),
+            type: 'post',
+            dataType: 'json'
+        });
+        request.done(function(xhr, status) {
+            redrawSearchResults(xhr);
+        });
+        request.fail(function(xhr, status) {
+            // TODO An actual modal with error messages and what not is needed!
+            alert('Search Failed: ' + status);
+        })
+        return false;
     });
 
     // Set onresize handlers
@@ -179,13 +199,51 @@ function setSubject(subject) {
             $('div.subject-cursor').show();
         });
     }
-
 }
 
 // Set object to the server as being saved in a collection
 function collectItem(item) {
     // Here we will send to the server the item id we are saving.
     // We need to get an updated pagination here and send that back tot he collections div.
-console.log(item);
+    console.log(item);
 }
 
+// Here we redraw the search results panel from an xhr.
+function redrawSearchResults(res) {
+    // clear the panel
+    $('div.results').empty();
+    var items = res.items;
+
+    for (var i=0;i<12;i++) {
+        if (items[i] == undefined) continue;
+        var tmp = $('div.item.hidden').clone();
+        $(tmp).attr('data-itemid', items[i]['id']);
+        $(tmp).find('img.thumb').attr('src',items[i]['img']);
+        $(tmp).find('h3').attr('title',items[i]['title']).html(truncateString(items[i]['title'],13));
+        $(tmp).find('h4').html(items[i]['provider']);
+        $(tmp).removeClass('hidden');
+        $(tmp).appendTo('div.results');
+    }
+
+
+
+//    <div class='item'>
+//        <div class='inner'>
+//            <img src='/assets/tmp-2.png' />
+//            <div>
+//                <h3>Chemistry Video</h3>
+//                <h4>Provider Name</h4>
+//                <hr />
+//                <img src='/assets/popularity-pill-on.png' /><img src='/assets/popularity-pill-off.png' /><img src='/assets/popularity-pill-off.png' />
+//            </div>
+//        </div>
+//    </div>
+
+    console.log(items);
+}
+
+// Helper function to truncate the title
+function truncateString(string, length) {
+    if (string.length <= length + 1) return string;
+    return string.substring(0, length-2) + '&hellip;'
+}
