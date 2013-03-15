@@ -44,7 +44,22 @@
       </div>
     </header>
 
-    <%= yield %>
+    <section>
+      <div class='container'>
+        <div class='middle'>
+
+          <div class='controls'>
+            <div class='control icon-teachers'><input type="checkbox" name="filter[teachers]" value="on" id="teachersCheckbox"/><label for="teachersCheckbox">For Teachers</label></div>
+            <div class='control icon-students'><input type="checkbox" name="filter[students]" value="on" id="studentsCheckbox"/><label for="studentsCheckbox">For Students</label></div>
+            <div class='control icon-pages'><input type="checkbox" name="filter[pages]" value="on" id="pagesCheckbox"/><label for="pagesCheckbox">Reading & Web Pages</label></div>
+            <div class='control icon-finger'><input type="checkbox" name="filter[media]" value="on" id="mediaCheckbox"/><label for="mediaCheckbox">Audio / Video / Interactive</label></div>
+          </div>
+
+        </div>
+
+        <%= yield %>
+      </div>
+    </section>
 
   </form>
 </body>

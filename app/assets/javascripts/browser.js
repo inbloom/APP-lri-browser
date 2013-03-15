@@ -77,54 +77,21 @@ $(function() {
         return false;
     });
 
-    // Click to open/close the featured stuff
-    $('div.divider a').click(function(e) {
-        var a = $(e.target);
-        if (a.hasClass('closed')) {
-            $('div.featured').animate({ height: 'show' }, 600, 'easeInOutCubic', function() {
-                a.removeClass('closed');
-            });
-        } else {
-            $('div.featured').animate({ height: 'hide' }, 600, 'easeInOutCubic', function() {
-                $.cookie('hideFeatured', true);
-                $.removeCookie('showFeatured');
-                a.addClass('closed');
-            });
-        }
-    });
-    // Set state of featured slider with cookie
-    if ($.cookie('hideFeatured') == "true") {
-        $('div.featured').hide();
-        $('div.divider a').addClass('closed');
-    }
-
     // Initialization of the accordion
     $("#accordion").accordion({
         heightStyle:"fill",
         animate: "easeInOutCubic"
     });
 
-    // Make items that aren't landing zones draggable using a live event!
-    $(document).on("mouseover", 'div.item:not(.landingzone):not(.collected)', function() {
-        $(this).draggable({
-            helper: 'clone',
-            opacity: 0.7,
-            revert: 'invalid'
-        });
+    $(document).on('click', '#_mathmatics', function() {
+        subject = 'mathmatics';
+        setSubject(subject);
+        return false;
     });
-    // Setup landing zones
-    $('div.item.landingzone').droppable({
-        hoverClass: 'hovering',
-        drop: function(e,u) {
-            // @TODO Test to see if the dragged item exists in collections already
-            var clone = u.draggable.clone().addClass('collected').hide().prependTo('div.collections span.zone');
-            clone.animate({height:'show'}, 600, 'easeInOutCubic', function() {
-                collectItem(this);
-            });
-            $('div.collections span.zone div.item:nth-child(4)').animate({height:'hide'}, 600, 'easeInOutCubic', function() {
-                $(this).remove();
-            });
-        }
+    $(document).on('click', '#_languagearts', function() {
+        subject = 'languagearts';
+        setSubject(subject);
+        return false;
     });
 
     // Make form work via ajax post
@@ -189,14 +156,12 @@ function setSubject(subject) {
     $('div.subjects button').removeClass('selected');
     $('div.subjects button#_'+subject).addClass('selected');
     $('#form-subject').attr('value', subject);
+
+    // Transition old panel off
+
+    $('div.panel._'+subject).show();
 }
 
-// Set object to the server as being saved in a collection
-function collectItem(item) {
-    // Here we will send to the server the item id we are saving.
-    // We need to get an updated pagination here and send that back tot he collections div.
-    console.log(item);
-}
 
 // Here we redraw the search results panel from an xhr.
 function redrawSearchResults(res) {
