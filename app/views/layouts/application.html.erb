@@ -21,7 +21,9 @@
 
           <div class='clearfix'></div>
 
-          <button id="_mathmatics">Mathmatics</button><button id="_languagearts">Language Arts</button>
+          <div class='subjects'>
+            <button id="_mathmatics">Mathmatics</button><button id="_languagearts">Language Arts</button>
+          </div>
         </div>
 
         <div class='grade'>
@@ -42,17 +44,7 @@
       </div>
     </header>
 
-    <div class='middle'>
-    </div>
-
-
-    <div class='main'>
-        <div class='container'>
-
-              <%= yield %>
-
-        </div>
-    </div>
+    <%= yield %>
 
   </form>
 </body>

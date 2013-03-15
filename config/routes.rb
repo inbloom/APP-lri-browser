@@ -20,6 +20,6 @@ Browser::Application.routes.draw do
   match "/signout" => "sessions#destroy", :as => :signout
 
   # Until we get the products united, just forward to tagger code
-  root :to => 'browser#index'
+  root :to => 'browser#mathmatics'
 
 end

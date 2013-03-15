@@ -186,20 +186,9 @@ function setGradeRange(ranges) {
 
 // Set the subject and move the cursor accordingly
 function setSubject(subject) {
-    if ($('div.subjects li._'+subject).length == 1) {
-        $('div.subjects li').removeClass('selected');
-        $('div.subjects li._'+subject).addClass('selected');
-        $('#form-subject').attr('value', subject);
-
-        var tWidth = $('div.subjects li._'+subject).width();
-        var tLeft = $('div.subjects li._'+subject).offset().left;
-        var tCenter = tLeft + (tWidth /2);
-        var cPosition = tCenter - ($('div.subject-cursor').width()/2) + 3;
-
-        $('div.subject-cursor').animate({'left': cPosition}, 300, 'easeInOutCubic', function() {
-            $('div.subject-cursor').show();
-        });
-    }
+    $('div.subjects button').removeClass('selected');
+    $('div.subjects button#_'+subject).addClass('selected');
+    $('#form-subject').attr('value', subject);
 }
 
 // Set object to the server as being saved in a collection
