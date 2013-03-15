@@ -16,117 +16,39 @@
     <header>
       <div class='container'>
 
-        <div class='user'>
-          <ul class='user'>
-            <li class='pull-right'><a href="#">Logout</a></li>
-            <li class='pull-right'><% if current_user %>
-              Hi, <%= current_user.full_name %> | <%= link_to "Sign Out", signout_path, :class => "muted" %>
-              <%= @slc_request %>
-            <% else %>
-              <%= link_to "Sign in with inBloom", "/auth/slc" %>
-            <% end %>
-            &nbsp;|&nbsp;</li>
-          </ul>
-        </div>
-
         <div class='image'>
           <img src="/assets/inbloom.png" />
         </div>
 
         <div class='grade'>
-
+          <span>K</span>
           <ul>
-            <li class='_0'>K</li>
-            <li class='_1'>1</li>
-            <li class='_2'>2</li>
-            <li class='_3'>3</li>
-            <li class='_4'>4</li>
-            <li class='_5'>5</li>
-            <li class='_6'>6</li>
-            <li class='_7'>7</li>
-            <li class='_8'>8</li>
-            <li class='_9'>9</li>
-            <li class='_10'>10</li>
-            <li class='_11'>11</li>
-            <li class='_12'>12</li>
+            <li class='_0'></li><li class='_1'></li><li class='_2'></li><li class='_3'></li><li class='_4'></li><li class='_5'></li><li class='_6'></li><li class='_7'></li><li class='_8'></li><li class='_9'></li><li class='_10'></li><li class='_11'></li><li class='_12'></li>
           </ul>
+          <span>12</span>
 
           <div class='slider-handle-left'></div>
           <div class='slider-handle-right'></div>
-          <div class='grade-slider'>
-            <div class='inner'>
-            </div>
-          </div>
-
         </div>
 
+        <div class='search'>
+          <input type="text" name="search" id="form-search-filter" placeholder="Search" />
+        </div>
       </div>
     </header>
 
     <div class='middle'>
-      <div class='container'>
-        <div class='subjects'>
-          <div class='subject-cursor'></div>
-          <ul>
-            <li class='disabled watermark'><strong>LRI</strong>Browser</li>
-            <li class='_math'><a href="#">math</a></li>
-            <li class='_english'><a href="#">english</a></li>
-            <li class='_science disabled'><a href="#">science</a></li>
-            <li class='_history disabled'><a href="#">history</a></li>
-            <li class='_other disabled'><a href="#">other</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class='container'>
-        <div class='featured'>
-          <iframe src="http://lri.wpengine.com"></iframe>
-        </div>
-      </div>
-
-      <div class='divider'>
-        <a href="#">&nbsp;</a>
-      </div>
-
-      <div class='bottom'>
-        <div class='container'>
-          <div class='content'>
-            <ul class='tabs'>
-              <li class='active search'><a href="#">Search</a></li>
-              <li class='inactive browse'><a href="#">Browse</a></li>
-            </ul>
-            <div class='main'>
-              <%= yield %>
-            </div>
-            <div class='collections'>
-              <div class='title'>
-                My School Collections
-              </div>
-              <div class='pagination'>
-
-              </div>
-              <div class='item landingzone'>
-                <div class='inner'><span>Drag Course Here</span><br />to add to your collection</div>
-              </div>
-
-              <span class='zone'>
-
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 
-    <footer>
-      <div class='container'>
-        <ul>
-          <li class='pull-right'><a href="#">Privacy Policy</a></li>
-          <li class='pull-right'><a href="#">Terms of Use</a>&nbsp;|&nbsp;</li>
-          <li class='font-opensans'>inBloom is a Trademark of inBloom, Inc.</li>
-        </ul>
-      </div>
-    </footer>
+
+    <div class='main'>
+        <div class='container'>
+
+              <%= yield %>
+
+        </div>
+    </div>
+
   </form>
 </body>
 </html>

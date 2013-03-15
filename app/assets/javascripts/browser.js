@@ -4,28 +4,33 @@ $(function() {
     gradeRanges = { 'minimum': 0, 'maximum': 12 }
     subject = 'math';
     
-    // Some position helpers K-12
+    // Some position helpers K-12 in the event the need to be different sizes
+    // Minimum is the offset for the left slider position compared to actual
+    // Maximum is the offset for the right slider position compared to actual
+    // Leftboundary is used when moving either slider from left to right
+    // Rightboundary is used when moving either slider from right to left
     loc_offsets = {
-        0 : {'minimum':-27,'maximum':39, 'leftBoundary': 10, 'rightBoundary': 43},
-        1 : {'minimum':-27,'maximum':39, 'leftBoundary': 43, 'rightBoundary': 75},
-        2 : {'minimum':-27,'maximum':39, 'leftBoundary': 75, 'rightBoundary': 107},
-        3 : {'minimum':-27,'maximum':39, 'leftBoundary': 107, 'rightBoundary': 139},
-        4 : {'minimum':-27,'maximum':39, 'leftBoundary': 139, 'rightBoundary': 171},
-        5 : {'minimum':-27,'maximum':39, 'leftBoundary': 171, 'rightBoundary': 203},
-        6 : {'minimum':-27,'maximum':39, 'leftBoundary': 203, 'rightBoundary': 235},
-        7 : {'minimum':-27,'maximum':39, 'leftBoundary': 235, 'rightBoundary': 267},
-        8 : {'minimum':-27,'maximum':39, 'leftBoundary': 267, 'rightBoundary': 299},
-        9 : {'minimum':-27,'maximum':39, 'leftBoundary': 299, 'rightBoundary': 331},
-        10 : {'minimum':-27,'maximum':46, 'leftBoundary': 331, 'rightBoundary': 371},
-        11 : {'minimum':-27,'maximum':46, 'leftBoundary': 371, 'rightBoundary': 411},
-        12 : {'minimum':-27,'maximum':46, 'leftBoundary': 411, 'rightBoundary': 455}
+        0 : {'minimum':-27,'maximum':42, 'leftBoundary': 15, 'rightBoundary': 45},
+        1 : {'minimum':-27,'maximum':42, 'leftBoundary': 45, 'rightBoundary': 75},
+        2 : {'minimum':-27,'maximum':42, 'leftBoundary': 75, 'rightBoundary': 105},
+        3 : {'minimum':-27,'maximum':42, 'leftBoundary': 105, 'rightBoundary': 135},
+        4 : {'minimum':-27,'maximum':42, 'leftBoundary': 135, 'rightBoundary': 165},
+        5 : {'minimum':-27,'maximum':42, 'leftBoundary': 165, 'rightBoundary': 195},
+        6 : {'minimum':-27,'maximum':42, 'leftBoundary': 195, 'rightBoundary': 225},
+        7 : {'minimum':-27,'maximum':42, 'leftBoundary': 225, 'rightBoundary': 255},
+        8 : {'minimum':-27,'maximum':42, 'leftBoundary': 255, 'rightBoundary': 285},
+        9 : {'minimum':-27,'maximum':42, 'leftBoundary': 285, 'rightBoundary': 315},
+        10 : {'minimum':-27,'maximum':42, 'leftBoundary': 315, 'rightBoundary': 345},
+        11 : {'minimum':-27,'maximum':42, 'leftBoundary': 345, 'rightBoundary': 375},
+        12 : {'minimum':-27,'maximum':42, 'leftBoundary': 375, 'rightBoundary': 405}
     }
 
     // Now turn on the UI and set defaults
     setTimeout(function(){
         setGradeRange(gradeRanges);
+        setGradeRange(gradeRanges);
         setSubject(subject);
-    },500);
+    },250);
 
     // Make Left Handle Draggable
     $('div.slider-handle-left').draggable({
@@ -174,13 +179,9 @@ function setGradeRange(ranges) {
     // Some helpers to set width
     var slider_left = Math.ceil($('li._'+ranges.minimum).offset().left + loc_offsets[ranges.minimum].minimum);
     var slider_right = Math.ceil(($('li._'+ranges.maximum).offset().left - slider_left) + loc_offsets[ranges.maximum].maximum);
-    // Set the initial grade slider position
-    $('.grade-slider').offset({ 'left': slider_left });
-    $('.grade-slider').width(slider_right);
     // Set the handles locations
-
-    $('.slider-handle-left').offset({ 'left': slider_left + 6 }).show();
-    $('.slider-handle-right').offset({ 'left': slider_right + slider_left - 26 }).show();
+    $('.slider-handle-left').offset({ 'left': slider_left + 6 }).html((ranges.minimum == 0)?'K':ranges.minimum).show();
+    $('.slider-handle-right').offset({ 'left': slider_right + slider_left - 26 }).html((ranges.maximum == 0)?'K':ranges.maximum).show();
 }
 
 // Set the subject and move the cursor accordingly
