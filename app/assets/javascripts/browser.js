@@ -2,7 +2,7 @@
 $(function() {
     // Some initial values
     gradeRanges = { 'minimum': 0, 'maximum': 12 }
-    subject = 'math';
+    subject = 'mathmatics';
     
     // Some position helpers K-12 in the event the need to be different sizes
     // Minimum is the offset for the left slider position compared to actual
