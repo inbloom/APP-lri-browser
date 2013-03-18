@@ -113,6 +113,7 @@ $(function() {
 
     // Set onresize handlers
     $(window).resize(function() {
+        setSubject(subject,0);
         setGradeRange(gradeRanges);
         $("#accordion").accordion("refresh");
     });
@@ -152,14 +153,20 @@ function setGradeRange(ranges) {
 }
 
 // Set the subject and move the cursor accordingly
-function setSubject(subject) {
+function setSubject(subject, rate) {
+    if (rate == undefined) rate = 500;
     $('div.subjects button').removeClass('selected');
     $('div.subjects button#_'+subject).addClass('selected');
     $('#form-subject').attr('value', subject);
 
     // Transition old panel off
-
-    $('div.panel._'+subject).show();
+    if (subject == 'mathmatics') {
+        $('div.panel._languagearts').stop().animate({left:$(document).width()},rate,'easeInOutCubic',function() { });
+        $('div.panel._mathmatics').show().animate({left:0},rate,'easeInOutCubic');
+    } else if (subject == 'languagearts') {
+        $('div.panel._mathmatics').stop().animate({left:-$(document).width()},rate,'easeInOutCubic',function() { });
+        $('div.panel._languagearts').show().animate({left:0},rate,'easeInOutCubic');
+    }
 }
 
 
