@@ -30,7 +30,11 @@ $(function() {
         setGradeRange(gradeRanges);
         setGradeRange(gradeRanges);
         setSubject(subject);
-    },250);
+        // Initialization of the accordion
+        $(".accordion").accordion({
+            animate: 'easeInOutCubic'
+        });
+    },500);
 
     // Make Left Handle Draggable
     $('div.slider-handle-left').draggable({
@@ -77,11 +81,6 @@ $(function() {
         return false;
     });
 
-    // Initialization of the accordion
-    $("#accordion").accordion({
-        heightStyle:"fill",
-        animate: "easeInOutCubic"
-    });
 
     $(document).on('click', '#_mathmatics', function() {
         subject = 'mathmatics';
@@ -115,7 +114,7 @@ $(function() {
     $(window).resize(function() {
         setSubject(subject,0);
         setGradeRange(gradeRanges);
-        $("#accordion").accordion("refresh");
+        $(".accordion").accordion("refresh");
     });
 });
 
