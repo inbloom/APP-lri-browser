@@ -2,7 +2,7 @@
 $(function() {
     // Some initial values
     gradeRanges = { 'minimum': 0, 'maximum': 12 }
-    subject = 'mathmatics';
+    subject = 'mathematics';
     
     // Some position helpers K-12 in the event the need to be different sizes
     // Minimum is the offset for the left slider position compared to actual
@@ -30,6 +30,8 @@ $(function() {
         setGradeRange(gradeRanges);
         setGradeRange(gradeRanges);
         setSubject(subject);
+        // Build the accordion based on dynamic content (that's hard coded for the time being until we learn to get it from the lri)
+        buildAccordionNavigation($('div.accordion._mathematics'), jsonStandards.CCSS.Math.Content);
         // Initialization of the accordion
         $(".accordion").accordion({
             animate: 'easeInOutCubic'
@@ -82,8 +84,8 @@ $(function() {
     });
 
 
-    $(document).on('click', '#_mathmatics', function() {
-        subject = 'mathmatics';
+    $(document).on('click', '#_mathematics', function() {
+        subject = 'mathematics';
         setSubject(subject);
         return false;
     });
@@ -159,11 +161,11 @@ function setSubject(subject, rate) {
     $('#form-subject').attr('value', subject);
 
     // Transition old panel off
-    if (subject == 'mathmatics') {
+    if (subject == 'mathematics') {
         $('div.panel._languagearts').stop().animate({left:$(document).width()},rate,'easeInOutCubic',function() { });
-        $('div.panel._mathmatics').show().animate({left:0},rate,'easeInOutCubic');
+        $('div.panel._mathematics').show().animate({left:0},rate,'easeInOutCubic');
     } else if (subject == 'languagearts') {
-        $('div.panel._mathmatics').stop().animate({left:-$(document).width()},rate,'easeInOutCubic',function() { });
+        $('div.panel._mathematics').stop().animate({left:-$(document).width()},rate,'easeInOutCubic',function() { });
         $('div.panel._languagearts').show().animate({left:0},rate,'easeInOutCubic');
     }
 }
@@ -172,21 +174,19 @@ function setSubject(subject, rate) {
 // Here we redraw the search results panel from an xhr.
 function redrawSearchResults(res) {
     // clear the panel
-    $('div.results').empty();
-    var items = res.items;
-
-    for (var i=0;i<12;i++) {
-        if (items[i] == undefined) continue;
-        var tmp = $('div.item.hidden').clone();
-        $(tmp).attr('data-itemid', items[i]['id']);
-        $(tmp).find('img.thumb').attr('src',items[i]['img']);
-        $(tmp).find('h3').attr('title',items[i]['title']).html(truncateString(items[i]['title'],13));
-        $(tmp).find('h4').html(items[i]['provider']);
-        $(tmp).removeClass('hidden');
-        $(tmp).appendTo('div.results');
-    }
-
-
+//    $('div.results').empty();
+//    var items = res.items;
+//
+//    for (var i=0;i<12;i++) {
+//        if (items[i] == undefined) continue;
+//        var tmp = $('div.item.hidden').clone();
+//        $(tmp).attr('data-itemid', items[i]['id']);
+//        $(tmp).find('img.thumb').attr('src',items[i]['img']);
+//        $(tmp).find('h3').attr('title',items[i]['title']).html(truncateString(items[i]['title'],13));
+//        $(tmp).find('h4').html(items[i]['provider']);
+//        $(tmp).removeClass('hidden');
+//        $(tmp).appendTo('div.results');
+//    }
 
 //    <div class='item'>
 //        <div class='inner'>
@@ -200,7 +200,7 @@ function redrawSearchResults(res) {
 //        </div>
 //    </div>
 
-    console.log(items);
+//    console.log(items);
 }
 
 // Helper function to truncate the title
@@ -208,3 +208,19 @@ function truncateString(string, length) {
     if (string.length <= length + 1) return string;
     return string.substring(0, length-2) + '&hellip;'
 }
+
+// Build out the accordion navigation based on which standard
+function buildAccordionNavigation(div, standard) {
+    $(div).empty();
+    for (i in standard) {
+        if (i == '_text') continue;
+        var title = standard[i]._text;
+        if (title.indexOf(':') != -1) {
+            title = title.substr(0,title.indexOf(':')) + '<span>' + title.substr(title.indexOf(':'),title.length) + '</span>'
+        } else if (title.indexOf(' ') != -1) {
+            title = title.substr(0,title.indexOf(' ')) + '<span>' + title.substr(title.indexOf(' '),title.length) + '</span>'
+        }
+        $('<h3>' + title + '</h3><div></div>').appendTo(div);
+    }
+}
+
