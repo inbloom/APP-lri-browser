@@ -113,7 +113,15 @@ $(function() {
         return false;
     });
 
-    // Live event for nav links
+    /*
+     * Live event for nav links
+     *
+     * This is the magic of the UI for the time being.  This on click method goes through and pulls the information out
+     * of the standard json blog and updates the UI with the information it has.  If the information isn't there, i tcan't
+     * use it obviously.
+     *
+     */
+
     $(document).on('click', 'a[rel=navlink]', function() {
         // Strip away the #
         var href = $(this).attr('href').replace('#','');
@@ -135,15 +143,45 @@ $(function() {
         eval("var standard = jsonStandards"+notation+";");
 
 
-        // Set the panel information
-
+        // Update the Header information
         // Set the grade in the panel
         $('div.results.'+panel+' span.strand').html(parentStandard._text);
         // Set the domain in the panel
         $('div.results.'+panel+' span.domain').html(standard._text);
 
+        // Update the standards information in the panel
+        $('div.results.'+panel+' div.domains').empty();
+        for (i in standard) {
+            if (i == '_text') continue;
+            for (t in standard[i]) {
+                if (t == '_text') continue;
+                var tmpNotation = notation+'["'+i+'"]["'+t+'"]';
+                var tmpText = tmpNotation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+                $('<a href="#'+tmpText+'">'+tmpText+'</a>').appendTo('div.results.'+panel+' div.domains');
+            }
+        }
 
-        console.log(standard);
+        //Update the standards information
+        $('div.results.'+panel+' div.content').empty();
+        for (i in standard) {
+            if (i == '_text') continue;
+            var tmpTextContent = '';
+            for (t in standard[i]) {
+                if (t == '_text') {
+                    var tmpNotation = notation+'["'+i+'"]["'+t+'"]';
+                    eval("var tmpStandard = jsonStandards"+tmpNotation+";");
+                    tmpTextContent = '<h4>'+tmpStandard+'</h4><ul>' + tmpTextContent;
+                } else {
+                    var tmpNotation = notation+'["'+i+'"]["'+t+'"]';
+                    var tmpText = tmpNotation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+                    eval("var tmpStandard = jsonStandards"+tmpNotation+"['_text'];");
+                    tmpTextContent += '<li><strong>'+tmpText+'</strong>: ' + tmpStandard + '</li>';
+                }
+            }
+            tmpTextContent += '</ul>';
+            $('div.results.'+panel+' div.content').append(tmpTextContent);
+        }
+
         return false;
     });
 
