@@ -142,37 +142,73 @@ $(function() {
         // Eval out the standard
         eval("var standard = jsonStandards"+notation+";");
 
-
         // Update the Header information
         // Set the grade in the panel
         $('div.results.'+panel+' span.strand').html(parentStandard._text);
         // Set the domain in the panel
         $('div.results.'+panel+' span.domain').html(standard._text);
 
-        // Update the standards information in the panel
-        $('div.results.'+panel+' div.domains').empty();
-        for (i in standard) {
-            if (i == '_text') continue;
-            for (t in standard[i]) {
-                if (t == '_text') continue;
-                var tmpNotation = notation+'["'+i+'"]["'+t+'"]';
-                var tmpText = tmpNotation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
-                $('<a href="#'+tmpText+'">'+tmpText+'</a>').appendTo('div.results.'+panel+' div.domains');
+        /** Handle the panels differently based on which one it is.
+         * Okay this sucks, but the irony is that the standards arent standardized so we have to handle them completely differently.
+         */
+
+        // Handle CCSS.Math output
+        if (panel == '_ccssmath') {
+            // Update the standards information in the panel
+            $('div.results.'+panel+' div.domains').empty();
+            for (i in standard) {
+                if (i == '_text') continue;
+                for (t in standard[i]) {
+                    if (t == '_text') continue;
+                    var tmpNotation = notation+'["'+i+'"]["'+t+'"]';
+                    var tmpText = tmpNotation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+                    $('<a href="#'+tmpText+'">'+tmpText+'</a>').appendTo('div.results.'+panel+' div.domains');
+                }
+            }
+
+            //Update the standards information
+            $('div.results.'+panel+' div.content').empty();
+            for (i in standard) {
+                if (i == '_text') continue;
+                var tmpTextContent = '';
+                for (t in standard[i]) {
+                    if (t == '_text') {
+                        var tmpNotation = notation+'["'+i+'"]["'+t+'"]';
+                        eval("var tmpStandard = jsonStandards"+tmpNotation+";");
+                        tmpTextContent = '<h4>'+tmpStandard+'</h4><ul>' + tmpTextContent;
+                    } else {
+                        var tmpNotation = notation+'["'+i+'"]["'+t+'"]';
+                        var tmpText = tmpNotation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+                        eval("var tmpStandard = jsonStandards"+tmpNotation+"['_text'];");
+                        tmpTextContent += '<li><strong>'+tmpText+'</strong>: ' + tmpStandard + '</li>';
+                    }
+                }
+                tmpTextContent += '</ul>';
+                $('div.results.'+panel+' div.content').append(tmpTextContent);
             }
         }
 
-        //Update the standards information
-        $('div.results.'+panel+' div.content').empty();
-        for (i in standard) {
-            if (i == '_text') continue;
+        // Handle CCSS.ELA-Literacy output
+        if (panel == '_ccsselaliteracy') {
+            // Update the standards information in the panel
+            $('div.results.'+panel+' div.domains').empty();
+            for (t in standard) {
+                if (t == '_text') continue;
+                var tmpNotation = notation+'["'+t+'"]';
+                var tmpText = tmpNotation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+                $('<a href="#'+tmpText+'">'+tmpText+'</a>').appendTo('div.results.'+panel+' div.domains');
+            }
+
+            //Update the standards information
+            $('div.results.'+panel+' div.content').empty();
             var tmpTextContent = '';
-            for (t in standard[i]) {
+            for (t in standard) {
                 if (t == '_text') {
-                    var tmpNotation = notation+'["'+i+'"]["'+t+'"]';
+                    var tmpNotation = notation+'["'+t+'"]';
                     eval("var tmpStandard = jsonStandards"+tmpNotation+";");
                     tmpTextContent = '<h4>'+tmpStandard+'</h4><ul>' + tmpTextContent;
                 } else {
-                    var tmpNotation = notation+'["'+i+'"]["'+t+'"]';
+                    var tmpNotation = notation+'["'+t+'"]';
                     var tmpText = tmpNotation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
                     eval("var tmpStandard = jsonStandards"+tmpNotation+"['_text'];");
                     tmpTextContent += '<li><strong>'+tmpText+'</strong>: ' + tmpStandard + '</li>';
