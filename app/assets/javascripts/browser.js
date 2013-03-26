@@ -31,7 +31,6 @@ $(function() {
         setGradeRange(gradeRanges);
         setSubject(subject, 0);
         // Build the accordion based on dynamic content (that's hard coded for the time being until we learn to get it from the lri)
-//        buildAccordionNavigation($('div.accordion._ccssmath'), jsonStandards.CCSS.Math.Practice);
         buildAccordionNavigation($('div.accordion._ccssmath'), 'ccssmath');
         buildAccordionNavigation($('div.accordion._ccsselaliteracy'), 'ccsselaliteracy');
         // Initialization of the accordion
@@ -116,16 +115,33 @@ $(function() {
 
     // Live event for nav links
     $(document).on('click', 'a[rel=navlink]', function() {
+        // Strip away the #
         var href = $(this).attr('href').replace('#','');
+        // Split the href by dot since its a dotnotation
         var split = href.split('.');
+        // Find our panel name (strip dashes)
         var panel = ('_' + split[0] + split[1]).toLowerCase().replace('-','');
+        // Parent Notation -- Massage the dots into an array..ish
+        var parent = '';
+        for (i in split) {
+            if (i == split.length-1) continue;
+            parent += '["' + split[i] + '"]';
+        }
+        // Eval out the parent standard
+        eval("var parentStandard = jsonStandards"+parent+";");
+        // Clicked Notation -- Massage the dots into an array..ish
         var notation = '["'+href.replace(/\./g,'"]["')+'"]';
-console.log(panel);
-
+        // Eval out the standard
         eval("var standard = jsonStandards"+notation+";");
 
-        // Set the domain
-        var domain = standard._text;
+
+        // Set the panel information
+
+        // Set the grade in the panel
+        $('div.results.'+panel+' span.strand').html(parentStandard._text);
+        // Set the domain in the panel
+        $('div.results.'+panel+' span.domain').html(standard._text);
+
 
         console.log(standard);
         return false;
