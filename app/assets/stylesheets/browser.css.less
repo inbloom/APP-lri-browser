@@ -274,7 +274,6 @@ section.bottom {
   div.panel {
     position: absolute;
     width: 100%;
-    display: none;
 
     div.accordion {
       float: left;
@@ -285,8 +284,7 @@ section.bottom {
         .gradient(#fefefe, #cccccc, #fefefe);
         border-bottom: 1px solid #727272;
         font-size: 12px;
-        padding-left: 10px;
-        line-height: 60px;
+        padding: 20px 0 20px 10px;
         .font-opensans;
         font-weight:800;
         .user-select(none);
@@ -297,18 +295,47 @@ section.bottom {
         span {
           font-weight: 600;
         }
-        &:last-of-type {
-          border-bottom: 0;
-        }
         &.ui-state-active {
           color: #f2f2f2;
           text-shadow: 0px -1px 0px #000;
           .gradient(#0c88c9, #067cbf, #1195d5);
         }
       }
+      div.ui-accordion-content {
+        p {
+          margin: 5px 0 5px 15px;
+        }
+      }
       div.ui-accordion-content-active {
         border-bottom: 1px solid #727272;
 //        height: inherit !important;
+      }
+    }
+
+    div.results {
+      position: absolute;
+      left: 245px;
+      right: 20px;
+      h3 {
+        .font-opensans;
+        font-weight:800;
+        b {
+          color: #1195d5;
+          font-weight: 600;
+          font-size: 22px;
+        }
+      }
+      h5 {
+        .font-opensans;
+        color: #a8a8a8;
+        font-size: 12px;
+        text-transform: uppercase;
+        margin: 5px 0 10px 0;
+      }
+      hr {
+        border: 0;
+        border-top: 1px solid #a8a8a8;
+        margin: 10px 0 5px 0;
       }
     }
 

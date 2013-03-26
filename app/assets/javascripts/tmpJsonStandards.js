@@ -1,5 +1,5 @@
 
-var jsonStandards = {
+var tmpJsonStandards = {
     'CCSS':{
         '_text':'Common Core State Standards Initiative',
         'Math':{

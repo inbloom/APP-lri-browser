@@ -2,7 +2,7 @@
 $(function() {
     // Some initial values
     gradeRanges = { 'minimum': 0, 'maximum': 12 }
-    subject = 'mathematics';
+    subject = 'ccssmath';
     
     // Some position helpers K-12 in the event the need to be different sizes
     // Minimum is the offset for the left slider position compared to actual
@@ -29,11 +29,14 @@ $(function() {
     setTimeout(function(){
         setGradeRange(gradeRanges);
         setGradeRange(gradeRanges);
-        setSubject(subject);
+        setSubject(subject, 0);
         // Build the accordion based on dynamic content (that's hard coded for the time being until we learn to get it from the lri)
-        buildAccordionNavigation($('div.accordion._mathematics'), jsonStandards.CCSS.Math.Content);
+//        buildAccordionNavigation($('div.accordion._ccssmath'), jsonStandards.CCSS.Math.Practice);
+        buildAccordionNavigation($('div.accordion._ccssmath'), 'ccssmath');
+        buildAccordionNavigation($('div.accordion._ccsselaliteracy'), 'ccsselaliteracy');
         // Initialization of the accordion
         $(".accordion").accordion({
+            heightStyle: 'content',
             animate: 'easeInOutCubic'
         });
     },500);
@@ -74,23 +77,22 @@ $(function() {
         }
     });
 
-    // Make subjects clickable So that it selects between them -- only one can be selected.
-    $('div.subjects li a').click(function(e) {
-        var a = $(e.target);
-        var li = a.parent();
-        if (li.hasClass('disabled')) return false;
-        setSubject(a.html());
-        return false;
-    });
+//    // Make subjects clickable So that it selects between them -- only one can be selected.
+//    $('div.subjects li a').click(function(e) {
+//        var a = $(e.target);
+//        var li = a.parent();
+//        if (li.hasClass('disabled')) return false;
+//        setSubject(a.html());
+//        return false;
+//    });
 
-
-    $(document).on('click', '#_mathematics', function() {
-        subject = 'mathematics';
+    $(document).on('click', '#_ccssmath', function() {
+        subject = 'ccssmath';
         setSubject(subject);
         return false;
     });
-    $(document).on('click', '#_languagearts', function() {
-        subject = 'languagearts';
+    $(document).on('click', '#_ccsselaliteracy', function() {
+        subject = 'ccsselaliteracy';
         setSubject(subject);
         return false;
     });
@@ -109,6 +111,23 @@ $(function() {
             // TODO An actual modal with error messages and what not is needed!
             alert('Search Failed: ' + status);
         })
+        return false;
+    });
+
+    // Live event for nav links
+    $(document).on('click', 'a[rel=navlink]', function() {
+        var href = $(this).attr('href').replace('#','');
+        var split = href.split('.');
+        var panel = ('_' + split[0] + split[1]).toLowerCase().replace('-','');
+        var notation = '["'+href.replace(/\./g,'"]["')+'"]';
+console.log(panel);
+
+        eval("var standard = jsonStandards"+notation+";");
+
+        // Set the domain
+        var domain = standard._text;
+
+        console.log(standard);
         return false;
     });
 
@@ -161,12 +180,14 @@ function setSubject(subject, rate) {
     $('#form-subject').attr('value', subject);
 
     // Transition old panel off
-    if (subject == 'mathematics') {
-        $('div.panel._languagearts').stop().animate({left:$(document).width()},rate,'easeInOutCubic',function() { });
-        $('div.panel._mathematics').show().animate({left:0},rate,'easeInOutCubic');
-    } else if (subject == 'languagearts') {
-        $('div.panel._mathematics').stop().animate({left:-$(document).width()},rate,'easeInOutCubic',function() { });
-        $('div.panel._languagearts').show().animate({left:0},rate,'easeInOutCubic');
+    if (subject == 'ccssmath') {
+        $('div.panel._ccsselaliteracy').stop().animate({left:$(document).width()},rate,'easeInOutCubic',function() { });
+        $('div.panel._ccssmath').show().animate({left:0},rate,'easeInOutCubic');
+        $('div.panel._search').stop().hide();
+    } else if (subject == 'ccsselaliteracy') {
+        $('div.panel._ccsselaliteracy').show().animate({left:0},rate,'easeInOutCubic');
+        $('div.panel._ccssmath').stop().animate({left:-$(document).width()},rate,'easeInOutCubic',function() { });
+        $('div.panel._search').stop().hide();
     }
 }
 
@@ -210,17 +231,61 @@ function truncateString(string, length) {
 }
 
 // Build out the accordion navigation based on which standard
-function buildAccordionNavigation(div, standard) {
-    $(div).empty();
-    for (i in standard) {
-        if (i == '_text') continue;
-        var title = standard[i]._text;
-        if (title.indexOf(':') != -1) {
-            title = title.substr(0,title.indexOf(':')) + '<span>' + title.substr(title.indexOf(':'),title.length) + '</span>'
-        } else if (title.indexOf(' ') != -1) {
-            title = title.substr(0,title.indexOf(' ')) + '<span>' + title.substr(title.indexOf(' '),title.length) + '</span>'
+function buildAccordionNavigation(div, req) {
+
+    // Create navigation for CCSS.ELA-Literacy
+    if (req == 'ccsselaliteracy') {
+        var standard = jsonStandards.CCSS['ELA-Literacy'];
+        for (i in standard) {
+            if (i == '_text') continue;
+
+            var title = accordionTitle(standard[i]._text);
+            var links = "";
+            for (s in standard[i]) {
+                if (s == '_text') continue;
+                var linkText = (standard[i][s]._text != undefined)?standard[i][s]._text:s;
+                links += '<p><a href="#CCSS.ELA-Literacy.'+i+'.'+s+'" rel="navlink">' + linkText + '</a></p>';
+            }
+            
+            $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
         }
-        $('<h3>' + title + '</h3><div></div>').appendTo(div);
+
+    // Create navigation for CCSS.Math
+    } else if (req == 'ccssmath') {
+
+        var standard = jsonStandards.CCSS.Math.Practice;
+        var title = accordionTitle(standard._text);
+        var linkText = (standard._text != undefined)?standard._text:'undefined';
+        var links = '<p><a href="#CCSS.Math.Practice" rel="navlink">' + linkText + '</a></p>';
+        $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
+
+        var standard = jsonStandards.CCSS.Math.Content;
+        for (i in standard) {
+            if (i == '_text') continue;
+            var title = accordionTitle(standard[i]._text);
+
+            var links = "";
+            for (s in standard[i]) {
+                if (s == '_text') continue;
+                var linkText = (standard[i][s]._text != undefined)?standard[i][s]._text:s;
+                links += '<p><a href="#CCSS.Math.Content.'+i+'.'+s+'" rel="navlink">' + linkText + '</a></p>';
+            }
+
+            $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
+        }
+
     }
+
 }
+
+// Take the title and transform it into something pretty
+function accordionTitle(string) {
+    if (string.indexOf(':') != -1) {
+        string = string.substr(0,string.indexOf(':')) + '<span>' + string.substr(string.indexOf(':'),string.length) + '</span>'
+    } else if (string.indexOf(' ') != -1) {
+        string = string.substr(0,string.indexOf(' ')) + '<span>' + string.substr(string.indexOf(' '),string.length) + '</span>'
+    }
+    return string;
+}
+
 
