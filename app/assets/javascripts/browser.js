@@ -142,6 +142,10 @@ $(function() {
         // Eval out the standard
         eval("var standard = jsonStandards"+notation+";");
 
+        // Remove active highlight from all of this panels links and add it to this one.
+        $('div.panel.'+panel+' a[rel=navlink]').removeClass('active');
+        $(this).addClass('active');
+
         // Update the Header information
         // Set the grade in the panel
         $('div.results.'+panel+' span.strand').html(parentStandard._text);
@@ -201,18 +205,22 @@ $(function() {
 
             //Update the standards information
             $('div.results.'+panel+' div.content').empty();
-            var tmpTextContent = '';
-            for (t in standard) {
-                if (t == '_text') {
-                    var tmpNotation = notation+'["'+t+'"]';
-                    eval("var tmpStandard = jsonStandards"+tmpNotation+";");
-                    tmpTextContent = '<h4>'+tmpStandard+'</h4><ul>' + tmpTextContent;
-                } else {
-                    var tmpNotation = notation+'["'+t+'"]';
+            var tmpTextContent = '<ul>';
+            for (i in standard) {
+                if (i == '_text') continue;
+                var tmpNotation = notation+'["'+i+'"]';
+                var tmpText = tmpNotation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+                eval("var tmpStandard = jsonStandards"+tmpNotation+"['_text'];");
+                tmpTextContent += '<li><strong>'+tmpText+'</strong>: ' + tmpStandard + '</li>';
+
+                for (t in standard[i]) {
+                    if (t == '_text') continue;
+                    var tmpNotation = notation+'["'+i+'"]["'+t+'"]';
                     var tmpText = tmpNotation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
                     eval("var tmpStandard = jsonStandards"+tmpNotation+"['_text'];");
-                    tmpTextContent += '<li><strong>'+tmpText+'</strong>: ' + tmpStandard + '</li>';
+                    tmpTextContent += '<ul><li><strong>'+tmpText+'</strong>: ' + tmpStandard + '</li></ul>';
                 }
+
             }
             tmpTextContent += '</ul>';
             $('div.results.'+panel+' div.content').append(tmpTextContent);
