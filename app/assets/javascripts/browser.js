@@ -154,9 +154,25 @@ $(function() {
 
         /** Handle the panels differently based on which one it is.
          * Okay this sucks, but the irony is that the standards arent standardized so we have to handle them completely differently.
+         *
+         * CCSS.Math ~ Initiative.Framework.Set.Grade.Domain.Cluster.Standard
+         * CCSS.ELA ~ Initiative.Framework.Domain.Grade.{Cluster}.Standard.Component
+         *
+         * Initiative : The top level organization that a standar dcan belong to.
+         * Framework : Essentially the subject
+         * Set : Some subjects have subsets of content
+         * Grade : Grade level
+         * Domain : A grouping under each grade of the specific domain content
+         * Cluster : A subgrouping in each domain of the underlying standards
+         * Standard : The thing students are heald to
+         * Component : A substandard that makes up the standards
+         *
+         * At this time, ELA doesn't have the notion of a cluster but really needs it.
          */
 
         // Handle CCSS.Math output
+
+
         if (panel == '_ccssmath') {
             // Update the standards information in the panel
             $('div.results.'+panel+' div.domains').empty();
