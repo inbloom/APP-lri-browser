@@ -168,6 +168,8 @@ $(function() {
          * Component : A substandard that makes up the standards, optional but used in ELA a lot
          *
          * At this time, ELA doesn't have the notion of a cluster but really needs it.
+         * See this mess for more information: http://www.corestandards.org/assets/identifiers_feedback_memo.pdf
+         *
          */
 
         // An array of dot notations to dynamically load
