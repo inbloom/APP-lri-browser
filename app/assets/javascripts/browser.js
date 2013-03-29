@@ -155,24 +155,25 @@ $(function() {
         /** Handle the panels differently based on which one it is.
          * Okay this sucks, but the irony is that the standards arent standardized so we have to handle them completely differently.
          *
-         * CCSS.Math ~ Initiative.Framework.Set.Grade.Domain.Cluster.Standard
-         * CCSS.ELA ~ Initiative.Framework.Domain.Grade.{Cluster}.Standard.Component
+         * CCSS.Math ~ Initiative.Framework.Set.Grade.Domain.Cluster.Standard.{Component}
+         * CCSS.ELA ~ Initiative.Framework.{Set}.Domain.Grade.Standard.{Component}
          *
          * Initiative : The top level organization that a standar dcan belong to.
          * Framework : Essentially the subject
-         * Set : Some subjects have subsets of content
+         * Set : Some subjects have subsets of content, optional in ELA and not used that I can tell.
          * Grade : Grade level
          * Domain : A grouping under each grade of the specific domain content
          * Cluster : A subgrouping in each domain of the underlying standards
          * Standard : The thing students are heald to
-         * Component : A substandard that makes up the standards
+         * Component : A substandard that makes up the standards, optional but used in ELA a lot
          *
          * At this time, ELA doesn't have the notion of a cluster but really needs it.
          */
 
+        // An array of dot notations to dynamically load
+        var dynamicLoad = [];
+
         // Handle CCSS.Math output
-
-
         if (panel == '_ccssmath') {
             // Update the standards information in the panel
             $('div.results.'+panel+' div.domains').empty();
@@ -180,27 +181,29 @@ $(function() {
                 if (i == '_text') continue;
                 for (t in standard[i]) {
                     if (t == '_text') continue;
-                    var tmpNotation = notation+'["'+i+'"]["'+t+'"]';
-                    var tmpText = tmpNotation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
-                    $('<a href="#'+tmpText+'">'+tmpText+'</a>').appendTo('div.results.'+panel+' div.domains');
+                    var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
+                    var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+                    $('<a href="#'+tmpText+'">'+tmpDotNotation+'</a>').appendTo('div.results.'+panel+' div.domains');
                 }
             }
 
-            //Update the standards information
+            // Update the standards information
             $('div.results.'+panel+' div.content').empty();
             for (i in standard) {
                 if (i == '_text') continue;
                 var tmpTextContent = '';
                 for (t in standard[i]) {
                     if (t == '_text') {
-                        var tmpNotation = notation+'["'+i+'"]["'+t+'"]';
-                        eval("var tmpStandard = jsonStandards"+tmpNotation+";");
+                        var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
+                        eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+";");
                         tmpTextContent = '<h4>'+tmpStandard+'</h4><ul>' + tmpTextContent;
                     } else {
-                        var tmpNotation = notation+'["'+i+'"]["'+t+'"]';
-                        var tmpText = tmpNotation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
-                        eval("var tmpStandard = jsonStandards"+tmpNotation+"['_text'];");
-                        tmpTextContent += '<li><strong>'+tmpText+'</strong>: ' + tmpStandard + '</li>';
+                        var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
+                        var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+                        var className = tmpDotNotation.replace(/\./g,"_");
+                        dynamicLoad.push(tmpDotNotation);
+                        eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
+                        tmpTextContent += '<li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="inlineResults _'+className+'"></div></li>';
                     }
                 }
                 tmpTextContent += '</ul>';
@@ -214,8 +217,8 @@ $(function() {
             $('div.results.'+panel+' div.domains').empty();
             for (t in standard) {
                 if (t == '_text') continue;
-                var tmpNotation = notation+'["'+t+'"]';
-                var tmpText = tmpNotation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+                var tmpStandardArrayLocation = notation+'["'+t+'"]';
+                var tmpText = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
                 $('<a href="#'+tmpText+'">'+tmpText+'</a>').appendTo('div.results.'+panel+' div.domains');
             }
 
@@ -224,22 +227,29 @@ $(function() {
             var tmpTextContent = '<ul>';
             for (i in standard) {
                 if (i == '_text') continue;
-                var tmpNotation = notation+'["'+i+'"]';
-                var tmpText = tmpNotation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
-                eval("var tmpStandard = jsonStandards"+tmpNotation+"['_text'];");
-                tmpTextContent += '<li><strong>'+tmpText+'</strong>: ' + tmpStandard + '</li>';
+                var tmpStandardArrayLocation = notation+'["'+i+'"]';
+                var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+                eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
+                tmpTextContent += '<li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '</li>';
 
                 for (t in standard[i]) {
                     if (t == '_text') continue;
-                    var tmpNotation = notation+'["'+i+'"]["'+t+'"]';
-                    var tmpText = tmpNotation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
-                    eval("var tmpStandard = jsonStandards"+tmpNotation+"['_text'];");
-                    tmpTextContent += '<ul><li><strong>'+tmpText+'</strong>: ' + tmpStandard + '</li></ul>';
+                    var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
+                    var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+                    var className = tmpDotNotation.replace(/\./g,"_");
+                    dynamicLoad.push(tmpDotNotation);
+                    eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
+                    tmpTextContent += '<ul><li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="inlineResults _'+className+'"></div></li></ul>';
                 }
 
             }
             tmpTextContent += '</ul>';
             $('div.results.'+panel+' div.content').append(tmpTextContent);
+        }
+
+        // Fire off the dynamic loads
+        for (i in dynamicLoad) {
+            loadInlineSearchResults(dynamicLoad[i]);
         }
 
         return false;
@@ -402,4 +412,19 @@ function accordionTitle(string) {
     return string;
 }
 
+// This function fires off the search for each of the inline dotnotations as they are selected and asyncronously adds
+// them to the list as they come in.  Complete with pagination, adding "searching" and removing
+function loadInlineSearchResults(tmpDotNotation) {
+    var className = tmpDotNotation.replace(/\./g,"_");
+    $('div.inlineResults._'+className).addClass('loading');
 
+    setTimeout(function(){ parseInlineSearchResults(null, tmpDotNotation); }, 1000); // @TODO FAKE!
+//    console.log(className);
+}
+
+// Parse out the results by drawing the various bitz
+function parseInlineSearchResults(results, tmpDotNotation) {
+    var className = tmpDotNotation.replace(/\./g,"_");
+
+    $('div.inlineResults._'+className).removeClass('loading');
+}
