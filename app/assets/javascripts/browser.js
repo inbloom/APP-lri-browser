@@ -420,7 +420,7 @@ function loadInlineSearchResults(tmpDotNotation) {
     var className = tmpDotNotation.replace(/\./g,"_");
     $('div.inlineResults._'+className).addClass('loading');
 
-    setTimeout(function(){ parseInlineSearchResults(null, tmpDotNotation); }, 1000); // @TODO FAKE!
+    setTimeout(function(){ parseInlineSearchResults(null, tmpDotNotation); }, Math.floor((Math.random()*500)+1)+1000); // @TODO FAKE!
 //    console.log(className);
 }
 
