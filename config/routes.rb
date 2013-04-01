@@ -16,6 +16,9 @@
 
 Browser::Application.routes.draw do
 
+  match "/auth/:provider/callback" => "sessions#create"
+  match "/signout" => "sessions#destroy", :as => :signout
+
   # Until we get the products united, just forward to tagger code
   root :to => 'browser#index'
 

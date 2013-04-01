@@ -1,0 +1,403 @@
+@import "elements.css.less";
+
+.pull-left { float: left; }
+.pull-right { float: right; }
+
+.font-opensans {
+  font-family: 'Open Sans', Arial;
+}
+
+body {
+  margin:0;
+  padding:0;
+  min-width: 1024px;
+  .font-opensans;
+}
+
+div.container {
+  min-width: 1024px;
+//  margin: auto;
+//  width: 1024px;
+}
+
+header {
+  position: relative;
+  right: 0;
+  left: 0;
+  top: 0;
+  height: 105px;
+
+  background-color: #000000;
+
+  ul {
+    margin: 0 30px;
+    padding: 0;
+    list-style: none;
+    font-size: 14px;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 600;
+    li {
+      display: inline;
+      color: #ffffff;
+      a {
+        color: #0099cc;
+      }
+    }
+  }
+
+  div.logo {
+    height: 105px;
+    float: left;
+    img {
+      margin: 0 30px;
+    }
+    button {
+      margin: 0;
+      padding: 11px 20px;
+      background: #000000;
+      color: #ffffff;
+      border: 0;
+      background: url(/assets/button-background.png) repeat-x;
+      background-position: 0 -5px;
+      border: 1px solid #10101a;
+      .box-shadow(0px 1px 0px #7d7b7c);
+      text-shadow: 1px -1px 2px #000;
+      font-size:14px;
+      &:first-of-type {
+        margin-left: 20px;
+        .border-radius(0,0,8px,8px);
+      }
+      &:last-of-type {
+        .border-radius(8px,8px,0,0);
+        border-left: 0;
+      }
+      &.selected {
+        background: #3c97cc url(/assets/button-background-selected.png) repeat-x;
+      }
+    }
+  }
+
+  div.search {
+    position: relative;
+    float: right;
+    top: 69px;
+    right: 10px;
+    margin: 0;
+    border: 0;
+    padding: 4px 0 4px 5px;
+    background-color: #ffffff;
+    .rounded(15px);
+    .box-shadow(0px 1px 0px #7d7b7c);
+    text-shadow: 1px -1px 2px #000;
+    font-size:14px;
+    z-index: 1500;
+    input {
+      width: 200px;
+      border: 0;
+      margin: 0 25px 0 5px;
+      &:focus {
+        outline: none;
+        .box-shadow(0 0 0 #000);
+        border: 0;
+      }
+    }
+    button {
+      position: absolute;
+      top: 3px;
+      right: 0px;
+      border: 0;
+      background: none;
+      font-size: 14px;
+      color: #a8a8a8;
+      font-size: 30px;
+      line-height: 15px;
+    }
+  }
+
+  div.grade {
+    display: inline;
+    cursor: default;
+    height: 105px;
+    width: 460px;
+    position: absolute;
+    left: 50%;
+    margin-left: -230px;
+    padding: 0 25px;
+
+    ul {
+      display: inline;
+      cursor: default;
+      position: relative;
+      top: 65px;
+      z-index: 1000;
+      margin: 0 0 0 20px;
+      padding: 0;
+      li {
+        display: inline-block;
+        width: 30px;
+        height: 10px;
+        cursor: default;
+        margin: 0;
+        background-image: url(/assets/gradeslider-bar-white.png);
+        background-position: -145px;
+        &:first-of-type {
+          background-position: 0;
+        }
+        &:last-of-type {
+          background-position: -270px;
+        }
+        &.selected {
+          background-image: url(/assets/gradeslider-bar-blue.png);
+        }
+      }
+    }
+    span {
+      color: #ffffff;
+      font-weight: 800;
+      .font-opensans;
+      position: relative;
+      top: 65px;
+      &:first-of-type {
+        left: 18px;
+      }
+
+    }
+  }
+
+  div.slider-handle-left {
+    background: url(/assets/gradeslider-bubble-minimum.png) no-repeat;
+  }
+  div.slider-handle-right {
+    background: url(/assets/gradeslider-bubble-maximum.png) no-repeat;
+  }
+  div.slider-handle-left,
+  div.slider-handle-right {
+    display: none;
+    cursor: col-resize;
+    z-index: 1005;
+    position: absolute;
+    top: 25px;
+    width: 35px;
+    height: 46px;
+    .font-opensans;
+    font-weight: 800;
+    color: #fff;
+    line-height: 36px;
+    text-align: center;
+    &.snapping {
+      padding-left: 1px;
+    }
+  }
+
+  div.grade-slider {
+    position: absolute;
+    top: 0;
+    z-index: 100;
+    .inner {
+      height: 50px;
+      margin-left: 16px;
+      margin-right: 16px;
+      background: url(/assets/gradeslider-bar-blue.png) repeat-x;
+    }
+  }
+
+}
+
+section.middle {
+  position: absolute;
+  top: 105px;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  height: 61px;
+
+  .gradient(#f5f5f5, #cccccc, #fdfdfd);
+  border-bottom: 1px solid #939393;
+  div.controls {
+    position: absolute;
+    left: 50%;
+    margin-left: -512px;
+    display: inline;
+    width: 1024px;
+    div.control {
+      line-height: 65px;
+      margin: 0 20px;
+      float: left;
+      input[type=checkbox] {
+        visibility: hidden;
+        &+label {
+          display: inline-block;
+          padding-left: 25px;
+          line-height: 28px;
+          .font-opensans;
+          font-weight:600;
+          .user-select(none);
+          background: url(/assets/checkbox-unchecked.png) no-repeat;
+        }
+        &:checked+label {
+          background: url(/assets/checkbox-checked.png) no-repeat;
+        }
+      }
+      &.icon-teachers {
+        padding-right: 24px;
+        background: url(/assets/icon-teacher.png) no-repeat;
+        background-position: right 22px;
+      }
+      &.icon-students {
+        padding-right: 28px;
+        background: url(/assets/icon-students.png) no-repeat;
+        background-position: right 22px;
+      }
+      &.icon-pages {
+        padding-right: 26px;
+        background: url(/assets/icon-pages.png) no-repeat;
+        background-position: right 22px;
+      }
+      &.icon-finger {
+        padding-right: 20px;
+        background: url(/assets/icon-finger.png) no-repeat;
+        background-position: right 20px;
+      }
+    }
+  }
+
+}
+
+
+section.bottom {
+  position: absolute;
+  top: 167px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-x: hidden;
+
+  div.panel {
+    position: absolute;
+    width: 100%;
+
+    div.accordion {
+      float: left;
+      width: 220px;
+      border-right: 1px solid #000000;
+      h3 {
+        margin: 0;
+        .gradient(#fefefe, #cccccc, #fefefe);
+        border-bottom: 1px solid #727272;
+        font-size: 12px;
+        padding: 10px 0 10px 10px;
+        .font-opensans;
+        font-weight:800;
+        .user-select(none);
+        color: #444444;
+        text-shadow: 1px 1px 1px #fff;
+        cursor: pointer;
+        outline: none;
+        span {
+          font-weight: 600;
+        }
+        &.ui-state-active {
+          color: #f2f2f2;
+          text-shadow: 0px -1px 0px #000;
+          .gradient(#0c88c9, #067cbf, #1195d5);
+        }
+      }
+      div.ui-accordion-content {
+        p {
+          margin: 8px 0 8px 15px;
+          line-height: 12px;
+          a {
+            font-size: 12px;
+            color: #727272;
+            text-decoration: none;
+            &.active {
+              font-weight: bolder;
+              color: #067cbf;
+            }
+          }
+        }
+      }
+      div.ui-accordion-content-active {
+        border-bottom: 1px solid #727272;
+//        height: inherit !important;
+      }
+    }
+
+    div.results {
+      position: absolute;
+      left: 245px;
+      right: 20px;
+      h3 {
+        .font-opensans;
+        font-weight:800;
+        b {
+          color: #1195d5;
+          font-weight: 600;
+          font-size: 22px;
+        }
+      }
+      h5 {
+        .font-opensans;
+        color: #a8a8a8;
+        font-size: 12px;
+        text-transform: uppercase;
+        margin: 5px 0 10px 0;
+      }
+      hr {
+        border: 0;
+        border-top: 1px solid #a8a8a8;
+        margin: 10px 0 5px 0;
+      }
+      div.domains {
+        overflow: auto;
+        a {
+          float: left;
+          color: #1195d5;
+          margin: 3px 0;
+          padding: 0 10px;
+          border-right: 1px solid #a8a8a8;
+          .font-opensans;
+          font-size: 16px;
+          font-weight: 800;
+          text-decoration: none;
+          &:last-of-type {
+            border-right: 0;
+          }
+        }
+      }
+      div.content {
+        ul {
+          padding-left: 15px;
+          list-style: none;
+          li {
+            margin-bottom: 15px;
+            &:before {
+              color: #1195d5;
+              font-size: 22px;
+              font-weight: 600;
+              content: '«';
+              margin: 0 8px 0 0;
+            }
+            div.inlineResults {
+              margin-top: 20px;
+              &.loading {
+                background: url(/assets/loading.gif) no-repeat;
+                background-position: 50% 50%;
+                text-align: center;
+                font-size: 9px;
+                font-weight: bold;
+                &:before {
+                  content: "Loading...";
+                }
+              }
+            }
+          }
+          ul {
+            padding-left: 20px;
+          }
+        }
+      }
+    }
+
+  }
+}

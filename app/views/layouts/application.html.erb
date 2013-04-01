@@ -8,8 +8,59 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <form id="superform" method="post" action="/">
+    <input type='hidden' name='grade[minimum]' id='form-grade-minimum' />
+    <input type='hidden' name='grade[maximum]' id='form-grade-maximum' />
+    <input type='hidden' name='subject' id='form-subject' />
 
-<%= yield %>
+    <header>
+      <div class='container'>
 
+        <div class='logo'>
+          <img src="/assets/inbloom.png" />
+
+          <div class='clearfix'></div>
+
+          <div class='subjects'>
+            <button id="_ccssmath">Mathematics</button><button id="_ccsselaliteracy">Language Arts</button>
+          </div>
+        </div>
+
+        <div class='grade'>
+          <span>K</span>
+          <ul>
+            <li class='_0'></li><li class='_1'></li><li class='_2'></li><li class='_3'></li><li class='_4'></li><li class='_5'></li><li class='_6'></li><li class='_7'></li><li class='_8'></li><li class='_9'></li><li class='_10'></li><li class='_11'></li><li class='_12'></li>
+          </ul>
+          <span>12</span>
+
+          <div class='slider-handle-left'></div>
+          <div class='slider-handle-right'></div>
+        </div>
+
+        <div class='search'>
+          <input type="text" name="search" id="form-search-filter" placeholder="Search" />
+          <button>&times;</button>
+        </div>
+      </div>
+    </header>
+
+    <section class='middle'>
+      <div class='container'>
+        <div class='controls'>
+          <div class='control icon-teachers'><input type="checkbox" name="filter[teachers]" value="on" id="teachersCheckbox"/><label for="teachersCheckbox">For Teachers</label></div>
+          <div class='control icon-students'><input type="checkbox" name="filter[students]" value="on" id="studentsCheckbox"/><label for="studentsCheckbox">For Students</label></div>
+          <div class='control icon-pages'><input type="checkbox" name="filter[pages]" value="on" id="pagesCheckbox"/><label for="pagesCheckbox">Reading & Web Pages</label></div>
+          <div class='control icon-finger'><input type="checkbox" name="filter[media]" value="on" id="mediaCheckbox"/><label for="mediaCheckbox">Audio / Video / Interactive</label></div>
+        </div>
+      </div>
+    </section>
+
+    <section class='bottom'>
+      <div class='container'>
+        <%= yield %>
+      </div>
+    </section>
+
+  </form>
 </body>
 </html>
