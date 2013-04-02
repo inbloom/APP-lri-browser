@@ -19,6 +19,13 @@ Browser::Application.routes.draw do
   match "/auth/:provider/callback" => "sessions#create"
   match "/signout" => "sessions#destroy", :as => :signout
 
+  # This is the only way to do this for now.. when a user enters a query string, do a full search to get the results
+  resources :browser, :only => [ :index, :search ] do
+    collection do
+      post :search,   :path => "/search",   :constraints => { :format => /json/ }
+    end
+  end
+
   # Until we get the products united, just forward to tagger code
   root :to => 'browser#index'
 
