@@ -371,6 +371,7 @@ section.bottom {
           list-style: none;
           li {
             margin-bottom: 15px;
+            clear: left;
             &:before {
               color: #1195d5;
               font-size: 22px;
@@ -398,6 +399,25 @@ section.bottom {
                 font-weight: bold;
                 &:before {
                   content: "No Results Found";
+                }
+              }
+              div.item {
+                position: relative;
+                border: 1px solid #e2e2e2;
+                margin: 0 15px 20px 15px;
+                width: 225px;
+                height: 80px;
+                .rounded(5px);
+                .drop-shadow(2px, 2px, 5px, 0.4);
+                float: left;
+                background: red;
+                div.content {
+                  position: absolute;
+                  top: 0;
+                  left:  80px;
+                  right: 0;
+                  bottom: 0;
+                  background: white;
                 }
               }
             }

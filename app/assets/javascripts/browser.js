@@ -421,12 +421,12 @@ function loadInlineSearchResults(tmpDotNotation, limit, offset) {
     var className = tmpDotNotation.replace(/\./g,"_");
     $('div.inlineResults._'+className).addClass('loading');
 
-    var query = '';
+    var query = 'math';
     var limit = (limit != undefined)?limit:6;
     var offset = (offset != undefined)?offset:0;
 
     var filters = {};
-    filters['properties.educationalAlignment.properties.targetName['+tmpDotNotation+ ']'] = true;
+//    filters['properties.educationalAlignment.properties.targetName['+tmpDotNotation+ ']'] = true;
 
     $.ajax({
         type : "POST",
@@ -446,12 +446,13 @@ function loadInlineSearchResults(tmpDotNotation, limit, offset) {
 // Parse out the results by drawing the various bitz
 function parseInlineSearchResults(results, tmpDotNotation) {
     var className = tmpDotNotation.replace(/\./g,"_");
-
     $('div.inlineResults._'+className).removeClass('loading');
 
     if (results.length == 0) {
         $('div.inlineResults._'+className).addClass('empty');
     } else {
-
+        for(i in results) {
+            $('<div class="item"><div class="content"><h4>A lot of resource alpha text goes here</h4><h5>Provider Organization</h5></div></div>').appendTo('div.inlineResults._'+className);
+        }
     }
 }
