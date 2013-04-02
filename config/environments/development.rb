@@ -34,4 +34,8 @@ Browser::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  # Elastic search server configs
+  config.elastic_search_url = 'http://esearch.agilix.com:9200/lr/lr/_search'
+
 end
