@@ -452,7 +452,7 @@ function parseInlineSearchResults(results, tmpDotNotation) {
         $('div.inlineResults._'+className).addClass('empty');
     } else {
         for(i in results) {
-            $('<div class="item"><div class="content"><h4>A lot of resource alpha text goes here</h4><h5>Provider Organization</h5></div></div>').appendTo('div.inlineResults._'+className);
+            $('<div class="item"><div class="content"><h4>A Lot of Resource Alpha Text Goes Here</h4><h5>Provider Organization</h5></div></div>').appendTo('div.inlineResults._'+className);
         }
     }
 }
