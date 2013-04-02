@@ -416,12 +416,31 @@ function accordionTitle(string) {
 
 // This function fires off the search for each of the inline dotnotations as they are selected and asyncronously adds
 // them to the list as they come in.  Complete with pagination, adding "searching" and removing
-function loadInlineSearchResults(tmpDotNotation) {
+function loadInlineSearchResults(tmpDotNotation, limit, offset) {
+
     var className = tmpDotNotation.replace(/\./g,"_");
     $('div.inlineResults._'+className).addClass('loading');
 
-    setTimeout(function(){ parseInlineSearchResults(null, tmpDotNotation); }, Math.floor((Math.random()*500)+1)+1000); // @TODO FAKE!
-//    console.log(className);
+    var query = '';
+    var limit = (limit != undefined)?limit:6;
+    var offset = (offset != undefined)?offset:0;
+
+    var filters = {};
+    filters['properties.educationalAlignment.properties.targetName['+tmpDotNotation+ ']'] = true;
+
+    $.ajax({
+        type : "POST",
+        dataType : 'json',
+        url  : "/browser/search",
+        data : { query : query, filters : filters, limit : limit, offset : offset },
+        success : function(xhr) {
+            parseInlineSearchResults(xhr.hits.hits, tmpDotNotation);
+        },
+        error : function(xhr, txtStatus, errThrown) {
+            // @TODO need to add code to do something with errors
+        }
+    });
+
 }
 
 // Parse out the results by drawing the various bitz
@@ -429,4 +448,10 @@ function parseInlineSearchResults(results, tmpDotNotation) {
     var className = tmpDotNotation.replace(/\./g,"_");
 
     $('div.inlineResults._'+className).removeClass('loading');
+
+    if (results.length == 0) {
+        $('div.inlineResults._'+className).addClass('empty');
+    } else {
+
+    }
 }
