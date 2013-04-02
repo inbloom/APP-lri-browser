@@ -36,6 +36,8 @@ gem 'omniauth-slc', '0.0.2'
 gem 'oauth'
 # HTTP Party Rockin
 gem 'httparty'
+# For Elastic Search Communications
+gem 'rest-client'
 
 # Dev/Test env only please
 group :development, :test do
