@@ -36,8 +36,8 @@ def execute_query request_uri
 end
 
 def harvest_property property_id, i
+  data = execute_query "#{@lri_addy}/entity/search?q={\"urn:lri:property_type:id\": \"#{property_id}\"}"
   data = data['response'].first
-  
   id = data['props']['urn:lri:property_type:id']
   name = data['props']['urn:lri:property_type:name']
   desc = data['props']['urn:lri:property_type:description']
