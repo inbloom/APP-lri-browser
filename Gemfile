@@ -38,6 +38,9 @@ gem 'oauth'
 gem 'httparty'
 # For Elastic Search Communications
 gem 'rest-client'
+# HTML Entities encode/decoder
+gem 'htmlentities'
+
 
 # Dev/Test env only please
 group :development, :test do
