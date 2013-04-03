@@ -3,7 +3,10 @@
 require 'net/http'
 require 'uri'
 require 'json'
+require 'action_view'
+require 'htmlentities'
 
+include ActionView::Helpers::SanitizeHelper
 
 @lri_addy = 'http://lriserver.inbloom.org'
 @lri_un = 'lri'
@@ -33,8 +36,6 @@ def execute_query request_uri
 end
 
 def harvest_property property_id, i
-  puts HTMLEntities.new.decode strip_tags "Understand the concept of a ratio and use ratio language to describe a ratio relationship between two quantities. <i>For example, &ldquo;The ratio of wings to beaks in the bird house at the zoo was 2:1, because for every 2 wings there was 1 beak.&rdquo; &ldquo;For every vote candidate A received, candidate C received nearly three votes.&rdquo;</i>"
-  data = execute_query "#{@lri_addy}/entity/search?q={\"urn:lri:property_type:id\": \"#{property_id}\"}"
   data = data['response'].first
   
   id = data['props']['urn:lri:property_type:id']
@@ -51,6 +52,8 @@ def harvest_property property_id, i
   if text.length < 1
     text = id
   end
+  
+  text = HTMLEntities.new.decode strip_tags text
   
   create_key property_id, text  
   
