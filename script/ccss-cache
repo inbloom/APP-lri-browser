@@ -1,0 +1,88 @@
+#!/usr/bin/env ruby
+
+require 'net/http'
+require 'uri'
+require 'json'
+
+
+@lri_addy = 'http://lriserver.inbloom.org'
+@lri_un = 'lri'
+@lri_pw = 'secret'
+
+@response_json = Hash.new{ |h,k| h[k] = Hash.new(&h.default_proc) }
+
+class String
+  def pop_node
+    gsub(':', '.').split('.').last
+  end
+end
+
+def create_key notation, value
+  nodes = notation.gsub(':', '.').split('.')[3..-1]
+  nodes.inject(@response_json) { |h, k|
+    h[k]
+  }['_text'] = value
+end
+
+def execute_query request_uri
+  uri = URI.parse(URI.encode(request_uri))
+  http = Net::HTTP.new(uri.host, uri.port)
+  request = Net::HTTP::Get.new(uri.request_uri)
+  request.basic_auth(@lri_un, @lri_pw)
+  JSON.parse http.request(request).body
+end
+
+def harvest_property property_id, i
+  puts HTMLEntities.new.decode strip_tags "Understand the concept of a ratio and use ratio language to describe a ratio relationship between two quantities. <i>For example, &ldquo;The ratio of wings to beaks in the bird house at the zoo was 2:1, because for every 2 wings there was 1 beak.&rdquo; &ldquo;For every vote candidate A received, candidate C received nearly three votes.&rdquo;</i>"
+  data = execute_query "#{@lri_addy}/entity/search?q={\"urn:lri:property_type:id\": \"#{property_id}\"}"
+  data = data['response'].first
+  
+  id = data['props']['urn:lri:property_type:id']
+  name = data['props']['urn:lri:property_type:name']
+  desc = data['props']['urn:lri:property_type:description']
+  id_top = id.pop_node
+  text = ''
+  
+  if name.to_s.length > desc.to_s.length
+    text = name
+  else
+    text = desc
+  end
+  if text.length < 1
+    text = id
+  end
+  
+  create_key property_id, text  
+  
+  data
+end
+
+def recursive_harvest_property(property_id, i)
+  property_data = harvest_property property_id, i
+  contains = property_data['props']['urn:lri:property_type:contains']
+  if contains.class == String
+    create_key property_id, property_data['props']['urn:lri:property_type:name']
+  elsif contains.to_a.count > 0  
+    i += 1
+    contains.each do |property_id|
+      recursive_harvest_property(property_id, i)
+    end
+  end
+end
+
+# Get frameworks and their children ids
+framework_json = execute_query("#{@lri_addy}/ccss/frameworks")
+
+frameworks = {}
+
+framework_json['response'][0]['frameworks'].to_a.each do |framework| 
+  frameworks["#{framework['props']['urn:lri:property_type:name'].pop_node}"] = framework
+end
+
+frameworks.each do |key, framework|
+  framework['props']['urn:lri:property_type:contains'].each do |property_id|
+    recursive_harvest_property property_id, 1
+  end
+end
+
+puts JSON.generate @response_json
