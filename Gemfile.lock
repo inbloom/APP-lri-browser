@@ -79,6 +79,7 @@ GEM
     ffi (1.6.0)
     hashie (1.2.0)
     hike (1.2.1)
+    htmlentities (4.3.1)
     httparty (0.10.2)
       multi_json (~> 1.0)
       multi_xml (>= 0.5.2)
@@ -224,6 +225,7 @@ DEPENDENCIES
   enum_simulator
   factory_girl_rails
   faker
+  htmlentities
   httparty
   jquery-rails
   jquery-ui-rails
