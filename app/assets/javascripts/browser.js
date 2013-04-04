@@ -86,14 +86,28 @@ $(function() {
 //    });
 
     $(document).on('click', '#_ccssmath', function() {
-        subject = 'ccssmath';
-        setSubject(subject);
-        return false;
+      subject = 'ccssmath';
+      setSubject(subject);
+      return false;
     });
     $(document).on('click', '#_ccsselaliteracy', function() {
-        subject = 'ccsselaliteracy';
-        setSubject(subject);
-        return false;
+      subject = 'ccsselaliteracy';
+      setSubject(subject);
+      return false;
+    });
+
+    // filter checkboxes
+    $(document).on('click', '#teachersCheckbox', function() {
+      refreshInlineSearchResults();
+    });
+    $(document).on('click', '#studentsCheckbox', function() {
+      refreshInlineSearchResults();
+    });
+    $(document).on('click', '#pagesCheckbox', function() {
+      refreshInlineSearchResults();
+    });
+    $(document).on('click', '#mediaCheckbox', function() {
+      refreshInlineSearchResults();
     });
 
     // Make form work via ajax post
@@ -205,7 +219,7 @@ $(function() {
                         var className = tmpDotNotation.replace(/\./g,"_");
                         dynamicLoad.push(tmpDotNotation);
                         eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
-                        tmpTextContent += '<li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="inlineResults _'+className+'"></div></li>';
+                        tmpTextContent += '<li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'"></div></div></li>';
                     }
                 }
                 tmpTextContent += '</ul>';
@@ -241,7 +255,7 @@ $(function() {
                     var className = tmpDotNotation.replace(/\./g,"_");
                     dynamicLoad.push(tmpDotNotation);
                     eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
-                    tmpTextContent += '<ul><li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="inlineResults _'+className+'"></div></li></ul>';
+                    tmpTextContent += '<ul><li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'"></div></div></li></ul>';
                 }
 
             }
@@ -352,55 +366,55 @@ function redrawSearchResults(res) {
 
 // Helper function to truncate the title
 function truncateString(string, length) {
-    if (string.length <= length + 1) return string;
-    return string.substring(0, length-2) + '&hellip;'
+  if (string.length <= length + 1) return string;
+  return string.substring(0, length-2) + '&hellip;'
 }
 
 // Build out the accordion navigation based on which standard
 function buildAccordionNavigation(div, req) {
 
-    // Create navigation for CCSS.ELA-Literacy
-    if (req == 'ccsselaliteracy') {
-        var standard = jsonStandards.CCSS['ELA-Literacy'];
-        for (i in standard) {
-            if (i == '_text') continue;
+  // Create navigation for CCSS.ELA-Literacy
+  if (req == 'ccsselaliteracy') {
+    var standard = jsonStandards.CCSS['ELA-Literacy'];
+    for (i in standard) {
+      if (i == '_text') continue;
 
-            var title = accordionTitle(standard[i]._text);
-            var links = "";
-            for (s in standard[i]) {
-                if (s == '_text') continue;
-                var linkText = (standard[i][s]._text != undefined)?standard[i][s]._text:s;
-                links += '<p><a href="#CCSS.ELA-Literacy.'+i+'.'+s+'" rel="navlink">' + linkText + '</a></p>';
-            }
-            
-            $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
-        }
+      var title = accordionTitle(standard[i]._text);
+      var links = "";
+      for (s in standard[i]) {
+        if (s == '_text') continue;
+        var linkText = (standard[i][s]._text != undefined)?standard[i][s]._text:s;
+        links += '<p><a href="#CCSS.ELA-Literacy.'+i+'.'+s+'" rel="navlink">' + linkText + '</a></p>';
+      }
 
-    // Create navigation for CCSS.Math
-    } else if (req == 'ccssmath') {
-
-        var standard = jsonStandards.CCSS.Math.Practice;
-        var title = accordionTitle(standard._text);
-        var linkText = (standard._text != undefined)?standard._text:'undefined';
-        var links = '<p><a href="#CCSS.Math.Practice" rel="navlink">' + linkText + '</a></p>';
-        $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
-
-        var standard = jsonStandards.CCSS.Math.Content;
-        for (i in standard) {
-            if (i == '_text') continue;
-            var title = accordionTitle(standard[i]._text);
-
-            var links = "";
-            for (s in standard[i]) {
-                if (s == '_text') continue;
-                var linkText = (standard[i][s]._text != undefined)?standard[i][s]._text:s;
-                links += '<p><a href="#CCSS.Math.Content.'+i+'.'+s+'" rel="navlink">' + linkText + '</a></p>';
-            }
-
-            $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
-        }
-
+      $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
     }
+
+  // Create navigation for CCSS.Math
+  } else if (req == 'ccssmath') {
+
+    var standard = jsonStandards.CCSS.Math.Practice;
+    var title = accordionTitle(standard._text);
+    var linkText = (standard._text != undefined)?standard._text:'undefined';
+    var links = '<p><a href="#CCSS.Math.Practice" rel="navlink">' + linkText + '</a></p>';
+    $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
+
+    var standard = jsonStandards.CCSS.Math.Content;
+    for (i in standard) {
+      if (i == '_text') continue;
+      var title = accordionTitle(standard[i]._text);
+
+      var links = "";
+      for (s in standard[i]) {
+        if (s == '_text') continue;
+        var linkText = (standard[i][s]._text != undefined)?standard[i][s]._text:s;
+        links += '<p><a href="#CCSS.Math.Content.'+i+'.'+s+'" rel="navlink">' + linkText + '</a></p>';
+      }
+
+      $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
+    }
+
+  }
 
 }
 
@@ -418,41 +432,72 @@ function accordionTitle(string) {
 // them to the list as they come in.  Complete with pagination, adding "searching" and removing
 function loadInlineSearchResults(tmpDotNotation, limit, offset) {
 
-    var className = tmpDotNotation.replace(/\./g,"_");
-    $('div.inlineResults._'+className).addClass('loading');
+  var className = tmpDotNotation.replace(/\./g,"_");
+  $('div.inlineResults._'+className).addClass('loading').removeClass('empty').empty();
 
-    var query = 'math';
-    var limit = (limit != undefined)?limit:6;
-    var offset = (offset != undefined)?offset:0;
+  var query = 'fractions';
+  var limit = (limit != undefined)?limit:6;
+  var offset = (offset != undefined)?offset:0;
 
-    var filters = {};
+  var filters = {};
+  // Add the filter for this dot notation
 //    filters['properties.educationalAlignment.properties.targetName['+tmpDotNotation+ ']'] = true;
+  // If "Audio / Video / Interactive" is checked add those filters
+  if ($("#mediaCheckbox").prop('checked')) {
+    filters['properties.educationalUse[Interactive]'] = true;
+    filters['properties.learningResourceType[Audio]'] = true;
+    filters['properties.learningResourceType[Video]'] = true;
+  }
+  // If "Reading & Web Pages" is checked add those filters
+  if ($("#pagesCheckbox").prop('checked')) {
+    filters['properties.educationalUse[Reading]'] = true;
+    filters['properties.mediaType[Webpage]'] = true;
+  }
+  // If "For Students" is checked add those filters
+  if ($("#studentsCheckbox").prop('checked')) {
+    filters['properties.intendedEndUserRole[Student]'] = true;
+  }
+  // If "For Teachers" is checked add those filters
+  if ($("#teachersCheckbox").prop('checked')) {
+    filters['properties.intendedEndUserRole[Teacher]'] = true;
+  }
 
-    $.ajax({
-        type : "POST",
-        dataType : 'json',
-        url  : "/browser/search",
-        data : { query : query, filters : filters, limit : limit, offset : offset },
-        success : function(xhr) {
-            parseInlineSearchResults(xhr.hits.hits, tmpDotNotation);
-        },
-        error : function(xhr, txtStatus, errThrown) {
-            // @TODO need to add code to do something with errors
-        }
-    });
+  $.ajax({
+    type : "POST",
+    dataType : 'json',
+    url  : "/browser/search",
+    data : { query : query, filters : filters, limit : limit, offset : offset },
+    success : function(xhr) {
+      parseInlineSearchResults(xhr.hits, tmpDotNotation);
+    },
+    error : function(xhr, txtStatus, errThrown) {
+      var className = tmpDotNotation.replace(/\./g,"_");
+      $('div.inlineResults._'+className).removeClass('loading');
+      $('div.inlineResults._'+className).addClass('error');
+      // @TODO Add a refresh link or something..
+    }
+  });
 
 }
 
 // Parse out the results by drawing the various bitz
 function parseInlineSearchResults(results, tmpDotNotation) {
-    var className = tmpDotNotation.replace(/\./g,"_");
-    $('div.inlineResults._'+className).removeClass('loading');
+  var className = tmpDotNotation.replace(/\./g,"_");
+  $('div.inlineResults._'+className).removeClass('loading');
 
-    if (results.length == 0) {
-        $('div.inlineResults._'+className).addClass('empty');
-    } else {
-        for(i in results) {
-            $('<div class="item"><div class="content"><h4>A Lot of Resource Alpha Text Goes Here</h4><h5>Provider Organization</h5></div></div>').appendTo('div.inlineResults._'+className);
-        }
+  if (results.hits.length == 0) {
+    $('div.inlineResults._'+className).addClass('empty');
+  } else {
+    for(i in results.hits) {
+      $('<div class="item"><div class="content"><h4>' + results.hits[i]['_source']['properties']['name'][0] + '</h4><h5>Provider Organization</h5></div></div>').appendTo('div.inlineResults._'+className);
     }
+  }
+}
+
+// Steps through inlineResults and refreshes them based on the class
+function refreshInlineSearchResults() {
+  $("div.inlineResults").each(function() {
+    var tmpDotNotation = $(this).attr('class').replace('inlineResults','').replace('loading','').replace('empty','').replace(/^\s+_/,'').replace(/\s+$/,'').replace('_','.');
+    loadInlineSearchResults(tmpDotNotation);
+  });
 }

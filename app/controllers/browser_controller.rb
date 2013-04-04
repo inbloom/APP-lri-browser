@@ -45,7 +45,7 @@ class BrowserController < ApplicationController
           filter.keys.each do |f|
             orFilters << { 'query' => { 'match' => { key => f.to_s } } }
           end
-          filters << { 'or' => [ orFilters ] }
+          filters << { 'or' => orFilters }
         else
           # This should be simple, there is only one of this filter key
           filters << { 'query' => { 'match' => { key => filter.keys.first.to_s } } }
@@ -88,16 +88,46 @@ class BrowserController < ApplicationController
       searchResults = request.execute
       respond_to do |format|
         format.json { render json: searchResults }
+#        format.json { render json: payload.to_json }
       end
-#puts "RESPONSE"; puts searchResults
+puts "RESPONSE"; puts searchResults
     rescue => e
       # @TODO Need to return the correct error type and then an error message to be shown to user.
       respond_to do |format|
         format.json { render json: searchResults }
       end
-#puts "ERROR!"; puts e.response
+puts "ERROR!"; puts e.response
     end
 
   end
 
 end
+
+
+#{
+#    "size":"6",
+#    "from":"0",
+#    "query":{
+#      "filtered":{
+#      "query":{
+#        "match":{
+#          "_all":"fractions"
+#        }
+#      },
+#      "filter":{
+#        "limit":{
+#          "value":100
+#        },
+#        "and":[
+#          {
+#            "or":[
+#              [
+#                {
+#                  "query":{
+#                    "match":{
+#                      "properties.educationalUse":"Interactive"
+#                    }
+#                  }
+#                },
+#                {
+#                  "query":{"match":{"properties.educationalUse":"Reading"}}}]]},{"or":[[{"query":{"match":{"properties.learningResourceType":"Audio"}}},{"query":{"match":{"properties.learningResourceType":"Video"}}}]]},{"query":{"match":{"properties.mediaType":"Webpage"}}}]}}}}
