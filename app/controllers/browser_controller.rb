@@ -90,13 +90,13 @@ class BrowserController < ApplicationController
         format.json { render json: searchResults }
 #        format.json { render json: payload.to_json }
       end
-puts "RESPONSE"; puts searchResults
+#puts "RESPONSE"; puts searchResults
     rescue => e
       # @TODO Need to return the correct error type and then an error message to be shown to user.
       respond_to do |format|
         format.json { render json: searchResults }
       end
-puts "ERROR!"; puts e.response
+#puts "ERROR!"; puts e.response
     end
 
   end

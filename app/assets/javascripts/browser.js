@@ -430,7 +430,7 @@ function accordionTitle(string) {
 
 // This function fires off the search for each of the inline dotnotations as they are selected and asyncronously adds
 // them to the list as they come in.  Complete with pagination, adding "searching" and removing
-function loadInlineSearchResults(tmpDotNotation, limit, offset) {
+function loadInlineSearchResults(tmpDotNotation, offset, limit) {
 
   var className = tmpDotNotation.replace(/\./g,"_");
   $('div.inlineResults._'+className).addClass('loading').removeClass('empty').empty();
@@ -438,6 +438,9 @@ function loadInlineSearchResults(tmpDotNotation, limit, offset) {
   var query = 'fractions';
   var limit = (limit != undefined)?limit:6;
   var offset = (offset != undefined)?offset:0;
+
+  // Set our limit and offset on the div
+  $().data('div.inlineResults._'+className, { 'limit': limit, 'offset': limit });
 
   var filters = {};
   // Add the filter for this dot notation
@@ -491,6 +494,15 @@ function parseInlineSearchResults(results, tmpDotNotation) {
     for(i in results.hits) {
       $('<div class="item"><div class="content"><h4>' + results.hits[i]['_source']['properties']['name'][0] + '</h4><h5>Provider Organization</h5></div></div>').appendTo('div.inlineResults._'+className);
     }
+    var pagination = '<div class="pagination">';
+    pagination += '<a href="#" class="paginatorPage symbol">\u00ab</a>';
+    var numPages = results.total / 6;
+    for (var i = 0; i < numPages; i++) {
+      pagination += '<a href="#" class="paginatorPage">' + i + '</a>';
+    }
+    pagination += '<a href="#" class="paginatorPage symbol">\u00bb</a>';
+    pagination += '</div>'
+    $(pagination).appendTo('div.inlineResults._'+className);
   }
 }
 

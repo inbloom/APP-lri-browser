@@ -378,7 +378,7 @@ section.bottom {
           list-style: none;
           li {
             margin-bottom: 15px;
-            clear: left;
+            clear: both;
             &:before {
               color: #1195d5;
               font-size: 22px;
@@ -420,6 +420,17 @@ section.bottom {
                 font-weight: bold;
                 &:before {
                   content: "No Results Found";
+                }
+              }
+              div.pagination {
+                float: right;
+                a {
+                  text-decoration: none;
+                  padding: 0 3px;
+                  font-size: 14px;
+                  &.symbol {
+                    font-size: 20px;
+                  }
                 }
               }
               div.item {
