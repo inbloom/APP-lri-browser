@@ -10,9 +10,34 @@ include ActionView::Helpers::SanitizeHelper
 
 @lri_addy = 'http://lriserver.inbloom.org'
 @lri_un = 'lri'
-@lri_pw = 'secret'
+@lri_pw = '7u2GR94z'
 
 @response_json = Hash.new{ |h,k| h[k] = Hash.new(&h.default_proc) }
+
+@grade_table = {
+  0 => 'K',
+  1 => '1',
+  2 => '2',
+  3 => '3',
+  4 => '4',
+  5 => '5',
+  6 => '6',
+  7 => '6-8',
+  8 => '7',
+  9 => '8',
+  10 => '9',
+  11 => '9-10',
+  12 => '10',
+  13 => '10-11',
+  14 => '11',
+  15 => '11-12',
+  16 => '12',
+  17 => 'HSN',
+  18 => 'HSA',
+  19 => 'HSF',
+  20 => 'HSG',
+  21 => 'HSS'
+}
 
 class String
   def pop_node
@@ -65,10 +90,20 @@ def recursive_harvest_property(property_id, i)
   contains = property_data['props']['urn:lri:property_type:contains']
   if contains.class == String
     create_key property_id, property_data['props']['urn:lri:property_type:name']
-  elsif contains.to_a.count > 0  
+  elsif contains.to_a.count > 0    
     i += 1
-    contains.each do |property_id|
-      recursive_harvest_property(property_id, i)
+    contains_sorted = {}
+    if (property_id.include? 'urn:ccss:set:CCSS.Math.Content') || (property_id.include? 'urn:ccss:domain:CCSS.ELA-Literacy')
+      contains.each do |property_id|
+        contains_sorted.merge! @grade_table.key(property_id.split('.').last) => property_id
+      end
+      contains_sorted.sort.map do |k,v|
+        recursive_harvest_property(v, i)
+      end
+    else  
+      contains.each do |property_id|
+        recursive_harvest_property(property_id, i)
+      end
     end
   end
 end
