@@ -127,6 +127,17 @@ $(function() {
         return false;
     });
 
+    // Pagination links onclick
+    $(document).on('click', 'a.paginatorPage', function() {
+      // get the dot notation and page
+      var href = $(this).attr('href').replace('#','');
+      var split = href.split('!');
+      var tmpDotNotation = split[0];
+      var tmpPage = split[1];
+      loadInlineSearchResults(tmpDotNotation, tmpPage)
+      return false;
+    });
+
     /*
      * Live event for nav links
      *
@@ -430,17 +441,19 @@ function accordionTitle(string) {
 
 // This function fires off the search for each of the inline dotnotations as they are selected and asyncronously adds
 // them to the list as they come in.  Complete with pagination, adding "searching" and removing
-function loadInlineSearchResults(tmpDotNotation, offset, limit) {
+function loadInlineSearchResults(tmpDotNotation, page, limit) {
 
   var className = tmpDotNotation.replace(/\./g,"_");
   $('div.inlineResults._'+className).addClass('loading').removeClass('empty').empty();
 
   var query = 'fractions';
+  var page = (page != undefined)?page:1;
   var limit = (limit != undefined)?limit:6;
-  var offset = (offset != undefined)?offset:0;
+  var offset = (page -1) * limit;
 
-  // Set our limit and offset on the div
-  $().data('div.inlineResults._'+className, { 'limit': limit, 'offset': limit });
+  // Set our page and limit on the div
+  $('div.inlineResults._'+className).attr('data-page', page);
+  $('div.inlineResults._'+className).attr('data-limit', limit);
 
   var filters = {};
   // Add the filter for this dot notation
@@ -488,6 +501,10 @@ function parseInlineSearchResults(results, tmpDotNotation) {
   var className = tmpDotNotation.replace(/\./g,"_");
   $('div.inlineResults._'+className).removeClass('loading');
 
+  // Set our page and limit from the div
+  var page = $('div.inlineResults._'+className).attr('data-page');
+  var limit = $('div.inlineResults._'+className).attr('data-limit');
+
   if (results.hits.length == 0) {
     $('div.inlineResults._'+className).addClass('empty');
   } else {
@@ -495,12 +512,20 @@ function parseInlineSearchResults(results, tmpDotNotation) {
       $('<div class="item"><div class="content"><h4>' + results.hits[i]['_source']['properties']['name'][0] + '</h4><h5>Provider Organization</h5></div></div>').appendTo('div.inlineResults._'+className);
     }
     var pagination = '<div class="pagination">';
-    pagination += '<a href="#" class="paginatorPage symbol">\u00ab</a>';
-    var numPages = results.total / 6;
-    for (var i = 0; i < numPages; i++) {
-      pagination += '<a href="#" class="paginatorPage">' + i + '</a>';
+    pagination += '<a href="#'+tmpDotNotation+'!'+1+'" class="paginatorPage symbol'+((page == 1)?' disabled':'')+'">\u00ab</a>';
+    var numPages = Math.ceil(results.total / 6);
+    for (var i = 1; i <= numPages; i++) {
+      if (page > 5 && i == 1) {
+        pagination += '<a href="#'+tmpDotNotation+'!'+i+'" class="paginatorPage'+((page == i)?' active':'')+'">' + i + '</a> ... ';
+      }
+      if ((i - 5) < page && (i + 5) > page) {
+        pagination += '<a href="#'+tmpDotNotation+'!'+i+'" class="paginatorPage'+((page == i)?' active':'')+'">' + i + '</a>';
+      }
+      if (page < (numPages - 5) && i == numPages) {
+        pagination += ' ... <a href="#'+tmpDotNotation+'!'+i+'" class="paginatorPage'+((page == i)?' active':'')+'">' + i + '</a>';
+      }
     }
-    pagination += '<a href="#" class="paginatorPage symbol">\u00bb</a>';
+    pagination += '<a href="#'+tmpDotNotation+'!'+numPages+'" class="paginatorPage symbol'+((page == numPages)?' disabled':'')+'">\u00bb</a>';
     pagination += '</div>'
     $(pagination).appendTo('div.inlineResults._'+className);
   }
