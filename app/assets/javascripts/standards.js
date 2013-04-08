@@ -1,4 +1,4 @@
 var jsonStandards;
-$.getJSON("ccss.json", function(json) {
+$.getJSON("ccss-sorted.json", function(json) {
     jsonStandards = json;
 });
