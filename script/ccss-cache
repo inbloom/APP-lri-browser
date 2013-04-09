@@ -14,6 +14,8 @@ include ActionView::Helpers::SanitizeHelper
 
 @response_json = Hash.new{ |h,k| h[k] = Hash.new(&h.default_proc) }
 
+@order = []
+
 @grade_table = {
   0 => 'K',
   1 => '1',
@@ -50,6 +52,9 @@ def create_key notation, value
   nodes.inject(@response_json) { |h, k|
     h[k]
   }['_text'] = value
+  nodes.inject(@response_json) { |h, k|
+    h[k]
+  }['_order'] = @order
 end
 
 def execute_query request_uri
@@ -80,6 +85,15 @@ def harvest_property property_id, i
   
   text = HTMLEntities.new.decode strip_tags text
   
+  contains_sorted = {}
+  contains = data['props']['urn:lri:property_type:contains']
+  if (property_id.include? 'urn:ccss:set:CCSS.Math.Content') || (property_id.include? 'urn:ccss:domain:CCSS.ELA-Literacy')
+    contains.each do |property_id|
+      contains_sorted.merge! @grade_table.key(property_id.split('.').last) => property_id
+    end
+  end
+  @order = contains_sorted
+  
   create_key property_id, text  
   
   data
@@ -97,10 +111,12 @@ def recursive_harvest_property(property_id, i)
       contains.each do |property_id|
         contains_sorted.merge! @grade_table.key(property_id.split('.').last) => property_id
       end
+      @order = contains_sorted.to_a
       contains_sorted.sort.map do |k,v|
         recursive_harvest_property(v, i)
       end
     else  
+      @order = contains.to_a
       contains.each do |property_id|
         recursive_harvest_property(property_id, i)
       end
