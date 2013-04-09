@@ -112,6 +112,10 @@ header {
       color: #a8a8a8;
       font-size: 30px;
       line-height: 15px;
+      display: none;
+      &:hover {
+        color: #444444;
+      }
     }
   }
 
@@ -368,6 +372,7 @@ section.bottom {
         height: 38px;
         border: 0;
         background: url(/assets/search-close.png) no-repeat;
+        z-index:1;
       }
       button.close-facets {
         position: absolute;
@@ -387,6 +392,9 @@ section.bottom {
         height: 38px;
         border: 0;
         background: url(/assets/search-filters.png) no-repeat;
+      }
+      div.results._search {
+        left: 20px;
       }
     }
 
