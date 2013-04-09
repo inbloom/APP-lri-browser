@@ -1,80 +1,82 @@
 // Now set some stuff on ready
 $(function() {
-    // Some initial values
-    gradeRanges = { 'minimum': 0, 'maximum': 12 }
-    subject = 'ccssmath';
-    
-    // Some position helpers K-12 in the event the need to be different sizes
-    // Minimum is the offset for the left slider position compared to actual
-    // Maximum is the offset for the right slider position compared to actual
-    // Leftboundary is used when moving either slider from left to right
-    // Rightboundary is used when moving either slider from right to left
-    loc_offsets = {
-        0 : {'minimum':-27,'maximum':42, 'leftBoundary': 15, 'rightBoundary': 45},
-        1 : {'minimum':-27,'maximum':42, 'leftBoundary': 45, 'rightBoundary': 75},
-        2 : {'minimum':-27,'maximum':42, 'leftBoundary': 75, 'rightBoundary': 105},
-        3 : {'minimum':-27,'maximum':42, 'leftBoundary': 105, 'rightBoundary': 135},
-        4 : {'minimum':-27,'maximum':42, 'leftBoundary': 135, 'rightBoundary': 165},
-        5 : {'minimum':-27,'maximum':42, 'leftBoundary': 165, 'rightBoundary': 195},
-        6 : {'minimum':-27,'maximum':42, 'leftBoundary': 195, 'rightBoundary': 225},
-        7 : {'minimum':-27,'maximum':42, 'leftBoundary': 225, 'rightBoundary': 255},
-        8 : {'minimum':-27,'maximum':42, 'leftBoundary': 255, 'rightBoundary': 285},
-        9 : {'minimum':-27,'maximum':42, 'leftBoundary': 285, 'rightBoundary': 315},
-        10 : {'minimum':-27,'maximum':42, 'leftBoundary': 315, 'rightBoundary': 345},
-        11 : {'minimum':-27,'maximum':42, 'leftBoundary': 345, 'rightBoundary': 375},
-        12 : {'minimum':-27,'maximum':42, 'leftBoundary': 375, 'rightBoundary': 405}
-    }
+  // Some initial values
+  gradeRanges = { 'minimum': 0, 'maximum': 12 }
+  subject = 'ccssmath';
+  inlineSearchLimit = 6;
+  searchLimit = 12;
 
-    // Now turn on the UI and set defaults
-    setTimeout(function(){
-        setGradeRange(gradeRanges);
-        setGradeRange(gradeRanges);
-        setSubject(subject, 0);
-        // Build the accordion based on dynamic content (that's hard coded for the time being until we learn to get it from the lri)
-        buildAccordionNavigation($('div.accordion._ccssmath'), 'ccssmath');
-        buildAccordionNavigation($('div.accordion._ccsselaliteracy'), 'ccsselaliteracy');
-        // Initialization of the accordion
-        $(".accordion").accordion({
-            heightStyle: 'content',
-            animate: 'easeInOutCubic'
-        });
-    },500);
+  // Some position helpers K-12 in the event the need to be different sizes
+  // Minimum is the offset for the left slider position compared to actual
+  // Maximum is the offset for the right slider position compared to actual
+  // Leftboundary is used when moving either slider from left to right
+  // Rightboundary is used when moving either slider from right to left
+  loc_offsets = {
+    0 : {'minimum':-27,'maximum':42, 'leftBoundary': 15, 'rightBoundary': 45},
+    1 : {'minimum':-27,'maximum':42, 'leftBoundary': 45, 'rightBoundary': 75},
+    2 : {'minimum':-27,'maximum':42, 'leftBoundary': 75, 'rightBoundary': 105},
+    3 : {'minimum':-27,'maximum':42, 'leftBoundary': 105, 'rightBoundary': 135},
+    4 : {'minimum':-27,'maximum':42, 'leftBoundary': 135, 'rightBoundary': 165},
+    5 : {'minimum':-27,'maximum':42, 'leftBoundary': 165, 'rightBoundary': 195},
+    6 : {'minimum':-27,'maximum':42, 'leftBoundary': 195, 'rightBoundary': 225},
+    7 : {'minimum':-27,'maximum':42, 'leftBoundary': 225, 'rightBoundary': 255},
+    8 : {'minimum':-27,'maximum':42, 'leftBoundary': 255, 'rightBoundary': 285},
+    9 : {'minimum':-27,'maximum':42, 'leftBoundary': 285, 'rightBoundary': 315},
+    10 : {'minimum':-27,'maximum':42, 'leftBoundary': 315, 'rightBoundary': 345},
+    11 : {'minimum':-27,'maximum':42, 'leftBoundary': 345, 'rightBoundary': 375},
+    12 : {'minimum':-27,'maximum':42, 'leftBoundary': 375, 'rightBoundary': 405}
+  }
 
-    // Make Left Handle Draggable
-    $('div.slider-handle-left').draggable({
-        axis: 'x',
-        containment: 'parent',
-        drag: function(event, ui) {
-            var position = $(this).offset().left - ageRangeSlider.left; 
-            for (i in loc_offsets) {
-                if (i > gradeRanges.maximum) continue;
-                if (position < (loc_offsets[i].leftBoundary+10) && position > (loc_offsets[i].leftBoundary-10)) {
-                    setGradeRange({'minimum':i});
-                }
-            }
-        },
-        stop: function(event, ui) {
-            setGradeRange();
-        }
+  // Now turn on the UI and set defaults
+  setTimeout(function(){
+    setGradeRange(gradeRanges);
+    setGradeRange(gradeRanges);
+    setSubject(subject, 0);
+    // Build the accordion based on dynamic content (that's hard coded for the time being until we learn to get it from the lri)
+    buildAccordionNavigation($('div.accordion._ccssmath'), 'ccssmath');
+    buildAccordionNavigation($('div.accordion._ccsselaliteracy'), 'ccsselaliteracy');
+    // Initialization of the accordion
+    $(".accordion").accordion({
+      heightStyle: 'content',
+      animate: 'easeInOutCubic'
     });
+  },500);
 
-    // Make Right Handle Draggable
-    $('div.slider-handle-right').draggable({
-        axis: 'x',
-        containment: 'parent',
-        drag: function(event, ui) {
-            var position = $(this).offset().left - ageRangeSlider.left;
-            for (i in loc_offsets) {
-                if (i < gradeRanges.minimum) continue;
-                if (position < (loc_offsets[i].rightBoundary+10) && position > (loc_offsets[i].rightBoundary-10)) {
-                    setGradeRange({'maximum':i});
-                }
-            }
-        },
-        stop: function(event, ui) {
-            setGradeRange();
-        }
-    });
+  // Make Left Handle Draggable
+  $('div.slider-handle-left').draggable({
+      axis: 'x',
+      containment: 'parent',
+      drag: function(event, ui) {
+          var position = $(this).offset().left - ageRangeSlider.left;
+          for (i in loc_offsets) {
+              if (i > gradeRanges.maximum) continue;
+              if (position < (loc_offsets[i].leftBoundary+10) && position > (loc_offsets[i].leftBoundary-10)) {
+                  setGradeRange({'minimum':i});
+              }
+          }
+      },
+      stop: function(event, ui) {
+          setGradeRange();
+      }
+  });
+
+  // Make Right Handle Draggable
+  $('div.slider-handle-right').draggable({
+      axis: 'x',
+      containment: 'parent',
+      drag: function(event, ui) {
+          var position = $(this).offset().left - ageRangeSlider.left;
+          for (i in loc_offsets) {
+              if (i < gradeRanges.minimum) continue;
+              if (position < (loc_offsets[i].rightBoundary+10) && position > (loc_offsets[i].rightBoundary-10)) {
+                  setGradeRange({'maximum':i});
+              }
+          }
+      },
+      stop: function(event, ui) {
+          setGradeRange();
+      }
+  });
 
 //    // Make subjects clickable So that it selects between them -- only one can be selected.
 //    $('div.subjects li a').click(function(e) {
@@ -85,209 +87,222 @@ $(function() {
 //        return false;
 //    });
 
-    $(document).on('click', '#_ccssmath', function() {
-      subject = 'ccssmath';
-      setSubject(subject);
+  $(document).on('click', '#_ccssmath', function() {
+    subject = 'ccssmath';
+    setSubject(subject);
+    return false;
+  });
+  $(document).on('click', '#_ccsselaliteracy', function() {
+    subject = 'ccsselaliteracy';
+    setSubject(subject);
+    return false;
+  });
+
+  // filter checkboxes
+  $(document).on('click', '#teachersCheckbox', function() {
+    refreshInlineSearchResults();
+  });
+  $(document).on('click', '#studentsCheckbox', function() {
+    refreshInlineSearchResults();
+  });
+  $(document).on('click', '#pagesCheckbox', function() {
+    refreshInlineSearchResults();
+  });
+  $(document).on('click', '#mediaCheckbox', function() {
+    refreshInlineSearchResults();
+  });
+
+  // Make form work via ajax post
+  $(document).on('submit', '#superform', function() {
+      var request = $.ajax({
+          url: $(this).attr('action'),
+          type: 'post',
+          dataType: 'json'
+      });
+      request.done(function(xhr, status) {
+          redrawSearchResults(xhr);
+      });
+      request.fail(function(xhr, status) {
+          // TODO An actual modal with error messages and what not is needed!
+          alert('Search Failed: ' + status);
+      })
       return false;
-    });
-    $(document).on('click', '#_ccsselaliteracy', function() {
-      subject = 'ccsselaliteracy';
-      setSubject(subject);
-      return false;
-    });
+  });
 
-    // filter checkboxes
-    $(document).on('click', '#teachersCheckbox', function() {
-      refreshInlineSearchResults();
-    });
-    $(document).on('click', '#studentsCheckbox', function() {
-      refreshInlineSearchResults();
-    });
-    $(document).on('click', '#pagesCheckbox', function() {
-      refreshInlineSearchResults();
-    });
-    $(document).on('click', '#mediaCheckbox', function() {
-      refreshInlineSearchResults();
-    });
+  // Pagination links onclick
+  $(document).on('click', 'a.paginatorPage', function() {
+    // get the dot notation and page
+    var href = $(this).attr('href').replace('#','');
+    var split = href.split('!');
+    var tmpDotNotation = split[0];
+    var tmpPage = split[1];
+    loadInlineSearchResults(tmpDotNotation, tmpPage)
+    return false;
+  });
 
-    // Make form work via ajax post
-    $(document).on('submit', '#superform', function() {
-        var request = $.ajax({
-            url: $(this).attr('action'),
-            type: 'post',
-            dataType: 'json'
-        });
-        request.done(function(xhr, status) {
-            redrawSearchResults(xhr);
-        });
-        request.fail(function(xhr, status) {
-            // TODO An actual modal with error messages and what not is needed!
-            alert('Search Failed: ' + status);
-        })
-        return false;
-    });
+  /*
+   * Live event for nav links
+   *
+   * This is the magic of the UI for the time being.  This on click method goes through and pulls the information out
+   * of the standard json blog and updates the UI with the information it has.  If the information isn't there, i tcan't
+   * use it obviously.
+   *
+   */
 
-    // Pagination links onclick
-    $(document).on('click', 'a.paginatorPage', function() {
-      // get the dot notation and page
+  $(document).on('click', 'a[rel=navlink]', function() {
+      // Strip away the #
       var href = $(this).attr('href').replace('#','');
-      var split = href.split('!');
-      var tmpDotNotation = split[0];
-      var tmpPage = split[1];
-      loadInlineSearchResults(tmpDotNotation, tmpPage)
+      // Split the href by dot since its a dotnotation
+      var split = href.split('.');
+      // Find our panel name (strip dashes)
+      var panel = ('_' + split[0] + split[1]).toLowerCase().replace('-','');
+      // Parent Notation -- Massage the dots into an array..ish
+      var parent = '';
+      for (i in split) {
+          if (i == split.length-1) continue;
+          parent += '["' + split[i] + '"]';
+      }
+      // Eval out the parent standard
+      eval("var parentStandard = jsonStandards"+parent+";");
+      // Clicked Notation -- Massage the dots into an array..ish
+      var notation = '["'+href.replace(/\./g,'"]["')+'"]';
+      // Eval out the standard
+      eval("var standard = jsonStandards"+notation+";");
+
+      // Remove active highlight from all of this panels links and add it to this one.
+      $('div.panel.'+panel+' a[rel=navlink]').removeClass('active');
+      $(this).addClass('active');
+
+      // Update the Header information
+      // Set the grade in the panel
+      $('div.results.'+panel+' span.strand').html(parentStandard._text);
+      // Set the domain in the panel
+      $('div.results.'+panel+' span.domain').html(standard._text);
+
+      /** Handle the panels differently based on which one it is.
+       * Okay this sucks, but the irony is that the standards arent standardized so we have to handle them completely differently.
+       *
+       * CCSS.Math ~ Initiative.Framework.Set.Grade.Domain.Cluster.Standard.{Component}
+       * CCSS.ELA ~ Initiative.Framework.{Set}.Domain.Grade.Standard.{Component}
+       *
+       * Initiative : The top level organization that a standar dcan belong to.
+       * Framework : Essentially the subject
+       * Set : Some subjects have subsets of content, optional in ELA and not used that I can tell.
+       * Grade : Grade level
+       * Domain : A grouping under each grade of the specific domain content
+       * Cluster : A subgrouping in each domain of the underlying standards
+       * Standard : The thing students are heald to
+       * Component : A substandard that makes up the standards, optional but used in ELA a lot
+       *
+       * At this time, ELA doesn't have the notion of a cluster but really needs it.
+       * See this mess for more information: http://www.corestandards.org/assets/identifiers_feedback_memo.pdf
+       *
+       */
+
+      // An array of dot notations to dynamically load
+      var dynamicLoad = [];
+
+      // Handle CCSS.Math output
+      if (panel == '_ccssmath') {
+          // Update the standards information in the panel
+          $('div.results.'+panel+' div.domains').empty();
+          for (i in standard) {
+              if (i == '_text') continue;
+              for (t in standard[i]) {
+                  if (t == '_text') continue;
+                  var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
+                  var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+                  $('<a href="#'+tmpText+'">'+tmpDotNotation+'</a>').appendTo('div.results.'+panel+' div.domains');
+              }
+          }
+
+          // Update the standards information
+          $('div.results.'+panel+' div.content').empty();
+          for (i in standard) {
+              if (i == '_text') continue;
+              var tmpTextContent = '';
+              for (t in standard[i]) {
+                  if (t == '_text') {
+                      var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
+                      eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+";");
+                      tmpTextContent = '<h4>'+tmpStandard+'</h4><ul>' + tmpTextContent;
+                  } else {
+                      var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
+                      var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+                      var className = tmpDotNotation.replace(/\./g,"_");
+                      dynamicLoad.push(tmpDotNotation);
+                      eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
+                      tmpTextContent += '<li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'"></div></div></li>';
+                  }
+              }
+              tmpTextContent += '</ul>';
+              $('div.results.'+panel+' div.content').append(tmpTextContent);
+          }
+      }
+
+      // Handle CCSS.ELA-Literacy output
+      if (panel == '_ccsselaliteracy') {
+          // Update the standards information in the panel
+          $('div.results.'+panel+' div.domains').empty();
+          for (t in standard) {
+              if (t == '_text') continue;
+              var tmpStandardArrayLocation = notation+'["'+t+'"]';
+              var tmpText = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+              $('<a href="#'+tmpText+'">'+tmpText+'</a>').appendTo('div.results.'+panel+' div.domains');
+          }
+
+          //Update the standards information
+          $('div.results.'+panel+' div.content').empty();
+          var tmpTextContent = '<ul>';
+          for (i in standard) {
+              if (i == '_text') continue;
+              var tmpStandardArrayLocation = notation+'["'+i+'"]';
+              var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+              eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
+              tmpTextContent += '<li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '</li>';
+
+              for (t in standard[i]) {
+                  if (t == '_text') continue;
+                  var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
+                  var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+                  var className = tmpDotNotation.replace(/\./g,"_");
+                  dynamicLoad.push(tmpDotNotation);
+                  eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
+                  tmpTextContent += '<ul><li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'"></div></div></li></ul>';
+              }
+
+          }
+          tmpTextContent += '</ul>';
+          $('div.results.'+panel+' div.content').append(tmpTextContent);
+      }
+
+      // Fire off the dynamic loads
+      for (i in dynamicLoad) {
+          loadInlineSearchResults(dynamicLoad[i]);
+      }
+
       return false;
-    });
+  });
 
-    /*
-     * Live event for nav links
-     *
-     * This is the magic of the UI for the time being.  This on click method goes through and pulls the information out
-     * of the standard json blog and updates the UI with the information it has.  If the information isn't there, i tcan't
-     * use it obviously.
-     *
-     */
+  // Add an event to the search text area on hitting return it submits
+  $(document).on('keyup', '#form-search-filter', function(e) {
+    if (e.keyCode == 13) {
+      search($('#form-search-filter').val());
+    }
+  });
 
-    $(document).on('click', 'a[rel=navlink]', function() {
-        // Strip away the #
-        var href = $(this).attr('href').replace('#','');
-        // Split the href by dot since its a dotnotation
-        var split = href.split('.');
-        // Find our panel name (strip dashes)
-        var panel = ('_' + split[0] + split[1]).toLowerCase().replace('-','');
-        // Parent Notation -- Massage the dots into an array..ish
-        var parent = '';
-        for (i in split) {
-            if (i == split.length-1) continue;
-            parent += '["' + split[i] + '"]';
-        }
-        // Eval out the parent standard
-        eval("var parentStandard = jsonStandards"+parent+";");
-        // Clicked Notation -- Massage the dots into an array..ish
-        var notation = '["'+href.replace(/\./g,'"]["')+'"]';
-        // Eval out the standard
-        eval("var standard = jsonStandards"+notation+";");
+  // If user clicks the X in the search bar clear it.
+  $(document).on('click', '#superform div.search button', function(e) {
+    console.log('clear');
+    return false;
+  });
 
-        // Remove active highlight from all of this panels links and add it to this one.
-        $('div.panel.'+panel+' a[rel=navlink]').removeClass('active');
-        $(this).addClass('active');
-
-        // Update the Header information
-        // Set the grade in the panel
-        $('div.results.'+panel+' span.strand').html(parentStandard._text);
-        // Set the domain in the panel
-        $('div.results.'+panel+' span.domain').html(standard._text);
-
-        /** Handle the panels differently based on which one it is.
-         * Okay this sucks, but the irony is that the standards arent standardized so we have to handle them completely differently.
-         *
-         * CCSS.Math ~ Initiative.Framework.Set.Grade.Domain.Cluster.Standard.{Component}
-         * CCSS.ELA ~ Initiative.Framework.{Set}.Domain.Grade.Standard.{Component}
-         *
-         * Initiative : The top level organization that a standar dcan belong to.
-         * Framework : Essentially the subject
-         * Set : Some subjects have subsets of content, optional in ELA and not used that I can tell.
-         * Grade : Grade level
-         * Domain : A grouping under each grade of the specific domain content
-         * Cluster : A subgrouping in each domain of the underlying standards
-         * Standard : The thing students are heald to
-         * Component : A substandard that makes up the standards, optional but used in ELA a lot
-         *
-         * At this time, ELA doesn't have the notion of a cluster but really needs it.
-         * See this mess for more information: http://www.corestandards.org/assets/identifiers_feedback_memo.pdf
-         *
-         */
-
-        // An array of dot notations to dynamically load
-        var dynamicLoad = [];
-
-        // Handle CCSS.Math output
-        if (panel == '_ccssmath') {
-            // Update the standards information in the panel
-            $('div.results.'+panel+' div.domains').empty();
-            for (i in standard) {
-                if (i == '_text') continue;
-                for (t in standard[i]) {
-                    if (t == '_text') continue;
-                    var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
-                    var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
-                    $('<a href="#'+tmpText+'">'+tmpDotNotation+'</a>').appendTo('div.results.'+panel+' div.domains');
-                }
-            }
-
-            // Update the standards information
-            $('div.results.'+panel+' div.content').empty();
-            for (i in standard) {
-                if (i == '_text') continue;
-                var tmpTextContent = '';
-                for (t in standard[i]) {
-                    if (t == '_text') {
-                        var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
-                        eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+";");
-                        tmpTextContent = '<h4>'+tmpStandard+'</h4><ul>' + tmpTextContent;
-                    } else {
-                        var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
-                        var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
-                        var className = tmpDotNotation.replace(/\./g,"_");
-                        dynamicLoad.push(tmpDotNotation);
-                        eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
-                        tmpTextContent += '<li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'"></div></div></li>';
-                    }
-                }
-                tmpTextContent += '</ul>';
-                $('div.results.'+panel+' div.content').append(tmpTextContent);
-            }
-        }
-
-        // Handle CCSS.ELA-Literacy output
-        if (panel == '_ccsselaliteracy') {
-            // Update the standards information in the panel
-            $('div.results.'+panel+' div.domains').empty();
-            for (t in standard) {
-                if (t == '_text') continue;
-                var tmpStandardArrayLocation = notation+'["'+t+'"]';
-                var tmpText = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
-                $('<a href="#'+tmpText+'">'+tmpText+'</a>').appendTo('div.results.'+panel+' div.domains');
-            }
-
-            //Update the standards information
-            $('div.results.'+panel+' div.content').empty();
-            var tmpTextContent = '<ul>';
-            for (i in standard) {
-                if (i == '_text') continue;
-                var tmpStandardArrayLocation = notation+'["'+i+'"]';
-                var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
-                eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
-                tmpTextContent += '<li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '</li>';
-
-                for (t in standard[i]) {
-                    if (t == '_text') continue;
-                    var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
-                    var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
-                    var className = tmpDotNotation.replace(/\./g,"_");
-                    dynamicLoad.push(tmpDotNotation);
-                    eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
-                    tmpTextContent += '<ul><li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'"></div></div></li></ul>';
-                }
-
-            }
-            tmpTextContent += '</ul>';
-            $('div.results.'+panel+' div.content').append(tmpTextContent);
-        }
-
-        // Fire off the dynamic loads
-        for (i in dynamicLoad) {
-            loadInlineSearchResults(dynamicLoad[i]);
-        }
-
-        return false;
-    });
-
-    // Set onresize handlers
-    $(window).resize(function() {
-        setSubject(subject,0);
-        setGradeRange(gradeRanges);
-        $(".accordion").accordion("refresh");
-    });
+  // Set onresize handlers
+  $(window).resize(function() {
+    setSubject(subject,0);
+    setGradeRange(gradeRanges);
+    $(".accordion").accordion("refresh");
+  });
 });
 
 // Set grade range and the slider
@@ -325,11 +340,13 @@ function setGradeRange(ranges) {
 
 // Set the subject and move the cursor accordingly
 function setSubject(subject, rate) {
-    if (rate == undefined) rate = 500;
-    $('div.subjects button').removeClass('selected');
-    $('div.subjects button#_'+subject).addClass('selected');
-    $('#form-subject').attr('value', subject);
+  if (rate == undefined) rate = 500;
+  $('div.subjects button').removeClass('selected');
+  $('div.subjects button#_'+subject).addClass('selected');
+  $('#form-subject').attr('value', subject);
 
+  // different behavior based on if we are searching or not
+  if (!$('div.panel._search').is(':visible')) {
     // Transition old panel off
     if (subject == 'ccssmath') {
         $('div.panel._ccsselaliteracy').stop().animate({left:$(document).width()},rate,'easeInOutCubic',function() { });
@@ -340,8 +357,48 @@ function setSubject(subject, rate) {
         $('div.panel._ccssmath').stop().animate({left:-$(document).width()},rate,'easeInOutCubic',function() { });
         $('div.panel._search').stop().hide();
     }
+  } else {
+    // @TODO Refire the search cause they just changed subject while search was showing
+  }
 }
 
+// Toggle the visibility of the search panel, OR show/hide it based on bool
+function toggleSearchPanel(bool) {
+  if (bool == undefined) {
+    if ($('div.panel._search').is(':visible')) {
+      $('div.panel').stop().hide();
+      setSubject(subject,0);
+    } else {
+      $('div.panel').stop().hide();
+      $('div.panel._search').stop().show();
+    }
+  } else {
+    if (bool) {
+      $('div.panel').stop().hide();
+      $('div.panel._search').stop().show();
+    } else {
+      $('div.panel').stop().hide();
+      setSubject(subject,0);
+    }
+  }
+}
+
+// Toggle the visibility of the search mask, OR show/hide it based on bool
+function toggleSearchMask(bool) {
+  if (bool == undefined) {
+    if ($('div.searching-mask').is(':visible')) {
+      $('div.searching-mask').stop().animate({opacity:0},500,'easeInOutCubic',function() { $(this).hide(); });
+    } else {
+      $('div.searching-mask').stop().css({opacity:0}).show().animate({opacity:0.8},500,'easeInOutCubic',function() { });
+    }
+  } else {
+    if (bool) {
+      $('div.searching-mask').stop().css({opacity:0}).show().animate({opacity:0.8},500,'easeInOutCubic',function() { });
+    } else {
+      $('div.searching-mask').stop().animate({opacity:0},500,'easeInOutCubic',function() { $(this).hide(); });
+    }
+  }
+}
 
 // Here we redraw the search results panel from an xhr.
 function redrawSearchResults(res) {
@@ -446,9 +503,9 @@ function loadInlineSearchResults(tmpDotNotation, page, limit) {
   var className = tmpDotNotation.replace(/\./g,"_");
   $('div.inlineResults._'+className).addClass('loading').removeClass('empty').empty();
 
-  var query = 'fractions';
+  var query = '';
   var page = (page != undefined)?page:1;
-  var limit = (limit != undefined)?limit:6;
+  var limit = (limit != undefined)?limit:inlineSearchLimit;
   var offset = (page -1) * limit;
 
   // Set our page and limit on the div
@@ -457,17 +514,16 @@ function loadInlineSearchResults(tmpDotNotation, page, limit) {
 
   var filters = {};
   // Add the filter for this dot notation
-//    filters['properties.educationalAlignment.properties.targetName['+tmpDotNotation+ ']'] = true;
+    filters['properties.educationalAlignment.properties.targetName['+tmpDotNotation+ ']'] = true;
   // If "Audio / Video / Interactive" is checked add those filters
   if ($("#mediaCheckbox").prop('checked')) {
-    filters['properties.educationalUse[Interactive]'] = true;
+    filters['properties.learningResourceType[On-Line]'] = true;
     filters['properties.learningResourceType[Audio]'] = true;
     filters['properties.learningResourceType[Video]'] = true;
   }
   // If "Reading & Web Pages" is checked add those filters
   if ($("#pagesCheckbox").prop('checked')) {
     filters['properties.educationalUse[Reading]'] = true;
-    filters['properties.mediaType[Webpage]'] = true;
   }
   // If "For Students" is checked add those filters
   if ($("#studentsCheckbox").prop('checked')) {
@@ -509,11 +565,17 @@ function parseInlineSearchResults(results, tmpDotNotation) {
     $('div.inlineResults._'+className).addClass('empty');
   } else {
     for(i in results.hits) {
-      $('<div class="item"><div class="content"><h4>' + results.hits[i]['_source']['properties']['name'][0] + '</h4><h5>Provider Organization</h5></div></div>').appendTo('div.inlineResults._'+className);
+      var props = results.hits[i]['_source']['properties'];
+      var thumbnail = '';
+      if (props['thumbnailUrl'] != undefined) {
+        thumbnail = props['thumbnailUrl'][0]
+      }
+
+      $('<div class="item" style="background-image: url('+thumbnail+');"><div class="content"><h4>' + props['name'][0] + '</h4><h5>Provider Organization</h5></div></div>').appendTo('div.inlineResults._'+className);
     }
     var pagination = '<div class="pagination">';
     pagination += '<a href="#'+tmpDotNotation+'!'+1+'" class="paginatorPage symbol'+((page == 1)?' disabled':'')+'">\u00ab</a>';
-    var numPages = Math.ceil(results.total / 6);
+    var numPages = Math.ceil(results.total / inlineSearchLimit);
     for (var i = 1; i <= numPages; i++) {
       if (page > 5 && i == 1) {
         pagination += '<a href="#'+tmpDotNotation+'!'+i+'" class="paginatorPage'+((page == i)?' active':'')+'">' + i + '</a> ... ';
@@ -537,4 +599,60 @@ function refreshInlineSearchResults() {
     var tmpDotNotation = $(this).attr('class').replace('inlineResults','').replace('loading','').replace('empty','').replace(/^\s+_/,'').replace(/\s+$/,'').replace('_','.');
     loadInlineSearchResults(tmpDotNotation);
   });
+}
+
+// Primary search. Works a lot like inline search but allows the main filter to be defined and doesn't restrict by dotnotation
+function search(query, page, limit) {
+  if (query == undefined) return;
+  var query = query.replace(/^\s+/,'').replace(/\s+$/,'');
+  var page = (page != undefined)?page:1;
+  var limit = (limit != undefined)?limit:searchLimit;
+  var offset = (page -1) * limit;
+  // don't allow empty searches
+  if (query == '') return;
+  // Show the searching mask and panel
+  toggleSearchPanel(true);
+  toggleSearchMask(true);
+  // build our filters
+  var filters = {};
+  // If "Audio / Video / Interactive" is checked add those filters
+  if ($("#mediaCheckbox").prop('checked')) {
+    filters['properties.learningResourceType[On-Line]'] = true;
+    filters['properties.learningResourceType[Audio]'] = true;
+    filters['properties.learningResourceType[Video]'] = true;
+  }
+  // If "Reading & Web Pages" is checked add those filters
+  if ($("#pagesCheckbox").prop('checked')) {
+    filters['properties.educationalUse[Reading]'] = true;
+  }
+  // If "For Students" is checked add those filters
+  if ($("#studentsCheckbox").prop('checked')) {
+    filters['properties.intendedEndUserRole[Student]'] = true;
+  }
+  // If "For Teachers" is checked add those filters
+  if ($("#teachersCheckbox").prop('checked')) {
+    filters['properties.intendedEndUserRole[Teacher]'] = true;
+  }
+  // POST!
+  $.ajax({
+    type : "POST",
+    dataType : 'json',
+    url  : "/browser/search",
+    data : { query : query, filters : filters, limit : limit, offset : offset },
+    success : function(xhr) {
+      toggleSearchMask(false);
+console.log(xhr);
+    },
+    error : function(xhr, txtStatus, errThrown) {
+      var className = tmpDotNotation.replace(/\./g,"_");
+      $('div.inlineResults._'+className).removeClass('loading');
+      $('div.inlineResults._'+className).addClass('error');
+      // @TODO Add a refresh link or something..
+    }
+  });
+
+  // if txt is not empty
+  // show searching pop over
+  // initiate search agax
+
 }
