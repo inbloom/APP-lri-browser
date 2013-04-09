@@ -303,7 +303,9 @@ section.bottom {
     display: none;
 
     div.accordion {
-      float: left;
+      position: relative;
+      left: 0;
+      top: 0;
       width: 220px;
       border-right: 1px solid #000000;
       h3 {
@@ -367,7 +369,17 @@ section.bottom {
         border: 0;
         background: url(/assets/search-close.png) no-repeat;
       }
-      button.filters {
+      button.close-facets {
+        position: absolute;
+        top: 0px;
+        left: -36px;
+        width: 36px;
+        height: 38px;
+        border: 0;
+        background: url(/assets/search-close.png) no-repeat;
+        z-index:1;
+      }
+      button.facets {
         position: absolute;
         top: 0px;
         left: 0px;
@@ -382,6 +394,7 @@ section.bottom {
       position: absolute;
       left: 245px;
       right: 20px;
+      top: 0;
       h3 {
         .font-opensans;
         font-weight:800;

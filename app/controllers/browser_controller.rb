@@ -103,31 +103,3 @@ class BrowserController < ApplicationController
 
 end
 
-
-#{
-#    "size":"6",
-#    "from":"0",
-#    "query":{
-#      "filtered":{
-#      "query":{
-#        "match":{
-#          "_all":"fractions"
-#        }
-#      },
-#      "filter":{
-#        "limit":{
-#          "value":100
-#        },
-#        "and":[
-#          {
-#            "or":[
-#              [
-#                {
-#                  "query":{
-#                    "match":{
-#                      "properties.educationalUse":"Interactive"
-#                    }
-#                  }
-#                },
-#                {
-#                  "query":{"match":{"properties.educationalUse":"Reading"}}}]]},{"or":[[{"query":{"match":{"properties.learningResourceType":"Audio"}}},{"query":{"match":{"properties.learningResourceType":"Video"}}}]]},{"query":{"match":{"properties.mediaType":"Webpage"}}}]}}}}

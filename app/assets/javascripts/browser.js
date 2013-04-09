@@ -291,9 +291,23 @@ $(function() {
     }
   });
 
-  // If user clicks the X in the search bar clear it.
+  // If user clicks the X in the search bar or the blue X clear the search
+  $(document).on('click', 'div.panel._search button.close', function(e) {
+    toggleSearchPanel(false);
+    return false;
+  });
   $(document).on('click', '#superform div.search button', function(e) {
-    console.log('clear');
+    toggleSearchPanel(false);
+    return false;
+  });
+
+  // If user clicks the facets button then show them or hide them
+  $(document).on('click', 'div.panel._search button.facets', function(e) {
+    toggleSearchFilters();
+    return false;
+  });
+  $(document).on('click', 'div.panel._search button.close-facets', function(e) {
+    toggleSearchFilters();
     return false;
   });
 
@@ -367,6 +381,7 @@ function toggleSearchPanel(bool) {
   if (bool == undefined) {
     if ($('div.panel._search').is(':visible')) {
       $('div.panel').stop().hide();
+      $("#form-search-filter").val('');
       setSubject(subject,0);
     } else {
       $('div.panel').stop().hide();
@@ -378,6 +393,7 @@ function toggleSearchPanel(bool) {
       $('div.panel._search').stop().show();
     } else {
       $('div.panel').stop().hide();
+      $("#form-search-filter").val('');
       setSubject(subject,0);
     }
   }
@@ -397,6 +413,16 @@ function toggleSearchMask(bool) {
     } else {
       $('div.searching-mask').stop().animate({opacity:0},500,'easeInOutCubic',function() { $(this).hide(); });
     }
+  }
+}
+
+function toggleSearchFilters() {
+  if($('div._facets').is(':visible')) {
+    $('button.close-facets').stop().animate({left:-46},500,'easeInOutCubic',function() { $(this).hide(); });
+    $('div._facets').stop().animate({left:-220},500,'easeInOutCubic',function() { $(this).hide(); });
+  } else {
+    $('button.close-facets').stop().css({left:-46}).show().animate({left:184},500,'easeInOutCubic',function() { });
+    $('div._facets').stop().css({left:-220}).show().animate({left:0},500,'easeInOutCubic',function() { });
   }
 }
 
