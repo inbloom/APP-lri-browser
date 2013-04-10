@@ -207,9 +207,9 @@ $(function() {
           // Update the standards information in the panel
           $('div.results.'+panel+' div.domains').empty();
           for (i in standard) {
-              if (i == '_text') continue;
+              if (i.charAt(0) == '_') continue;
               for (t in standard[i]) {
-                  if (t == '_text') continue;
+                  if (t.charAt(0) == '_') continue;
                   var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
                   var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
                   $('<a href="#'+tmpText+'">'+tmpDotNotation+'</a>').appendTo('div.results.'+panel+' div.domains');
@@ -219,10 +219,10 @@ $(function() {
           // Update the standards information
           $('div.results.'+panel+' div.content').empty();
           for (i in standard) {
-              if (i == '_text') continue;
+              if (i.charAt(0) == '_') continue;
               var tmpTextContent = '';
               for (t in standard[i]) {
-                  if (t == '_text') {
+                  if (t.charAt(0) == '_') {
                       var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
                       eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+";");
                       tmpTextContent = '<h4>'+tmpStandard+'</h4><ul>' + tmpTextContent;
@@ -245,7 +245,7 @@ $(function() {
           // Update the standards information in the panel
           $('div.results.'+panel+' div.domains').empty();
           for (t in standard) {
-              if (t == '_text') continue;
+              if (t.charAt(0) == '_') continue;
               var tmpStandardArrayLocation = notation+'["'+t+'"]';
               var tmpText = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
               $('<a href="#'+tmpText+'">'+tmpText+'</a>').appendTo('div.results.'+panel+' div.domains');
@@ -255,14 +255,14 @@ $(function() {
           $('div.results.'+panel+' div.content').empty();
           var tmpTextContent = '<ul>';
           for (i in standard) {
-              if (i == '_text') continue;
+              if (i.charAt(0) == '_') continue;
               var tmpStandardArrayLocation = notation+'["'+i+'"]';
               var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
               eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
               tmpTextContent += '<li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '</li>';
 
               for (t in standard[i]) {
-                  if (t == '_text') continue;
+                  if (t.charAt(0) == '_') continue;
                   var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
                   var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
                   var className = tmpDotNotation.replace(/\./g,"_");
@@ -315,7 +315,9 @@ $(function() {
   $(window).resize(function() {
     setSubject(subject,0);
     setGradeRange(gradeRanges);
-    $(".accordion").accordion("refresh");
+    if ($(".accordion").hasClass('ui-accordion')) {
+      $(".accordion").accordion("refresh");
+    }
   });
 });
 
@@ -477,12 +479,12 @@ function buildAccordionNavigation(div, req) {
   if (req == 'ccsselaliteracy') {
     var standard = jsonStandards.CCSS['ELA-Literacy'];
     for (i in standard) {
-      if (i == '_text') continue;
+      if (i.charAt(0) == '_') continue;
 
       var title = accordionTitle(standard[i]._text);
       var links = "";
       for (s in standard[i]) {
-        if (s == '_text') continue;
+        if (s.charAt(0) == '_') continue;
         var linkText = (standard[i][s]._text != undefined)?standard[i][s]._text:s;
         links += '<p><a href="#CCSS.ELA-Literacy.'+i+'.'+s+'" rel="navlink">' + linkText + '</a></p>';
       }
@@ -501,12 +503,12 @@ function buildAccordionNavigation(div, req) {
 
     var standard = jsonStandards.CCSS.Math.Content;
     for (i in standard) {
-      if (i == '_text') continue;
+      if (i.charAt(0) == '_') continue;
       var title = accordionTitle(standard[i]._text);
 
       var links = "";
       for (s in standard[i]) {
-        if (s == '_text') continue;
+        if (s.charAt(0) == '_') continue;
         var linkText = (standard[i][s]._text != undefined)?standard[i][s]._text:s;
         links += '<p><a href="#CCSS.Math.Content.'+i+'.'+s+'" rel="navlink">' + linkText + '</a></p>';
       }
