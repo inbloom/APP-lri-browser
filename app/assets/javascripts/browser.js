@@ -222,10 +222,12 @@ $(function() {
               if (i.charAt(0) == '_') continue;
               var tmpTextContent = '';
               for (t in standard[i]) {
-                  if (t.charAt(0) == '_') {
-                      var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
-                      eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+";");
-                      tmpTextContent = '<h4>'+tmpStandard+'</h4><ul>' + tmpTextContent;
+                  if (t == '_text') {
+                    var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
+                    eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+";");
+                    tmpTextContent = '<h4>'+tmpStandard+'</h4><ul>' + tmpTextContent;
+                  } else if (t.charAt(0) == '_') {
+                    // Do nothing with these others
                   } else {
                       var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
                       var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
@@ -445,9 +447,24 @@ function renderSearchResults(res) {
     if (items[i] == undefined) continue;
     var props = items[i]['_source']['properties'];
     var thumbnail = (props['thumbnailUrl'] != undefined)?props['thumbnailUrl'][0]:'';
+    if (thumbnail == '') {
+      // Figure out which default image to use based on order
+      if ($("#teachersCheckbox").prop('checked')) {
+        thumbnail = '/assets/default-image-teacher.png';
+      } else if ($("#studentsCheckbox").prop('checked')) {
+        thumbnail = '/assets/default-image-students.png';
+      } else if ($("#mediaCheckbox").prop('checked')) {
+        thumbnail = '/assets/default-image-av.png';
+      } else if ($("#pagesCheckbox").prop('checked')) {
+        thumbnail = '/assets/default-image-reading.png';
+      } else {
+        thumbnail = '/assets/default-image-all.png';
+      }
+    }
+
     var tmp = $('div.item.hidden').clone();
     $(tmp).removeClass('hidden');
-console.log(thumbnail);
+//console.log(thumbnail);
     $(tmp).css('background-image', 'url('+thumbnail+')');
     $(tmp).find('h3').html(props['name'][0]);
 
@@ -515,6 +532,9 @@ function buildAccordionNavigation(div, req) {
     $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
 
     var standard = jsonStandards.CCSS.Math.Content;
+
+
+
     for (i in standard) {
       if (i.charAt(0) == '_') continue;
       var title = accordionTitle(standard[i]._text);
@@ -550,6 +570,7 @@ function loadInlineSearchResults(tmpDotNotation, page, limit) {
   var className = tmpDotNotation.replace(/\./g,"_");
   $('div.inlineResults._'+className).addClass('loading').removeClass('empty').empty();
 
+  // @TODO CHANGE TO FRACTIONS TO GET RESULTS and comment out the first filter below
   var query = '';
   var page = (page != undefined)?page:1;
   var limit = (limit != undefined)?limit:inlineSearchLimit;
@@ -616,6 +637,21 @@ function parseInlineSearchResults(results, tmpDotNotation) {
       var thumbnail = '';
       if (props['thumbnailUrl'] != undefined) {
         thumbnail = props['thumbnailUrl'][0]
+      } else {
+
+        // Figure out which default image to use based on order
+        if ($("#teachersCheckbox").prop('checked')) {
+          thumbnail = '/assets/default-image-teacher.png';
+        } else if ($("#studentsCheckbox").prop('checked')) {
+          thumbnail = '/assets/default-image-students.png';
+        } else if ($("#mediaCheckbox").prop('checked')) {
+          thumbnail = '/assets/default-image-av.png';
+        } else if ($("#pagesCheckbox").prop('checked')) {
+          thumbnail = '/assets/default-image-reading.png';
+        } else {
+          thumbnail = '/assets/default-image-all.png';
+        }
+
       }
 
       $('<div class="item" style="background-image: url('+thumbnail+');"><div class="content"><h4>' + props['name'][0] + '</h4><h5>Provider Organization</h5></div></div>').appendTo('div.inlineResults._'+className);
