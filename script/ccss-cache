@@ -6,6 +6,8 @@ require 'json'
 require 'action_view'
 require 'htmlentities'
 
+require 'awesome_print'
+
 include ActionView::Helpers::SanitizeHelper
 
 @lri_addy = 'http://lriserver.inbloom.org'
@@ -15,6 +17,8 @@ include ActionView::Helpers::SanitizeHelper
 @response_json = Hash.new{ |h,k| h[k] = Hash.new(&h.default_proc) }
 
 @order = []
+@min = 12
+@max = 0
 
 @grade_table = {
   0 => 'K',
@@ -41,6 +45,38 @@ include ActionView::Helpers::SanitizeHelper
   21 => 'HSS'
 }
 
+@grade_min_table = {
+  0 => ['K'],
+  1 => ['1'],
+  2 => ['2'],
+  3 => ['3'],
+  4 => ['4'],
+  5 => ['5'],
+  6 => ['6-8', '6'],
+  7 => ['7'],
+  8 => ['8'],
+  9 => ['HSN', 'HSA', 'HSF', 'HSG', 'HSS', '9-10', '9'],
+  10 => ['10-11', '10'],
+  11 => ['11-12', '11'],
+  12 => ['12']
+}
+
+@grade_max_table = {
+  0 => ['K'],
+  1 => ['1'],
+  2 => ['2'],
+  3 => ['3'],
+  4 => ['4'],
+  5 => ['5'],
+  6 => ['6'],
+  7 => ['7'],
+  8 => ['6-8', '8'],
+  9 => ['9'],
+  10 => ['9-10', '10'],
+  11 => ['10-11', '11'],
+  12 => ['11-12', '12', 'HSN', 'HSA', 'HSF', 'HSG', 'HSS']
+}
+
 class String
   def pop_node
     gsub(':', '.').split('.').last
@@ -49,12 +85,30 @@ end
 
 def create_key notation, value
   nodes = notation.gsub(':', '.').split('.')[3..-1]
-  nodes.inject(@response_json) { |h, k|
+  node = nodes.inject(@response_json) { |h, k|
     h[k]
-  }['_text'] = value
-  nodes.inject(@response_json) { |h, k|
-    h[k]
-  }['_order'] = @order
+  }
+  node['_text'] = value
+  node['_order'] = @order
+  if @order.count > 1 
+    @min = 12
+    @max = 0
+  end    
+  @order.each do |c|
+    current = c[1].split('.')[3]
+    @grade_min_table.each do |k,v|
+      if v.include? current
+        @min = k unless @min <= k
+      end
+    end  
+    @grade_max_table.each do |k,v|
+      if v.include? current
+        @max = k unless @max >= k
+      end
+    end
+  end    
+  node['_min'] = @min
+  node['_max'] = @max
 end
 
 def execute_query request_uri
@@ -91,8 +145,17 @@ def harvest_property property_id, i
     contains.each do |property_id|
       contains_sorted.merge! @grade_table.key(property_id.split('.').last) => property_id
     end
+    @order = contains_sorted
+  elsif contains.respond_to? :each
+    @order = {}
+    i=0
+    contains.each do |property_id|
+      @order.merge! i => property_id
+      i = i + 1
+    end
+  else
+    @order = {}
   end
-  @order = contains_sorted
   
   create_key property_id, text  
   
@@ -102,9 +165,10 @@ end
 def recursive_harvest_property(property_id, i)
   property_data = harvest_property property_id, i
   contains = property_data['props']['urn:lri:property_type:contains']
+
   if contains.class == String
     create_key property_id, property_data['props']['urn:lri:property_type:name']
-  elsif contains.to_a.count > 0    
+  elsif contains.to_a.count > 0   
     i += 1
     contains_sorted = {}
     if (property_id.include? 'urn:ccss:set:CCSS.Math.Content') || (property_id.include? 'urn:ccss:domain:CCSS.ELA-Literacy')
