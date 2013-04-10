@@ -98,18 +98,24 @@ $(function() {
     return false;
   });
 
-  // filter checkboxes
+  // Primary filter checkboxes on clicks
+  // Refresh the inline results (which might be off screen)
+  // and refresh the search results (which will only refresh in visible)
   $(document).on('click', '#teachersCheckbox', function() {
     refreshInlineSearchResults();
+    refreshSearchResults();
   });
   $(document).on('click', '#studentsCheckbox', function() {
     refreshInlineSearchResults();
+    refreshSearchResults();
   });
   $(document).on('click', '#pagesCheckbox', function() {
     refreshInlineSearchResults();
+    refreshSearchResults();
   });
   $(document).on('click', '#mediaCheckbox', function() {
     refreshInlineSearchResults();
+    refreshSearchResults();
   });
 
   // Make form work via ajax post
@@ -571,7 +577,8 @@ function loadInlineSearchResults(tmpDotNotation, page, limit) {
   $('div.inlineResults._'+className).addClass('loading').removeClass('empty').empty();
 
   // @TODO CHANGE TO FRACTIONS TO GET RESULTS and comment out the first filter below
-  var query = '';
+
+  var query = 'fractions';
   var page = (page != undefined)?page:1;
   var limit = (limit != undefined)?limit:inlineSearchLimit;
   var offset = (page -1) * limit;
@@ -582,7 +589,7 @@ function loadInlineSearchResults(tmpDotNotation, page, limit) {
 
   var filters = {};
   // Add the filter for this dot notation
-    filters['properties.educationalAlignment.properties.targetName['+tmpDotNotation+ ']'] = true;
+//    filters['properties.educationalAlignment.properties.targetName['+tmpDotNotation+ ']'] = true;
   // If "Audio / Video / Interactive" is checked add those filters
   if ($("#mediaCheckbox").prop('checked')) {
     filters['properties.learningResourceType[On-Line]'] = true;
@@ -682,6 +689,13 @@ function refreshInlineSearchResults() {
     var tmpDotNotation = $(this).attr('class').replace('inlineResults','').replace('loading','').replace('empty','').replace(/^\s+_/,'').replace(/\s+$/,'').replace('_','.');
     loadInlineSearchResults(tmpDotNotation);
   });
+}
+
+// If search is showing, refresh it.
+function refreshSearchResults() {
+  if ($('div.panel._search').is(':visible')) {
+    search($('#form-search-filter').val());
+  }
 }
 
 // Primary search. Works a lot like inline search but allows the main filter to be defined and doesn't restrict by dotnotation
