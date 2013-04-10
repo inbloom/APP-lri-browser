@@ -435,12 +435,25 @@ function toggleSearchFilters() {
 }
 
 // Here we redraw the search results panel from an xhr.
-function redrawSearchResults(res) {
-    // clear the panel
-//    $('div.results').empty();
-//    var items = res.items;
-//
-//    for (var i=0;i<12;i++) {
+function renderSearchResults(res) {
+  // clear the panel
+  $('div.panel._search div.results').empty();
+
+  var items = res.hits;
+
+  for (i in items) {
+    if (items[i] == undefined) continue;
+    var props = items[i]['_source']['properties'];
+    var thumbnail = (props['thumbnailUrl'] != undefined)?props['thumbnailUrl'][0]:'';
+    var tmp = $('div.item.hidden').clone();
+    $(tmp).removeClass('hidden');
+console.log(thumbnail);
+    $(tmp).css('background-image', 'url('+thumbnail+')');
+    $(tmp).find('h3').html(props['name'][0]);
+
+    $(tmp).appendTo('div.panel._search div.results');
+
+
 //        if (items[i] == undefined) continue;
 //        var tmp = $('div.item.hidden').clone();
 //        $(tmp).attr('data-itemid', items[i]['id']);
@@ -449,7 +462,7 @@ function redrawSearchResults(res) {
 //        $(tmp).find('h4').html(items[i]['provider']);
 //        $(tmp).removeClass('hidden');
 //        $(tmp).appendTo('div.results');
-//    }
+  }
 
 //    <div class='item'>
 //        <div class='inner'>
@@ -675,7 +688,7 @@ function search(query, page, limit) {
     data : { query : query, filters : filters, limit : limit, offset : offset },
     success : function(xhr) {
       toggleSearchMask(false);
-console.log(xhr);
+      renderSearchResults(xhr.hits);
     },
     error : function(xhr, txtStatus, errThrown) {
       var className = tmpDotNotation.replace(/\./g,"_");
