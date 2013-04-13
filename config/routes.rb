@@ -20,9 +20,10 @@ Browser::Application.routes.draw do
   match "/signout" => "sessions#destroy", :as => :signout
 
   # This is the only way to do this for now.. when a user enters a query string, do a full search to get the results
-  resources :browser, :only => [ :index, :search ] do
+  resources :browser, :only => [ :index, :search, :link ] do
     collection do
-      post :search,   :path => "/search",   :constraints => { :format => /json/ }
+      post :search, :path => "/search",   :constraints => { :format => /json/ }
+      get  :link,   :path => "/link"
     end
   end
 
