@@ -14,5 +14,12 @@ describe "PasswordResets" do
     visit root_path
     page.should have_content("Mathematics")
   end
+  
+  it "redirects to url via link action" do
+    # visit '/browser/link?url=https://www.inbloom.org'
+    # save_and_open_page
+    # page.status_code.should == 302
+    # # page.should have_content("inBloom, Inc")
+  end
 
 end
