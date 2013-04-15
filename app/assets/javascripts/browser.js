@@ -102,24 +102,24 @@ $(function() {
   // Refresh the inline results (which might be off screen)
   // and refresh the search results (which will only refresh in visible)
   $(document).on('click', '#teachersCheckbox', function(e) {
-    $('#teachersSecondaryCheckbox').attr('checked', e.target.checked);
+    $('#teachersSecondaryCheckbox').prop('checked', e.target.checked);
     refreshInlineSearchResults();
     refreshSearchResults();
   });
   $(document).on('click', '#studentsCheckbox', function(e) {
-    $('#studentsSecondaryCheckbox').attr('checked', e.target.checked);
+    $('#studentsSecondaryCheckbox').prop('checked', e.target.checked);
     refreshInlineSearchResults();
     refreshSearchResults();
   });
   $(document).on('click', '#pagesCheckbox', function(e) {
-    $('#readingSecondaryCheckbox').attr('checked', e.target.checked);
+    $('#readingSecondaryCheckbox').prop('checked', e.target.checked);
     refreshInlineSearchResults();
     refreshSearchResults();
   });
   $(document).on('click', '#mediaCheckbox', function(e) {
-    $('#audioSecondaryCheckbox').attr('checked', e.target.checked);
-    $('#videoSecondaryCheckbox').attr('checked', e.target.checked);
-    $('#onlineSecondaryCheckbox').attr('checked', e.target.checked);
+    $('#audioSecondaryCheckbox').prop('checked', e.target.checked);
+    $('#videoSecondaryCheckbox').prop('checked', e.target.checked);
+    $('#onlineSecondaryCheckbox').prop('checked', e.target.checked);
     refreshInlineSearchResults();
     refreshSearchResults();
   });
