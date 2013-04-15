@@ -746,7 +746,7 @@ function search(query, page, limit) {
     success : function(xhr) {
       toggleSearchMask(false);
       renderSearchResults(xhr.hits);
-console.log(xhr.hits);
+//console.log(xhr.hits);
     },
     error : function(xhr, txtStatus, errThrown) {
       // @TODO what do we do here if something just fails

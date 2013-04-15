@@ -78,7 +78,7 @@ class BrowserController < ApplicationController
             }
         }
     }
-puts "PAYLOAD"; puts payload.to_json
+#puts "PAYLOAD"; puts payload.to_json
 
     # Okay after all that mess, lets make the request
     request = RestClient::Request.new( :method => :get, :url => Rails.configuration.elastic_search_url, :payload => payload.to_json )
