@@ -58,7 +58,7 @@ class BrowserController < ApplicationController
         filter = { 'limit' => { 'value' => 100 }, 'and' => filters }
         # If no query is present then we can wildcard against anything
       else
-        query = { 'match' => { '_all' => '?' } }
+        query = { 'match_all' => {  } }
         filter = { 'limit' => { 'value' => 100 }, 'and' => filters }
       end
        # if not filter is present then just match against query
@@ -78,7 +78,7 @@ class BrowserController < ApplicationController
             }
         }
     }
-#puts "PAYLOAD"; puts payload.to_json
+puts "PAYLOAD"; puts payload.to_json
 
     # Okay after all that mess, lets make the request
     request = RestClient::Request.new( :method => :get, :url => Rails.configuration.elastic_search_url, :payload => payload.to_json )

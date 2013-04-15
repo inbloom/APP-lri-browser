@@ -418,14 +418,18 @@ function toggleSearchMask(bool) {
   if (bool == undefined) {
     if ($('div.searching-mask').is(':visible')) {
       $('div.searching-mask').stop().animate({opacity:0},500,'easeInOutCubic',function() { $(this).hide(); });
+      $('div.spinner').stop().animate({opacity:0},500,'easeInOutCubic',function() { $(this).hide(); });
     } else {
       $('div.searching-mask').stop().css({opacity:0}).show().animate({opacity:0.8},500,'easeInOutCubic',function() { });
+      $('div.spinner').stop().css({opacity:0}).show().animate({opacity:1},500,'easeInOutCubic',function() { });
     }
   } else {
     if (bool) {
       $('div.searching-mask').stop().css({opacity:0}).show().animate({opacity:0.8},500,'easeInOutCubic',function() { });
+      $('div.spinner').stop().css({opacity:0}).show().animate({opacity:1},500,'easeInOutCubic',function() { });
     } else {
       $('div.searching-mask').stop().animate({opacity:0},500,'easeInOutCubic',function() { $(this).hide(); });
+      $('div.spinner').stop().animate({opacity:0},500,'easeInOutCubic',function() { $(this).hide(); });
     }
   }
 }
@@ -514,6 +518,7 @@ function buildAccordionNavigation(div, req) {
   // Create navigation for CCSS.ELA-Literacy
   if (req == 'ccsselaliteracy') {
     var standard = jsonStandards.CCSS['ELA-Literacy'];
+
     for (i in standard) {
       if (i.charAt(0) == '_') continue;
 
@@ -539,24 +544,22 @@ function buildAccordionNavigation(div, req) {
 
     var standard = jsonStandards.CCSS.Math.Content;
 
+    for (i in standard._order) {
+      var key = standard._order[i].substr( standard._order[i].lastIndexOf('.') + 1, standard._order[i].length )
+      var item = standard[key];
 
-
-    for (i in standard) {
-      if (i.charAt(0) == '_') continue;
-      var title = accordionTitle(standard[i]._text);
-
+      var title = accordionTitle(item._text);
       var links = "";
-      for (s in standard[i]) {
+      for (s in item) {
         if (s.charAt(0) == '_') continue;
-        var linkText = (standard[i][s]._text != undefined)?standard[i][s]._text:s;
-        links += '<p><a href="#CCSS.Math.Content.'+i+'.'+s+'" rel="navlink">' + linkText + '</a></p>';
+        var linkText = (item[s]._text != undefined)?item[s]._text:s;
+        links += '<p><a href="#CCSS.Math.Content.'+key+'.'+s+'" rel="navlink">' + linkText + '</a></p>';
       }
 
       $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
     }
 
   }
-
 }
 
 // Take the title and transform it into something pretty
@@ -578,7 +581,7 @@ function loadInlineSearchResults(tmpDotNotation, page, limit) {
 
   // @TODO CHANGE TO FRACTIONS TO GET RESULTS and comment out the first filter below
 
-  var query = 'fractions';
+  var query = '';
   var page = (page != undefined)?page:1;
   var limit = (limit != undefined)?limit:inlineSearchLimit;
   var offset = (page -1) * limit;
@@ -589,7 +592,7 @@ function loadInlineSearchResults(tmpDotNotation, page, limit) {
 
   var filters = {};
   // Add the filter for this dot notation
-//    filters['properties.educationalAlignment.properties.targetName['+tmpDotNotation+ ']'] = true;
+    filters['properties.educationalAlignment.properties.targetName['+tmpDotNotation+ ']'] = true;
   // If "Audio / Video / Interactive" is checked add those filters
   if ($("#mediaCheckbox").prop('checked')) {
     filters['properties.learningResourceType[On-Line]'] = true;
@@ -739,17 +742,11 @@ function search(query, page, limit) {
     success : function(xhr) {
       toggleSearchMask(false);
       renderSearchResults(xhr.hits);
+console.log(xhr.hits);
     },
     error : function(xhr, txtStatus, errThrown) {
-      var className = tmpDotNotation.replace(/\./g,"_");
-      $('div.inlineResults._'+className).removeClass('loading');
-      $('div.inlineResults._'+className).addClass('error');
-      // @TODO Add a refresh link or something..
+      // @TODO what do we do here if something just fails
     }
   });
-
-  // if txt is not empty
-  // show searching pop over
-  // initiate search agax
 
 }
