@@ -78,15 +78,6 @@ $(function() {
       }
   });
 
-//    // Make subjects clickable So that it selects between them -- only one can be selected.
-//    $('div.subjects li a').click(function(e) {
-//        var a = $(e.target);
-//        var li = a.parent();
-//        if (li.hasClass('disabled')) return false;
-//        setSubject(a.html());
-//        return false;
-//    });
-
   $(document).on('click', '#_ccssmath', function() {
     subject = 'ccssmath';
     setSubject(subject);
@@ -121,6 +112,11 @@ $(function() {
     $('#videoSecondaryCheckbox').prop('checked', e.target.checked);
     $('#onlineSecondaryCheckbox').prop('checked', e.target.checked);
     refreshInlineSearchResults();
+    refreshSearchResults();
+  });
+
+  // Secondary filter checkboxes on clicks
+  $(document).on('click', 'input.secondaryCheckbox', function(e) {
     refreshSearchResults();
   });
 
@@ -484,36 +480,11 @@ function renderSearchResults(res) {
 
     var tmp = $('div.item.hidden').clone();
     $(tmp).removeClass('hidden');
-//console.log(thumbnail);
     $(tmp).css('background-image', 'url('+thumbnail+')');
     $(tmp).find('h3').html(props['name'][0]);
 
     $(tmp).appendTo('div.panel._search div.results');
-
-
-//        if (items[i] == undefined) continue;
-//        var tmp = $('div.item.hidden').clone();
-//        $(tmp).attr('data-itemid', items[i]['id']);
-//        $(tmp).find('img.thumb').attr('src',items[i]['img']);
-//        $(tmp).find('h3').attr('title',items[i]['title']).html(truncateString(items[i]['title'],13));
-//        $(tmp).find('h4').html(items[i]['provider']);
-//        $(tmp).removeClass('hidden');
-//        $(tmp).appendTo('div.results');
   }
-
-//    <div class='item'>
-//        <div class='inner'>
-//            <img src='/assets/tmp-2.png' />
-//            <div>
-//                <h3>Chemistry Video</h3>
-//                <h4>Provider Name</h4>
-//                <hr />
-//                <img src='/assets/popularity-pill-on.png' /><img src='/assets/popularity-pill-off.png' /><img src='/assets/popularity-pill-off.png' />
-//            </div>
-//        </div>
-//    </div>
-
-//    console.log(items);
 }
 
 // Helper function to truncate the title
@@ -671,7 +642,6 @@ function parseInlineSearchResults(results, tmpDotNotation) {
         } else {
           thumbnail = '/assets/default-image-all.png';
         }
-
       }
 
       $('<div class="item" style="background-image: url('+thumbnail+');"><div class="content"><h4>' + props['name'][0] + '</h4><h5>Provider Organization</h5></div></div>').appendTo('div.inlineResults._'+className);
@@ -712,6 +682,7 @@ function refreshSearchResults() {
 }
 
 // Primary search. Works a lot like inline search but allows the main filter to be defined and doesn't restrict by dotnotation
+// Also it only listens to the secondary filters as the primary filters check the secondaries where necessary
 function search(query, page, limit) {
   if (query == undefined) return;
   var query = query.replace(/^\s+/,'').replace(/\s+$/,'');
@@ -725,24 +696,17 @@ function search(query, page, limit) {
   toggleSearchMask(true);
   // build our filters
   var filters = {};
-  // If "Audio / Video / Interactive" is checked add those filters
-  if ($("#mediaCheckbox").prop('checked')) {
-    filters['properties.learningResourceType[On-Line]'] = true;
-    filters['properties.learningResourceType[Audio]'] = true;
-    filters['properties.learningResourceType[Video]'] = true;
-  }
-  // If "Reading & Web Pages" is checked add those filters
-  if ($("#pagesCheckbox").prop('checked')) {
-    filters['properties.educationalUse[Reading]'] = true;
-  }
-  // If "For Students" is checked add those filters
-  if ($("#studentsCheckbox").prop('checked')) {
-    filters['properties.intendedEndUserRole[Student]'] = true;
-  }
-  // If "For Teachers" is checked add those filters
-  if ($("#teachersCheckbox").prop('checked')) {
-    filters['properties.intendedEndUserRole[Teacher]'] = true;
-  }
+
+  // Go through the complete secondary filter list and add them to the filter variable
+  // We dont have to add the primaries like we do up in the inline filter loader because
+  // the secondaries are checked when you check the primaries
+  $('input.secondaryCheckbox').each(function(i, o) {
+    if ($(o).prop('checked')) {
+      var name = $(o).prop('name');
+      filters[name] = true;
+    }
+  });
+
   // POST!
   $.ajax({
     type : "POST",
@@ -752,7 +716,6 @@ function search(query, page, limit) {
     success : function(xhr) {
       toggleSearchMask(false);
       renderSearchResults(xhr.hits);
-//console.log(xhr.hits);
     },
     error : function(xhr, txtStatus, errThrown) {
       // @TODO what do we do here if something just fails
