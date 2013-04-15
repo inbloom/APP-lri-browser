@@ -100,6 +100,10 @@ class BrowserController < ApplicationController
     end
 
   end
+  
+  def link
+    redirect_to params[:url]
+  end
 
 end
 
