@@ -4,7 +4,7 @@ $(function() {
   gradeRanges = { 'minimum': 0, 'maximum': 12 }
   subject = 'ccssmath';
   inlineSearchLimit = 6;
-  searchLimit = 12;
+  searchLimit = 24;
 
   // Some position helpers K-12 in the event the need to be different sizes
   // Minimum is the offset for the left slider position compared to actual
