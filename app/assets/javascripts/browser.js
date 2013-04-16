@@ -156,7 +156,6 @@ $(function() {
    * use it obviously.
    *
    */
-
   $(document).on('click', 'a[rel=navlink]', function() {
       // Strip away the #
       var href = $(this).attr('href').replace('#','');
@@ -242,7 +241,7 @@ $(function() {
                       var className = tmpDotNotation.replace(/\./g,"_");
                       dynamicLoad.push(tmpDotNotation);
                       eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
-                      tmpTextContent += '<li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'"></div></div></li>';
+                      tmpTextContent += '<li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li>';
                   }
               }
               tmpTextContent += '</ul>';
@@ -278,7 +277,7 @@ $(function() {
                   var className = tmpDotNotation.replace(/\./g,"_");
                   dynamicLoad.push(tmpDotNotation);
                   eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
-                  tmpTextContent += '<ul><li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'"></div></div></li></ul>';
+                  tmpTextContent += '<ul><li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li></ul>';
               }
 
           }
@@ -571,6 +570,10 @@ function loadInlineSearchResults(tmpDotNotation, page, limit) {
   $('div.inlineResults._'+className).attr('data-page', page);
   $('div.inlineResults._'+className).attr('data-limit', limit);
 
+  // This is a one up serialization hack that keeps us from writing the wrong search result
+  var hack = parseInt($('div.inlineResults._'+className).attr('data-hack')) + 1;
+  $('div.inlineResults._'+className).attr('data-hack', hack);
+
   var filters = {};
   // Add the filter for this dot notation
     filters['properties.educationalAlignment.properties.targetName['+tmpDotNotation+ ']'] = true;
@@ -597,9 +600,12 @@ function loadInlineSearchResults(tmpDotNotation, page, limit) {
     type : "POST",
     dataType : 'json',
     url  : "/browser/search",
-    data : { query : query, filters : filters, limit : limit, offset : offset },
+    data : { query : query, filters : filters, limit : limit, offset : offset, hack : hack},
     success : function(xhr) {
-      parseInlineSearchResults(xhr.hits, tmpDotNotation);
+      var className = tmpDotNotation.replace(/\./g,"_");
+      if (xhr.hack == $('div.inlineResults._'+className).attr('data-hack')) {
+        parseInlineSearchResults(xhr.hits, tmpDotNotation);
+      }
     },
     error : function(xhr, txtStatus, errThrown) {
       var className = tmpDotNotation.replace(/\./g,"_");

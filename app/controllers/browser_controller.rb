@@ -32,6 +32,8 @@ class BrowserController < ApplicationController
     limit = params['limit']
     # define the elasticsearch result "from" (offset)
     offset = params['offset']
+    # Pass through
+    hack = params['hack']
     # Default output
     searchResults = ''
     # If we have filters, we need to parse them
@@ -82,15 +84,16 @@ class BrowserController < ApplicationController
 
     # Okay after all that mess, lets make the request
     request = RestClient::Request.new( :method => :get, :url => Rails.configuration.elastic_search_url, :payload => payload.to_json )
-
     # Since this can error lets catch it
     begin
       searchResults = request.execute
+      results = JSON.parse(searchResults)
+      results[:hack] = hack
+
       respond_to do |format|
-        format.json { render json: searchResults }
+        format.json { render json: results }
 #        format.json { render json: payload.to_json }
       end
-#puts "RESPONSE"; puts searchResults
     rescue => e
       # @TODO Need to return the correct error type and then an error message to be shown to user.
       respond_to do |format|
