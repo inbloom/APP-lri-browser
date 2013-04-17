@@ -41,27 +41,43 @@ class BrowserController < ApplicationController
       filters = []
       # For each of the filters format them and stuff them into an array
       params['filters'].each do |key, filter|
+
+        if [
+            'properties.educationalAlignment.properties.targetName',
+            'properties.inLanguage',
+            'properties.isBasedOnUrl',
+            'properties.thumbnailUrl',
+            'properties.timeRequired',
+            'properties.typicalAgeRange',
+            'properties.url',
+            'properties.useRightsUrl'
+        ].include?(key)
+          matchTerm = 'term'
+        else
+          matchTerm = 'match'
+        end
+
         if filter.keys.count > 1
           # This is more complex because this filter type needs the keys or'd together
           orFilters = []
           filter.keys.each do |f|
-            orFilters << { 'query' => { 'match' => { key => f.to_s } } }
+            orFilters << { 'query' => { matchTerm => { key => f.to_s } } }
           end
           filters << { 'or' => orFilters }
         else
           # This should be simple, there is only one of this filter key
-          filters << { 'query' => { 'match' => { key => filter.keys.first.to_s } } }
+          filters << { 'query' => { matchTerm => { key => filter.keys.first.to_s } } }
         end
       end
 
       # If the query is present we need to match it
       if params['query'].present?
         query = { 'match' => { '_all' => params['query'] } }
-        filter = { 'limit' => { 'value' => 100 }, 'and' => filters }
+        filter = { 'and' => filters }
         # If no query is present then we can wildcard against anything
       else
         query = { 'match_all' => {  } }
-        filter = { 'limit' => { 'value' => 100 }, 'and' => filters }
+        filter = { 'and' => filters }
       end
        # if not filter is present then just match against query
     else
@@ -80,7 +96,8 @@ class BrowserController < ApplicationController
             }
         }
     }
-#puts "PAYLOAD"; puts payload.to_json
+
+puts "PAYLOAD"; puts payload.to_json
 
     # Okay after all that mess, lets make the request
     request = RestClient::Request.new( :method => :get, :url => Rails.configuration.elastic_search_url, :payload => payload.to_json )
@@ -90,9 +107,10 @@ class BrowserController < ApplicationController
       results = JSON.parse(searchResults)
       results[:hack] = hack
 
+puts "RESPONSE"; puts results
+
       respond_to do |format|
         format.json { render json: results }
-#        format.json { render json: payload.to_json }
       end
     rescue => e
       # @TODO Need to return the correct error type and then an error message to be shown to user.
