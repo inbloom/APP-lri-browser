@@ -423,7 +423,6 @@ section.bottom {
           float: left;
           background-repeat: no-repeat;
           background-size: 80px 80px;
-          word-break: break-all;
           h3 {
             position: absolute;
             top: 25px;
@@ -435,7 +434,7 @@ section.bottom {
           h4 {
             position: absolute;
             top: 95px;
-            left: 20px;
+            left: 15px;
             right: 3px;
             .font-opensans;
             margin: 0;
@@ -445,7 +444,34 @@ section.bottom {
             line-height: 12px;
             font-weight: 600;
           }
-
+          div.content {
+            position: absolute;
+            top: 115px;
+            left: 15px;
+            right: 10px;
+            bottom: 30px;
+            font-size: 12px;
+            line-height: 14px;
+          }
+          div.date {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            font-size: 10px;
+            font-weight: 800;
+            font-style: italic;
+          }
+          div.imgs {
+            position: absolute;
+            left: 85px;
+            top: 3px;
+            img {
+              display: none;
+              &.show {
+                display: inline;
+              }
+            }
+          }
         }
       }
     }

@@ -474,6 +474,14 @@ function renderSearchResults(res) {
   for (i in items) {
     if (items[i] == undefined) continue;
     var props = items[i]['_source']['properties'];
+    var author = (props['author'] == undefined || props['author'][0] == undefined || props['author'][0]['properties'] == undefined)?'':props['author'][0]['properties'];
+    var description = (props['description'] == undefined)?'':props['description'][0];
+    var dateCreated = (props['dateCreated'] == undefined)?'':props['dateCreated'][0];
+
+    var lrt = (props['learningResourceType'] == undefined)?[]:props['learningResourceType'];
+    var eu = (props['educationalUse'] == undefined)?[]:props['educationalUse'];
+    var ieur = (props['intendedEndUserRole'] == undefined)?[]:props['intendedEndUserRole'];
+
     var thumbnail = (props['thumbnailUrl'] != undefined)?props['thumbnailUrl'][0]:'';
     if (thumbnail == '') {
       // Figure out which default image to use based on order
@@ -494,6 +502,18 @@ function renderSearchResults(res) {
     $(tmp).removeClass('hidden');
     $(tmp).css('background-image', 'url('+thumbnail+')');
     $(tmp).find('h3').html(props['name'][0]);
+    if (author['name'] != undefined) {
+      $(tmp).find('h4').html(author['name'][0]);
+    }
+    $(tmp).find('div.content').html(description);
+    $(tmp).find('div.date').html(dateCreated);
+
+    if ($.inArray('video', lrt) != -1) $(tmp).find('img.media').addClass('show');
+    if ($.inArray('audio', lrt) != -1) $(tmp).find('img.media').addClass('show');
+    if ($.inArray('on-line', lrt) != -1) $(tmp).find('img.media').addClass('show');
+    if ($.inArray('reading', eu) != -1) $(tmp).find('img.reading').addClass('show');
+    if ($.inArray('students', ieur) != -1) $(tmp).find('img.students').addClass('show');
+    if ($.inArray('teachers', ieur) != -1) $(tmp).find('img.teachers').addClass('show');
 
     $(tmp).appendTo('div.panel._search div.results');
   }
@@ -734,6 +754,7 @@ function search(query, page, limit) {
     success : function(xhr) {
       toggleSearchMask(false);
       renderSearchResults(xhr.hits);
+console.log(xhr);
     },
     error : function(xhr, txtStatus, errThrown) {
       // @TODO what do we do here if something just fails
