@@ -4,7 +4,7 @@ $(function() {
   gradeRanges = { 'minimum': 0, 'maximum': 12 }
   subject = 'ccssmath';
   inlineSearchLimit = 6;
-  searchLimit = 24;
+  searchLimit = 100;
 
   // Some position helpers K-12 in the event the need to be different sizes
   // Minimum is the offset for the left slider position compared to actual
@@ -118,6 +118,18 @@ $(function() {
   // Secondary filter checkboxes on clicks
   $(document).on('click', 'input.secondaryCheckbox', function(e) {
     refreshSearchResults();
+
+    // If a primary should be unchecked, then do it
+    if ($('#audioSecondaryCheckbox').prop('checked') &&
+        $('#onlineSecondaryCheckbox').prop('checked') &&
+        $('#videoSecondaryCheckbox').prop('checked')) {
+      $('#mediaCheckbox').prop('checked', true);
+    } else {
+      $('#mediaCheckbox').prop('checked', false);
+    }
+    $('#pagesCheckbox').prop('checked', $('#readingSecondaryCheckbox').prop('checked'));
+    $('#studentsCheckbox').prop('checked', $('#studentsSecondaryCheckbox').prop('checked'));
+    $('#teachersCheckbox').prop('checked', $('#teachersSecondaryCheckbox').prop('checked'));
   });
 
   // Make form work via ajax post
@@ -439,6 +451,7 @@ function toggleSearchMask(bool) {
   }
 }
 
+// Toggle the search filters in/out
 function toggleSearchFilters() {
   if($('div._facets').is(':visible')) {
     $('button.close-facets').stop().animate({left:-46},500,'easeInOutCubic',function() { $(this).hide(); });
@@ -559,8 +572,6 @@ function loadInlineSearchResults(tmpDotNotation, page, limit) {
   var className = tmpDotNotation.replace(/\./g,"_");
   $('div.inlineResults._'+className).addClass('loading').removeClass('empty').empty();
 
-  // @TODO CHANGE TO FRACTIONS TO GET RESULTS and comment out the first filter below
-
   var query = '';
   var page = (page != undefined)?page:1;
   var limit = (limit != undefined)?limit:inlineSearchLimit;
@@ -635,7 +646,6 @@ function parseInlineSearchResults(results, tmpDotNotation) {
       if (props['thumbnailUrl'] != undefined) {
         thumbnail = props['thumbnailUrl'][0]
       } else {
-
         // Figure out which default image to use based on order
         if ($("#teachersCheckbox").prop('checked')) {
           thumbnail = '/assets/default-image-teacher.png';
@@ -650,7 +660,9 @@ function parseInlineSearchResults(results, tmpDotNotation) {
         }
       }
 
-      $('<div class="item" style="background-image: url('+thumbnail+');"><div class="content"><h4>' + props['name'][0] + '</h4><h5>Provider Organization</h5></div></div>').appendTo('div.inlineResults._'+className);
+      if ($('div.inlineResults._'+className).length > 0) {
+        $('<div class="item" style="background-image: url('+thumbnail+');"><div class="content"><h4>' + props['name'][0] + '</h4><h5>Provider Organization</h5></div></div>').appendTo('div.inlineResults._'+className);
+      }
     }
     var pagination = '<div class="pagination">';
     pagination += '<a href="#'+tmpDotNotation+'!'+1+'" class="paginatorPage symbol'+((page == 1)?' disabled':'')+'">\u00ab</a>';
@@ -675,7 +687,7 @@ function parseInlineSearchResults(results, tmpDotNotation) {
 // Steps through inlineResults and refreshes them based on the class
 function refreshInlineSearchResults() {
   $("div.inlineResults").each(function() {
-    var tmpDotNotation = $(this).attr('class').replace('inlineResults','').replace('loading','').replace('empty','').replace(/^\s+_/,'').replace(/\s+$/,'').replace('_','.');
+    var tmpDotNotation = $(this).attr('class').replace('inlineResults','').replace('loading','').replace('empty','').replace(/^\s+_/,'').replace(/\s+$/,'').replace(/_/g,'.');
     loadInlineSearchResults(tmpDotNotation);
   });
 }
