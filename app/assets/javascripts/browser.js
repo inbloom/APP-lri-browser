@@ -503,6 +503,8 @@ function renderSearchResults(res, clear) {
   // clear the panel
   if (clear) {
     $('div.panel._search div.results').empty();
+    searchOffset = 0;
+    searchPage = 1;
   }
 
   var items = res.hits;
