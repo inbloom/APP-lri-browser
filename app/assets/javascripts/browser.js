@@ -1,10 +1,14 @@
 // Now set some stuff on ready
 $(function() {
-  // Some initial values
+  // Some initial global values
   gradeRanges = { 'minimum': 0, 'maximum': 12 }
   subject = 'ccssmath';
   inlineSearchLimit = 6;
+  searchQuery = '';
+  searchFilters = [];
+  searchOffset = 0;
   searchLimit = 24;
+  searchPage = 1;
 
   // Some position helpers K-12 in the event the need to be different sizes
   // Minimum is the offset for the left slider position compared to actual
@@ -340,6 +344,36 @@ $(function() {
       $(".accordion").accordion("refresh");
     }
   });
+
+  $('section.bottom').scroll(function(e) {
+    if ($('._search.panel').is(':visible')) {
+      var page = $('#pagination_current_page').text();
+      if ($('#pagination_current_page').text().length > 0 && $(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+          $('#pagination_current_page').html(null);
+          // POST!
+          searchOffset = (searchOffset > 0) ? searchOffset : 1;
+          os = searchOffset * searchPage
+          searchPage++;
+
+          $.ajax({
+            type : "POST",
+            dataType : 'json',
+            url  : "/browser/search",
+            data : { query : searchQuery, filters : searchFilters, limit : searchLimit, offset : os },
+            success : function(xhr) {
+              $('#pagination_current_page').text(page);
+              toggleSearchMask(false);
+              renderSearchResults(xhr.hits, false);
+            },
+            error : function(xhr, txtStatus, errThrown) {
+              // @TODO what do we do here if something just fails
+            }
+          });
+      }
+    }
+  });
+
+
 });
 
 // Set grade range and the slider
@@ -726,7 +760,7 @@ function refreshSearchResults() {
 function search(query, page, limit) {
   if (query == undefined) return;
   var query = query.replace(/^\s+/,'').replace(/\s+$/,'');
-  var page = (page != undefined)?page:1;
+  var page = (page != undefined)?page:searchPage;
   var limit = (limit != undefined)?limit:searchLimit;
   var offset = (page -1) * limit;
   // don't allow empty searches
@@ -736,7 +770,6 @@ function search(query, page, limit) {
   toggleSearchMask(true);
   // build our filters
   var filters = {};
-
   // Go through the complete secondary filter list and add them to the filter variable
   // We dont have to add the primaries like we do up in the inline filter loader because
   // the secondaries are checked when you check the primaries
@@ -746,6 +779,12 @@ function search(query, page, limit) {
       filters[name] = true;
     }
   });
+//  // setting some globals
+  searchQuery = query;
+  searchOffset = offset;
+  searchLimit = limit;
+  searchFilters = filters;
+  searchPage = page;
 
   // POST!
   $.ajax({
@@ -763,31 +802,4 @@ console.log(xhr);
     }
   });
   
-  $(window).scroll(function() {
-    var page = $('#pagination_current_page').text();
-    if ($('#pagination_current_page').text().length > 0 && $(window).scrollTop() > $(document).height() - $(window).height() - 50) {      
-      $('#pagination_current_page').html(null);
-        console.log(page);
-          // POST!
-          offset = (offset > 0) ? offset : 1;
-          os = offset * page
-          page++;
-          $.ajax({
-            type : "POST",
-            dataType : 'json',
-            url  : "/browser/search",
-            data : { query : 'math', filters : filters, limit : limit, offset : os },
-            success : function(xhr) {
-              $('#pagination_current_page').text(page);
-              toggleSearchMask(false);
-              renderSearchResults(xhr.hits, false);
-console.log(xhr);
-            },
-            error : function(xhr, txtStatus, errThrown) {
-              // @TODO what do we do here if something just fails
-            }
-          }); 
-      }
-  });
-            
 }
