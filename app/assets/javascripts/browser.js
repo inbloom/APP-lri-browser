@@ -794,7 +794,7 @@ function search(query, page, limit) {
     data : { query : query, filters : filters, limit : limit, offset : offset },
     success : function(xhr) {
       toggleSearchMask(false);
-      renderSearchResults(xhr.hits);
+      renderSearchResults(xhr.hits, true);
 console.log(xhr);
     },
     error : function(xhr, txtStatus, errThrown) {
