@@ -503,6 +503,7 @@ function renderSearchResults(res, clear) {
   // clear the panel
   if (clear) {
     $('div.panel._search div.results').empty();
+    $('#pagination_current_page').html(null);
     searchOffset = 0;
     searchPage = 1;
   }
