@@ -4,7 +4,7 @@ $(function() {
   gradeRanges = { 'minimum': 0, 'maximum': 12 }
   subject = 'ccssmath';
   inlineSearchLimit = 6;
-  searchLimit = 100;
+  searchLimit = 24;
 
   // Some position helpers K-12 in the event the need to be different sizes
   // Minimum is the offset for the left slider position compared to actual
@@ -465,9 +465,11 @@ function toggleSearchFilters() {
 }
 
 // Here we redraw the search results panel from an xhr.
-function renderSearchResults(res) {
+function renderSearchResults(res, clear) {
   // clear the panel
-  $('div.panel._search div.results').empty();
+  if (clear) {
+    $('div.panel._search div.results').empty();
+  }
 
   var items = res.hits;
 
@@ -760,5 +762,32 @@ console.log(xhr);
       // @TODO what do we do here if something just fails
     }
   });
-
+  
+  $(window).scroll(function() {
+    var page = $('#pagination_current_page').text();
+    if ($('#pagination_current_page').text().length > 0 && $(window).scrollTop() > $(document).height() - $(window).height() - 50) {      
+      $('#pagination_current_page').html(null);
+        console.log(page);
+          // POST!
+          offset = (offset > 0) ? offset : 1;
+          os = offset * page
+          page++;
+          $.ajax({
+            type : "POST",
+            dataType : 'json',
+            url  : "/browser/search",
+            data : { query : 'math', filters : filters, limit : limit, offset : os },
+            success : function(xhr) {
+              $('#pagination_current_page').text(page);
+              toggleSearchMask(false);
+              renderSearchResults(xhr.hits, false);
+console.log(xhr);
+            },
+            error : function(xhr, txtStatus, errThrown) {
+              // @TODO what do we do here if something just fails
+            }
+          }); 
+      }
+  });
+            
 }
