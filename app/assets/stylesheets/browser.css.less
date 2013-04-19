@@ -472,6 +472,20 @@ section.bottom {
               }
             }
           }
+          a.info {
+            position: absolute;
+            right: 15px;
+            bottom: 15px;
+            .rounded(5px);
+            padding: 0 7px;
+            font-style: italic;
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            font-family: Times Roman;
+            .gradient(#0b8aca, #1093d3, #077dc0);
+            .drop-shadow(0px, 1px, 1px, 1);
+          }
         }
       }
     }
@@ -610,7 +624,7 @@ section.bottom {
                   background: white;
                   h4 {
                     position: absolute;
-                    top: 25px;
+                    top: 23px;
                     left: 7px;
                     right: 3px;
                     .font-opensans;
@@ -620,10 +634,12 @@ section.bottom {
                     font-size: 12px;
                     line-height: 12px;
                     font-weight: 800;
+                    height:37px;
+                    overflow: hidden;
                   }
                   h5 {
                     position: absolute;
-                    top: 60px;
+                    top: 63px;
                     left: 7px;
                     right: 3px;
                     .font-opensans;
@@ -632,6 +648,31 @@ section.bottom {
                     color: #2697d0;
                     font-size: 8px;
                     line-height: 10px;
+                  }
+                  a.info {
+                    position: absolute;
+                    right: 5px;
+                    bottom: 5px;
+                    .rounded(5px);
+                    padding: 0 7px;
+                    font-style: italic;
+                    color: #fff;
+                    text-decoration: none;
+                    font-size: 14px;
+                    font-family: Times Roman;
+                    .gradient(#0b8aca, #1093d3, #077dc0);
+                    .drop-shadow(0px, 1px, 1px, 1);
+                  }
+                  div.imgs {
+                    padding-left: 5px;
+                    padding-top: 1px;
+                    img {
+                      display: none;
+                      width: 14px;
+                      &.show {
+                        display: inline;
+                      }
+                    }
                   }
                 }
               }
