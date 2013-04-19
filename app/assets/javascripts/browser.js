@@ -537,7 +537,8 @@ function renderSearchResults(res, clear) {
       }
     }
 
-    var tmp = $('div.item.hidden').clone();
+    var tmp = $('div.searchResult.item.hidden').clone();
+    $(tmp).removeClass('searchResult');
     $(tmp).removeClass('hidden');
     $(tmp).css('background-image', 'url('+thumbnail+')');
     $(tmp).find('h3').html(props['name'][0]);
@@ -701,6 +702,11 @@ function parseInlineSearchResults(results, tmpDotNotation) {
   } else {
     for(i in results.hits) {
       var props = results.hits[i]['_source']['properties'];
+      var author = (props['author'] == undefined || props['author'][0] == undefined || props['author'][0]['properties'] == undefined)?'':props['author'][0]['properties'];
+      var lrt = (props['learningResourceType'] == undefined)?[]:props['learningResourceType'];
+      var eu = (props['educationalUse'] == undefined)?[]:props['educationalUse'];
+      var ieur = (props['intendedEndUserRole'] == undefined)?[]:props['intendedEndUserRole'];
+
       var thumbnail = '';
       if (props['thumbnailUrl'] != undefined) {
         thumbnail = props['thumbnailUrl'][0]
@@ -720,7 +726,25 @@ function parseInlineSearchResults(results, tmpDotNotation) {
       }
 
       if ($('div.inlineResults._'+className).length > 0) {
-        $('<div class="item" style="background-image: url('+thumbnail+');"><div class="content"><h4>' + props['name'][0] + '</h4><h5>Provider Organization</h5></div></div>').appendTo('div.inlineResults._'+className);
+
+        var tmp = $('div.inlineResult.item.hidden').clone();
+        $(tmp).removeClass('inlineResult');
+        $(tmp).removeClass('hidden');
+        $(tmp).css('background-image', 'url('+thumbnail+')');
+        $(tmp).find('h4').html(props['name'][0]);
+        if (author['name'] != undefined) {
+          $(tmp).find('h5').html(author['name'][0]);
+        }
+
+        if ($.inArray('video', lrt) != -1) $(tmp).find('img.media').addClass('show');
+        if ($.inArray('audio', lrt) != -1) $(tmp).find('img.media').addClass('show');
+        if ($.inArray('on-line', lrt) != -1) $(tmp).find('img.media').addClass('show');
+        if ($.inArray('reading', eu) != -1) $(tmp).find('img.reading').addClass('show');
+        if ($.inArray('students', ieur) != -1) $(tmp).find('img.students').addClass('show');
+        if ($.inArray('teachers', ieur) != -1) $(tmp).find('img.teachers').addClass('show');
+
+        $(tmp).appendTo('div.inlineResults._'+className);
+
       }
     }
     var pagination = '<div class="pagination">';
@@ -782,7 +806,7 @@ function search(query, page, limit) {
       filters[name] = true;
     }
   });
-//  // setting some globals
+  // setting some globals
   searchQuery = query;
   searchOffset = offset;
   searchLimit = limit;
@@ -798,7 +822,6 @@ function search(query, page, limit) {
     success : function(xhr) {
       toggleSearchMask(false);
       renderSearchResults(xhr.hits, true);
-console.log(xhr);
     },
     error : function(xhr, txtStatus, errThrown) {
       // @TODO what do we do here if something just fails
