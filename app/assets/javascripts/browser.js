@@ -345,30 +345,30 @@ $(function() {
     }
   });
 
+  // scroll to bottom firing of the search
+  searching = false;
   $('section.bottom').scroll(function(e) {
     if ($('._search.panel').is(':visible')) {
-      var page = $('#pagination_current_page').text();
-      if ($('#pagination_current_page').text().length > 0 && $(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-          $('#pagination_current_page').html(null);
-          // POST!
-          searchOffset = (searchOffset > 0) ? searchOffset : 1;
-          os = searchOffset * searchPage
-          searchPage++;
-
-          $.ajax({
-            type : "POST",
-            dataType : 'json',
-            url  : "/browser/search",
-            data : { query : searchQuery, filters : searchFilters, limit : searchLimit, offset : os },
-            success : function(xhr) {
-              $('#pagination_current_page').text(page);
-              toggleSearchMask(false);
-              renderSearchResults(xhr.hits, false);
-            },
-            error : function(xhr, txtStatus, errThrown) {
-              // @TODO what do we do here if something just fails
-            }
-          });
+      if (!searching && $(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+        searchOffset = (searchOffset > 0) ? searchOffset : 1;
+        searchPage++;
+        toggleSearchSpinner(true);
+        searching = true;
+        $.ajax({
+          type : "POST",
+          dataType : 'json',
+          url  : "/browser/search",
+          data : { query : searchQuery, filters : searchFilters, limit : searchLimit, offset : (searchOffset * searchPage) },
+          success : function(xhr) {
+            searching = false;
+            toggleSearchSpinner(false);
+            renderSearchResults(xhr.hits, false);
+          },
+          error : function(xhr, txtStatus, errThrown) {
+            searching = false;
+            // @TODO what do we do here if something just fails
+          }
+        });
       }
     }
   });
@@ -465,21 +465,34 @@ function toggleSearchMask(bool) {
   if (bool == undefined) {
     if ($('div.searching-mask').is(':visible')) {
       $('div.searching-mask').stop().animate({opacity:0},500,'easeInOutCubic',function() { $(this).hide(); });
-      $('div.spinner').stop().animate({opacity:0},500,'easeInOutCubic',function() { $(this).hide(); });
     } else {
       $('div.searching-mask').stop().css({opacity:0}).show().animate({opacity:0.8},500,'easeInOutCubic',function() {
         $('div.panel._search div.results').empty();
       });
-      $('div.spinner').stop().css({opacity:0}).show().animate({opacity:1},500,'easeInOutCubic',function() { });
     }
   } else {
     if (bool) {
       $('div.searching-mask').stop().css({opacity:0}).show().animate({opacity:0.8},500,'easeInOutCubic',function() {
         $('div.panel._search div.results').empty();
       });
-      $('div.spinner').stop().css({opacity:0}).show().animate({opacity:1},500,'easeInOutCubic',function() { });
     } else {
       $('div.searching-mask').stop().animate({opacity:0},500,'easeInOutCubic',function() { $(this).hide(); });
+    }
+  }
+}
+
+// Toggle the visibility of the search spinner, OR show/hide it based on bool
+function toggleSearchSpinner(bool) {
+  if (bool == undefined) {
+    if ($('div.spinner').is(':visible')) {
+      $('div.spinner').stop().animate({opacity:0},500,'easeInOutCubic',function() { $(this).hide(); });
+    } else {
+      $('div.spinner').stop().css({opacity:0}).show().animate({opacity:1},500,'easeInOutCubic',function() { });
+    }
+  } else {
+    if (bool) {
+      $('div.spinner').stop().css({opacity:0}).show().animate({opacity:1},500,'easeInOutCubic',function() { });
+    } else {
       $('div.spinner').stop().animate({opacity:0},500,'easeInOutCubic',function() { $(this).hide(); });
     }
   }
@@ -503,7 +516,6 @@ function renderSearchResults(res, clear) {
   // clear the panel
   if (clear) {
     $('div.panel._search div.results').empty();
-    $('#pagination_current_page').html(null);
     searchOffset = 0;
     searchPage = 1;
   }
@@ -795,6 +807,7 @@ function search(query, page, limit) {
   // Show the searching mask and panel
   toggleSearchPanel(true);
   toggleSearchMask(true);
+  toggleSearchSpinner(true);
   // build our filters
   var filters = {};
   // Go through the complete secondary filter list and add them to the filter variable
@@ -821,6 +834,7 @@ function search(query, page, limit) {
     data : { query : query, filters : filters, limit : limit, offset : offset },
     success : function(xhr) {
       toggleSearchMask(false);
+      toggleSearchSpinner(false);
       renderSearchResults(xhr.hits, true);
     },
     error : function(xhr, txtStatus, errThrown) {
