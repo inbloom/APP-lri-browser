@@ -744,6 +744,9 @@ function parseInlineSearchResults(results, tmpDotNotation) {
         $(tmp).removeClass('hidden');
         $(tmp).css('background-image', 'url('+thumbnail+')');
         $(tmp).find('h4').html(props['name'][0]);
+        $(tmp).click(function() {
+          window.location.href = "/browser/link?url=" + props.url[0];
+        });
         if (author['name'] != undefined) {
           $(tmp).find('h5').html(author['name'][0]);
         }
