@@ -310,7 +310,7 @@ $(function() {
   });
 
   // Add an event to the search text area on hitting return it submits
-  $(document).on('keyup', '#form-search-filter', function(e) {
+  $(document).on('keydown', '#form-search-filter', function(e) {
     if (e.keyCode == 13) {
       search($('#form-search-filter').val());
     }
@@ -461,19 +461,31 @@ function toggleSearchPanel(bool) {
 }
 
 // Toggle the visibility of the search mask, OR show/hide it based on bool
-function toggleSearchMask(bool) {
+// If you flag it as a modal then it will be a dark overlay and wont clear the search pane
+function toggleSearchMask(bool,modal) {
+  if (modal == undefined) modal == false;
+  if (!modal) {
+    $('div.searching-mask').css('background','#fff');
+  } else {
+    $('div.searching-mask').css('background','#000');
+  }
+
   if (bool == undefined) {
     if ($('div.searching-mask').is(':visible')) {
       $('div.searching-mask').stop().animate({opacity:0},500,'easeInOutCubic',function() { $(this).hide(); });
     } else {
       $('div.searching-mask').stop().css({opacity:0}).show().animate({opacity:0.8},500,'easeInOutCubic',function() {
-        $('div.panel._search div.results').empty();
+        if (!modal) {
+          $('div.panel._search div.results').empty();
+        }
       });
     }
   } else {
     if (bool) {
       $('div.searching-mask').stop().css({opacity:0}).show().animate({opacity:0.8},500,'easeInOutCubic',function() {
-        $('div.panel._search div.results').empty();
+        if (!modal) {
+          $('div.panel._search div.results').empty();
+        }
       });
     } else {
       $('div.searching-mask').stop().animate({opacity:0},500,'easeInOutCubic',function() { $(this).hide(); });
@@ -554,6 +566,14 @@ function renderSearchResults(res, clear) {
     $(tmp).removeClass('hidden');
     $(tmp).css('background-image', 'url('+thumbnail+')');
     $(tmp).find('h3').html(props['name'][0]);
+    $(tmp).click(function(e) {
+      window.open("/browser/link?url=" + props.url[0], '_blank');
+      return false;
+    });
+    $(tmp).find('a.info').click(function(e) {
+      toggleSearchMask(true, true);
+      return false;
+    })
     if (author['name'] != undefined) {
       $(tmp).find('h4').html(author['name'][0]);
     }
@@ -745,7 +765,8 @@ function parseInlineSearchResults(results, tmpDotNotation) {
         $(tmp).css('background-image', 'url('+thumbnail+')');
         $(tmp).find('h4').html(props['name'][0]);
         $(tmp).click(function() {
-          window.location.href = "/browser/link?url=" + props.url[0];
+          window.open("/browser/link?url=" + props.url[0], '_blank');
+          return false;
         });
         if (author['name'] != undefined) {
           $(tmp).find('h5').html(author['name'][0]);
