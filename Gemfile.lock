@@ -115,7 +115,6 @@ GEM
     multi_json (1.7.2)
     multi_xml (0.5.3)
     multipart-post (1.2.0)
-    mysql2 (0.3.11)
     nokogiri (1.5.9)
     oauth (0.4.7)
     oauth2 (0.8.1)
@@ -133,6 +132,7 @@ GEM
     omniauth-slc (0.0.2)
       omniauth-oauth2 (~> 1.1)
     orm_adapter (0.4.0)
+    pg (0.15.1)
     polyglot (0.3.3)
     possessive (1.0.1)
     rack (1.4.5)
@@ -234,10 +234,10 @@ DEPENDENCIES
   jquery-ui-rails
   launchy
   less-rails
-  mysql2
   oauth
   omniauth
   omniauth-slc (= 0.0.2)
+  pg
   possessive
   rails (= 3.2.11)
   rest-client
