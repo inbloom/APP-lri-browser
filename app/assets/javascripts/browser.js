@@ -44,7 +44,7 @@ $(function() {
       heightStyle: 'content',
       animate: 'easeInOutCubic'
     });
-  },500);
+  },500);  
 
   // Make Left Handle Draggable
   $('div.slider-handle-left').draggable({
@@ -373,7 +373,6 @@ $(function() {
     }
   });
 
-
 });
 
 // Set grade range and the slider
@@ -644,7 +643,8 @@ function buildAccordionNavigation(div, req) {
       $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
     }
 
-  }
+  }  
+  
 }
 
 // Take the title and transform it into something pretty
@@ -867,3 +867,9 @@ function search(query, page, limit) {
   });
   
 }
+
+setTimeout(function() {
+  // Trigger the first element as clicked
+  $(".ui-accordion-content:first a").trigger('click');
+  $('#notify_close').click( function() { $(this).parent().fadeOut(); });
+}, 1000);
