@@ -36,6 +36,11 @@ gem 'omniauth-slc', '0.0.2'
 gem 'oauth'
 # HTTP Party Rockin
 gem 'httparty'
+# For Elastic Search Communications
+gem 'rest-client'
+# HTML Entities encode/decoder
+gem 'htmlentities'
+
 
 # Dev/Test env only please
 group :development, :test do
@@ -44,6 +49,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'capybara'
+  gem 'launchy'
   gem 'faker'
   gem 'thin'
 end

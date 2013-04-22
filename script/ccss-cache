@@ -1,0 +1,206 @@
+#!/usr/bin/env ruby
+
+require 'net/http'
+require 'uri'
+require 'json'
+require 'action_view'
+require 'htmlentities'
+
+require 'awesome_print'
+
+include ActionView::Helpers::SanitizeHelper
+
+@lri_addy = 'http://lriserver.inbloom.org'
+@lri_un = 'lri'
+@lri_pw = '7u2GR94z'
+
+@response_json = Hash.new{ |h,k| h[k] = Hash.new(&h.default_proc) }
+
+@order = []
+@min = 12
+@max = 0
+
+@grade_table = {
+  0 => 'K',
+  1 => '1',
+  2 => '2',
+  3 => '3',
+  4 => '4',
+  5 => '5',
+  6 => '6',
+  7 => '6-8',
+  8 => '7',
+  9 => '8',
+  10 => '9',
+  11 => '9-10',
+  12 => '10',
+  13 => '10-11',
+  14 => '11',
+  15 => '11-12',
+  16 => '12',
+  17 => 'HSN',
+  18 => 'HSA',
+  19 => 'HSF',
+  20 => 'HSG',
+  21 => 'HSS'
+}
+
+@grade_min_table = {
+  0 => ['K'],
+  1 => ['1'],
+  2 => ['2'],
+  3 => ['3'],
+  4 => ['4'],
+  5 => ['5'],
+  6 => ['6-8', '6'],
+  7 => ['7'],
+  8 => ['8'],
+  9 => ['HSN', 'HSA', 'HSF', 'HSG', 'HSS', '9-10', '9'],
+  10 => ['10-11', '10'],
+  11 => ['11-12', '11'],
+  12 => ['12']
+}
+
+@grade_max_table = {
+  0 => ['K'],
+  1 => ['1'],
+  2 => ['2'],
+  3 => ['3'],
+  4 => ['4'],
+  5 => ['5'],
+  6 => ['6'],
+  7 => ['7'],
+  8 => ['6-8', '8'],
+  9 => ['9'],
+  10 => ['9-10', '10'],
+  11 => ['10-11', '11'],
+  12 => ['11-12', '12', 'HSN', 'HSA', 'HSF', 'HSG', 'HSS']
+}
+
+class String
+  def pop_node
+    gsub(':', '.').split('.').last
+  end
+end
+
+def create_key notation, value
+  nodes = notation.gsub(':', '.').split('.')[3..-1]
+  node = nodes.inject(@response_json) { |h, k|
+    h[k]
+  }
+  node['_text'] = value
+  node['_order'] = @order
+  if @order.count > 1 
+    @min = 12
+    @max = 0
+  end    
+  @order.each do |c|
+    current = c[1].split('.')[3]
+    @grade_min_table.each do |k,v|
+      if v.include? current
+        @min = k unless @min <= k
+      end
+    end  
+    @grade_max_table.each do |k,v|
+      if v.include? current
+        @max = k unless @max >= k
+      end
+    end
+  end    
+  node['_min'] = @min
+  node['_max'] = @max
+end
+
+def execute_query request_uri
+  uri = URI.parse(URI.encode(request_uri))
+  http = Net::HTTP.new(uri.host, uri.port)
+  request = Net::HTTP::Get.new(uri.request_uri)
+  request.basic_auth(@lri_un, @lri_pw)
+  JSON.parse http.request(request).body
+end
+
+def harvest_property property_id, i
+  data = execute_query "#{@lri_addy}/entity/search?q={\"urn:lri:property_type:id\": \"#{property_id}\"}"
+  data = data['response'].first
+  id = data['props']['urn:lri:property_type:id']
+  name = data['props']['urn:lri:property_type:name']
+  desc = data['props']['urn:lri:property_type:description']
+  id_top = id.pop_node
+  text = ''
+  
+  if name.to_s.length > desc.to_s.length
+    text = name
+  else
+    text = desc
+  end
+  if text.length < 1
+    text = id
+  end
+  
+  text = HTMLEntities.new.decode strip_tags text
+  
+  contains_sorted = {}
+  contains = data['props']['urn:lri:property_type:contains']
+  if (property_id.include? 'urn:ccss:set:CCSS.Math.Content') || (property_id.include? 'urn:ccss:domain:CCSS.ELA-Literacy')
+    contains.each do |property_id|
+      contains_sorted.merge! @grade_table.key(property_id.split('.').last) => property_id
+    end
+    @order = contains_sorted
+  elsif contains.respond_to? :each
+    @order = {}
+    i=0
+    contains.each do |property_id|
+      @order.merge! i => property_id
+      i = i + 1
+    end
+  else
+    @order = {}
+  end
+  
+  create_key property_id, text  
+  
+  data
+end
+
+def recursive_harvest_property(property_id, i)
+  property_data = harvest_property property_id, i
+  contains = property_data['props']['urn:lri:property_type:contains']
+
+  if contains.class == String
+    create_key property_id, property_data['props']['urn:lri:property_type:name']
+  elsif contains.to_a.count > 0   
+    i += 1
+    contains_sorted = {}
+    if (property_id.include? 'urn:ccss:set:CCSS.Math.Content') || (property_id.include? 'urn:ccss:domain:CCSS.ELA-Literacy')
+      contains.each do |property_id|
+        contains_sorted.merge! @grade_table.key(property_id.split('.').last) => property_id
+      end
+      @order = contains_sorted.to_a
+      contains_sorted.sort.map do |k,v|
+        recursive_harvest_property(v, i)
+      end
+    else  
+      @order = contains.to_a
+      contains.each do |property_id|
+        recursive_harvest_property(property_id, i)
+      end
+    end
+  end
+end
+
+# Get frameworks and their children ids
+framework_json = execute_query("#{@lri_addy}/ccss/frameworks")
+
+frameworks = {}
+
+framework_json['response'][0]['frameworks'].to_a.each do |framework| 
+  frameworks["#{framework['props']['urn:lri:property_type:name'].pop_node}"] = framework
+end
+
+frameworks.each do |key, framework|
+  framework['props']['urn:lri:property_type:contains'].each do |property_id|
+    recursive_harvest_property property_id, 1
+  end
+end
+
+puts JSON.generate @response_json

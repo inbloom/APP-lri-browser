@@ -6,6 +6,7 @@
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:600italic,700italic,400,300,600,700' rel='stylesheet' type='text/css'>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 </head>
 <body>
   <form id="superform" method="post" action="/">
@@ -41,6 +42,8 @@
           <input type="text" name="search" id="form-search-filter" placeholder="Search" />
           <button>&times;</button>
         </div>
+
+        <div class='spinner'></div>
       </div>
     </header>
 
@@ -49,13 +52,14 @@
         <div class='controls'>
           <div class='control icon-teachers'><input type="checkbox" name="filter[teachers]" value="on" id="teachersCheckbox"/><label for="teachersCheckbox">For Teachers</label></div>
           <div class='control icon-students'><input type="checkbox" name="filter[students]" value="on" id="studentsCheckbox"/><label for="studentsCheckbox">For Students</label></div>
-          <div class='control icon-pages'><input type="checkbox" name="filter[pages]" value="on" id="pagesCheckbox"/><label for="pagesCheckbox">Reading & Web Pages</label></div>
-          <div class='control icon-finger'><input type="checkbox" name="filter[media]" value="on" id="mediaCheckbox"/><label for="mediaCheckbox">Audio / Video / Interactive</label></div>
+          <div class='control icon-pages'><input type="checkbox" name="filter[pages]" value="on" id="pagesCheckbox"/><label for="pagesCheckbox">Reading</label></div>
+          <div class='control icon-finger'><input type="checkbox" name="filter[media]" value="on" id="mediaCheckbox"/><label for="mediaCheckbox">Audio / Video / On-Line</label></div>
         </div>
       </div>
     </section>
 
     <section class='bottom'>
+      <div class='searching-mask'></div>
       <div class='container'>
         <%= yield %>
       </div>
