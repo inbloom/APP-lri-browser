@@ -44,7 +44,13 @@ $(function() {
       heightStyle: 'content',
       animate: 'easeInOutCubic'
     });
-  },500);  
+  },500);
+
+  // @TODO Remove this and add a function callback to the build Accordion Navigation method to correctly set the first option as desired by client
+  setTimeout(function() {
+    // Trigger the first element as clicked
+    $(".ui-accordion-content:first a").trigger('click');
+  }, 1000);
 
   // Make Left Handle Draggable
   $('div.slider-handle-left').draggable({
@@ -117,6 +123,11 @@ $(function() {
     $('#onlineSecondaryCheckbox').prop('checked', e.target.checked);
     refreshInlineSearchResults();
     refreshSearchResults();
+  });
+
+  // Fade out the notification
+  $('div.alert-notification a.close').click( function() {
+    $('div.alert-notification').fadeOut();
   });
 
   // Secondary filter checkboxes on clicks
@@ -868,8 +879,4 @@ function search(query, page, limit) {
   
 }
 
-setTimeout(function() {
-  // Trigger the first element as clicked
-  $(".ui-accordion-content:first a").trigger('click');
-  $('#notify_close').click( function() { $(this).parent().fadeOut(); });
-}, 1000);
+
