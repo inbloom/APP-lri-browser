@@ -850,4 +850,5 @@ function search(query, page, limit) {
 setTimeout(function() {
   // Trigger the first element as clicked
   $(".ui-accordion-content:first a").trigger('click');
+  $('#notify_close').click( function() { $(this).parent().fadeOut(); });
 }, 1000);
