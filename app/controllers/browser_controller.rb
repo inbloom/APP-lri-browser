@@ -52,8 +52,10 @@ class BrowserController < ApplicationController
             'properties.url',
             'properties.useRightsUrl'
         ].include?(key)
+          searchKey = "schema-org.#{key}.original"
           matchTerm = 'term'
         else
+          searchKey = "schema-org.#{key}"
           matchTerm = 'match'
         end
 
@@ -61,12 +63,12 @@ class BrowserController < ApplicationController
           # This is more complex because this filter type needs the keys or'd together
           orFilters = []
           filter.keys.each do |f|
-            orFilters << { 'query' => { matchTerm => { key => f.to_s } } }
+            orFilters << { 'query' => { matchTerm => { searchKey => f.to_s } } }
           end
           filters << { 'or' => orFilters }
         else
           # This should be simple, there is only one of this filter key
-          filters << { 'query' => { matchTerm => { key => filter.keys.first.to_s } } }
+          filters << { 'query' => { matchTerm => { searchKey => filter.keys.first.to_s } } }
         end
       end
 
@@ -97,7 +99,7 @@ class BrowserController < ApplicationController
         }
     }
 
-#puts "PAYLOAD"; puts payload.to_json
+puts "PAYLOAD"; puts Rails.configuration.elastic_search_url; puts payload.to_json
 
     # Okay after all that mess, lets make the request
     request = RestClient::Request.new( :method => :get, :url => Rails.configuration.elastic_search_url, :payload => payload.to_json )
@@ -107,7 +109,7 @@ class BrowserController < ApplicationController
       results = JSON.parse(searchResults)
       results[:hack] = hack
 
-#puts "RESPONSE"; puts results
+puts "RESPONSE"; puts results
 
       respond_to do |format|
         format.json { render json: results }
@@ -117,7 +119,7 @@ class BrowserController < ApplicationController
       respond_to do |format|
         format.json { render json: searchResults }
       end
-#puts "ERROR!"; puts e.response
+puts "ERROR!"; puts e.response
     end
 
   end

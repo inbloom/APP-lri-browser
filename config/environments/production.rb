@@ -66,6 +66,6 @@ Browser::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   # Elastic search server configs
-  config.elastic_search_url = 'http://esearch.agilix.com:9200/lris/lrmi/_search'
+  config.elastic_search_url = 'http://esearch.agilix.com:9200/lris-dev/schema-org/_search'
 
 end
