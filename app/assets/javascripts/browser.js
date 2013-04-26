@@ -627,7 +627,7 @@ function buildAccordionNavigation(div, req) {
         var key = standard[i]._order[s].substr( standard[i]._order[s].lastIndexOf('.') + 1, standard[i]._order[s].length )
 
         var linkText = (standard[i][key]._text != undefined)?standard[i][key]._text:key;
-        links += '<p><a href="#CCSS.ELA-Literacy.'+i+'.'+s+'" rel="navlink">' + linkText + '</a></p>';
+        links += '<p><a href="#CCSS.ELA-Literacy.'+i+'.'+key+'" rel="navlink">' + linkText + '</a></p>';
       }
 
       $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
