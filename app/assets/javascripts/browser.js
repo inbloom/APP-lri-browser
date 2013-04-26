@@ -580,10 +580,13 @@ function renderSearchResults(res, clear) {
       window.open("/browser/link?url=" + props.url[0], '_blank');
       return false;
     });
+
     $(tmp).find('a.info').click(function(e) {
       toggleSearchMask(true, true);
+      showItemModal(e.target);
       return false;
-    })
+    }).data('item',props);
+
     if (author['name'] != undefined) {
       $(tmp).find('h4').html(author['name'][0]);
     }
@@ -779,6 +782,14 @@ function parseInlineSearchResults(results, tmpDotNotation) {
           window.open("/browser/link?url=" + props.url[0], '_blank');
           return false;
         });
+
+        $(tmp).find('a.info').click(function(e) {
+          toggleSearchMask(true, true);
+          showItemModal(e.target);
+          return false;
+        }).data('item',props);
+
+
         if (author['name'] != undefined) {
           $(tmp).find('h5').html(author['name'][0]);
         }
@@ -879,4 +890,34 @@ function search(query, page, limit) {
   
 }
 
+// Pop the modal for the target.. the data is stored on the target
+function showItemModal(target) {
+  var item = $(target).data('item');
 
+  var author = (item['author'] == undefined || item['author'][0] == undefined || item['author'][0]['properties'] == undefined)?'':item['author'][0]['properties'];
+  var description = (item['description'] == undefined)?'':item['description'][0];
+  var dateCreated = (item['dateCreated'] == undefined)?'':item['dateCreated'][0];
+
+  $('#itemModal').find('h3').html(item['name'][0]);
+  $('#itemModal').find('div.content').html(description);
+  $('#itemModal').find('div.date').html(dateCreated);
+  if (author['name'] != undefined) {
+    $('#itemModal').find('h4').html(author['name'][0]);
+  }
+
+  $('#itemModal').find('a.go').click(function(e) {
+    window.open("/browser/link?url=" + item.url[0], '_blank');
+    $('#itemModal').fadeOut();
+    toggleSearchMask(false);
+    return false;
+  });
+
+  $('#itemModal').fadeIn();
+}
+
+// Hide the modal
+function hideItemModal() {
+  $('#itemModal').fadeOut();
+  toggleSearchMask(false);
+  return false;
+}

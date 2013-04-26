@@ -709,3 +709,97 @@ section.bottom {
   }
 }
 
+
+div#itemModal {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -175px;
+  margin-top: -225px;
+  width: 350px;
+  height: 450px;
+  .rounded(10px);
+  z-index: 1000;
+  .font-opensans;
+  .drop-shadow(1px, 1px, 4px, 0.5);
+  color: #5b5b5b;
+  background: #f5f5f5;
+  background-repeat: no-repeat;
+  background-size: 80px 80px;
+  a.close {
+    position: absolute;
+    z-index:1;
+    top: 0px;
+    right: 0px;
+    width: 36px;
+    height: 38px;
+    border: 0;
+    background: url(/assets/search-close.png) no-repeat;
+    cursor: pointer;
+  }
+  h3 {
+    position: absolute;
+    top: 25px;
+    left: 85px;
+    margin: 0 5px 0 0;
+    padding: 0;
+    font-size: 13px;
+    line-height: 14px;
+  }
+  h4 {
+    position: absolute;
+    top: 95px;
+    left: 15px;
+    right: 3px;
+    .font-opensans;
+    margin: 0;
+    padding: 0;
+    color: #0b8aca;
+    font-size: 12px;
+    line-height: 12px;
+    font-weight: 600;
+  }
+  div.content {
+    position: absolute;
+    top: 115px;
+    left: 15px;
+    right: 10px;
+    bottom: 30px;
+    font-size: 12px;
+    line-height: 14px;
+  }
+  div.date {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    font-size: 10px;
+    font-weight: 800;
+    font-style: italic;
+  }
+  div.imgs {
+    position: absolute;
+    left: 85px;
+    top: 3px;
+    img {
+      display: none;
+      &.show {
+        display: inline;
+      }
+    }
+  }
+  a.go {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    .rounded(5px);
+    padding: 0 7px;
+    font-style: italic;
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    font-family: Times Roman;
+    .gradient(#0b8aca, #1093d3, #077dc0);
+    .drop-shadow(0px, 1px, 1px, 1);
+  }
+}
