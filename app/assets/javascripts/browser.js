@@ -622,9 +622,11 @@ function buildAccordionNavigation(div, req) {
 
       var title = accordionTitle(standard[i]._text);
       var links = "";
-      for (s in standard[i]) {
-        if (s.charAt(0) == '_') continue;
-        var linkText = (standard[i][s]._text != undefined)?standard[i][s]._text:s;
+
+      for (s in standard[i]._order) {
+        var key = standard[i]._order[s].substr( standard[i]._order[s].lastIndexOf('.') + 1, standard[i]._order[s].length )
+
+        var linkText = (standard[i][key]._text != undefined)?standard[i][key]._text:key;
         links += '<p><a href="#CCSS.ELA-Literacy.'+i+'.'+s+'" rel="navlink">' + linkText + '</a></p>';
       }
 
