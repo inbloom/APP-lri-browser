@@ -57,16 +57,19 @@ $(function() {
       axis: 'x',
       containment: 'parent',
       drag: function(event, ui) {
-          var position = $(this).offset().left - ageRangeSlider.left;
-          for (i in loc_offsets) {
-              if (i > gradeRanges.maximum) continue;
-              if (position < (loc_offsets[i].leftBoundary+10) && position > (loc_offsets[i].leftBoundary-10)) {
-                  setGradeRange({'minimum':i});
-              }
+        var position = $(this).offset().left - ageRangeSlider.left;
+        for (i in loc_offsets) {
+          if (i > gradeRanges.maximum) continue;
+          if (position < (loc_offsets[i].leftBoundary+10) && position > (loc_offsets[i].leftBoundary-10)) {
+            setGradeRange({'minimum':i});
           }
+        }
       },
       stop: function(event, ui) {
-          setGradeRange();
+        setGradeRange();
+        // Now redraw the left navigation based on the grades allowed
+        buildAccordionNavigation($('div.accordion._ccssmath'), 'ccssmath');
+        buildAccordionNavigation($('div.accordion._ccsselaliteracy'), 'ccsselaliteracy');
       }
   });
 
@@ -75,16 +78,19 @@ $(function() {
       axis: 'x',
       containment: 'parent',
       drag: function(event, ui) {
-          var position = $(this).offset().left - ageRangeSlider.left;
-          for (i in loc_offsets) {
-              if (i < gradeRanges.minimum) continue;
-              if (position < (loc_offsets[i].rightBoundary+10) && position > (loc_offsets[i].rightBoundary-10)) {
-                  setGradeRange({'maximum':i});
-              }
+        var position = $(this).offset().left - ageRangeSlider.left;
+        for (i in loc_offsets) {
+          if (i < gradeRanges.minimum) continue;
+          if (position < (loc_offsets[i].rightBoundary+10) && position > (loc_offsets[i].rightBoundary-10)) {
+            setGradeRange({'maximum':i});
           }
+        }
       },
       stop: function(event, ui) {
-          setGradeRange();
+        setGradeRange();
+        // Now redraw the left navigation based on the grades allowed
+        buildAccordionNavigation($('div.accordion._ccssmath'), 'ccssmath');
+        buildAccordionNavigation($('div.accordion._ccsselaliteracy'), 'ccsselaliteracy');
       }
   });
 
@@ -388,35 +394,35 @@ $(function() {
 
 // Set grade range and the slider
 function setGradeRange(ranges) {
-    // Allow some or all arguments to be blank
-    if (ranges == undefined) ranges = gradeRanges;
-    if (ranges.minimum == undefined) ranges.minimum = gradeRanges.minimum;
-    if (ranges.maximum == undefined) ranges.maximum = gradeRanges.maximum;
-    // Parse to make sure they are ints
-    ranges.minimum = parseInt(ranges.minimum);
-    ranges.maximum = parseInt(ranges.maximum);
-    // Some useful slider information that doesn't change (but could based on browser resize)
-    ageRangeSlider = {
-        'left' : Math.ceil($('li._0').offset().left + loc_offsets[0].minimum),
-        'right' : Math.ceil($('li._12').offset().left + loc_offsets[12].maximum)
-    };
-    // First set the ranges
-    $('div.grade li').removeClass('selected');
-    for (i=ranges.minimum;i<=ranges.maximum;i++) {
-        $('li._'+i).addClass('selected');
-    }
-    // Set ranges back to variable
-    gradeRanges = ranges;
-    // Set them to the form
-    $('#form-grade-minimum').attr('value', ranges.minimum);
-    $('#form-grade-maximum').attr('value', ranges.maximum);
-    // Now position the sliders
-    // Some helpers to set width
-    var slider_left = Math.ceil($('li._'+ranges.minimum).offset().left + loc_offsets[ranges.minimum].minimum);
-    var slider_right = Math.ceil(($('li._'+ranges.maximum).offset().left - slider_left) + loc_offsets[ranges.maximum].maximum);
-    // Set the handles locations
-    $('.slider-handle-left').offset({ 'left': slider_left + 6 }).html((ranges.minimum == 0)?'K':ranges.minimum).show();
-    $('.slider-handle-right').offset({ 'left': slider_right + slider_left - 26 }).html((ranges.maximum == 0)?'K':ranges.maximum).show();
+  // Allow some or all arguments to be blank
+  if (ranges == undefined) ranges = gradeRanges;
+  if (ranges.minimum == undefined) ranges.minimum = gradeRanges.minimum;
+  if (ranges.maximum == undefined) ranges.maximum = gradeRanges.maximum;
+  // Parse to make sure they are ints
+  ranges.minimum = parseInt(ranges.minimum);
+  ranges.maximum = parseInt(ranges.maximum);
+  // Some useful slider information that doesn't change (but could based on browser resize)
+  ageRangeSlider = {
+    'left' : Math.ceil($('li._0').offset().left + loc_offsets[0].minimum),
+    'right' : Math.ceil($('li._12').offset().left + loc_offsets[12].maximum)
+  };
+  // First set the ranges
+  $('div.grade li').removeClass('selected');
+  for (i=ranges.minimum;i<=ranges.maximum;i++) {
+    $('li._'+i).addClass('selected');
+  }
+  // Set ranges back to variable
+  gradeRanges = ranges;
+  // Set them to the form
+  $('#form-grade-minimum').attr('value', ranges.minimum);
+  $('#form-grade-maximum').attr('value', ranges.maximum);
+  // Now position the sliders
+  // Some helpers to set width
+  var slider_left = Math.ceil($('li._'+ranges.minimum).offset().left + loc_offsets[ranges.minimum].minimum);
+  var slider_right = Math.ceil(($('li._'+ranges.maximum).offset().left - slider_left) + loc_offsets[ranges.maximum].maximum);
+  // Set the handles locations
+  $('.slider-handle-left').offset({ 'left': slider_left + 6 }).html((ranges.minimum == 0)?'K':ranges.minimum).show();
+  $('.slider-handle-right').offset({ 'left': slider_right + slider_left - 26 }).html((ranges.maximum == 0)?'K':ranges.maximum).show();
 }
 
 // Set the subject and move the cursor accordingly
@@ -612,6 +618,8 @@ function truncateString(string, length) {
 
 // Build out the accordion navigation based on which standard
 function buildAccordionNavigation(div, req) {
+  // Clear the div
+  $(div).empty();
 
   // Create navigation for CCSS.ELA-Literacy
   if (req == 'ccsselaliteracy') {
@@ -625,6 +633,9 @@ function buildAccordionNavigation(div, req) {
 
       for (s in standard[i]._order) {
         var key = standard[i]._order[s].substr( standard[i]._order[s].lastIndexOf('.') + 1, standard[i]._order[s].length )
+        var item = standard[i][key];
+
+        if (gradeRanges.maximum < item._min || gradeRanges.minimum > item._max) continue;
 
         var linkText = (standard[i][key]._text != undefined)?standard[i][key]._text:key;
         links += '<p><a href="#CCSS.ELA-Literacy.'+i+'.'+key+'" rel="navlink">' + linkText + '</a></p>';
@@ -648,6 +659,8 @@ function buildAccordionNavigation(div, req) {
       var key = standard._order[i].substr( standard._order[i].lastIndexOf('.') + 1, standard._order[i].length )
       var item = standard[key];
 
+      if (gradeRanges.maximum < item._min || gradeRanges.minimum > item._max) continue;
+
       var title = accordionTitle(item._text);
       var links = "";
       for (s in item) {
@@ -659,8 +672,13 @@ function buildAccordionNavigation(div, req) {
       $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
     }
 
-  }  
-  
+  }
+
+  // In the event of a redraw go ahead and refresh
+  if ($(".accordion").hasClass('ui-accordion')) {
+    $(".accordion").accordion("refresh");
+  }
+
 }
 
 // Take the title and transform it into something pretty
