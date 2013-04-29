@@ -582,8 +582,10 @@ function renderSearchResults(res, clear) {
     $(tmp).removeClass('hidden');
     $(tmp).css('background-image', 'url('+thumbnail+')');
     $(tmp).find('h3').html(props['name'][0]);
+    $(tmp).attr('data-url', props.url[0]);
     $(tmp).click(function(e) {
-      window.open("/browser/link?url=" + props.url[0], '_blank');
+      var url = $(this).attr('data-url');
+      window.open("/browser/link?url=" + url, '_blank');
       return false;
     });
 
@@ -591,7 +593,7 @@ function renderSearchResults(res, clear) {
       toggleSearchMask(true, true);
       showItemModal(e.target);
       return false;
-    }).data('item',props);
+    }).attr('data-item',JSON.stringify(props));
 
     if (author['name'] != undefined) {
       $(tmp).find('h4').html(author['name'][0]);
@@ -798,8 +800,10 @@ function parseInlineSearchResults(results, tmpDotNotation) {
         $(tmp).removeClass('hidden');
         $(tmp).css('background-image', 'url('+thumbnail+')');
         $(tmp).find('h4').html(props['name'][0]);
+        $(tmp).attr('data-url', props.url[0]);
         $(tmp).click(function() {
-          window.open("/browser/link?url=" + props.url[0], '_blank');
+          var url = $(this).attr('data-url');
+          window.open("/browser/link?url=" + url, '_blank');
           return false;
         });
 
@@ -807,8 +811,7 @@ function parseInlineSearchResults(results, tmpDotNotation) {
           toggleSearchMask(true, true);
           showItemModal(e.target);
           return false;
-        }).data('item',props);
-
+        }).attr('data-item',JSON.stringify(props));
 
         if (author['name'] != undefined) {
           $(tmp).find('h5').html(author['name'][0]);
@@ -912,7 +915,7 @@ function search(query, page, limit) {
 
 // Pop the modal for the target.. the data is stored on the target
 function showItemModal(target) {
-  var item = $(target).data('item');
+  var item = JSON.parse($(target).attr('data-item'));
 
   var author = (item['author'] == undefined || item['author'][0] == undefined || item['author'][0]['properties'] == undefined)?'':item['author'][0]['properties'];
   var description = (item['description'] == undefined)?'':item['description'][0];
