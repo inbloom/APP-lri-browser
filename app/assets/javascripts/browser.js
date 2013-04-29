@@ -676,6 +676,12 @@ function buildAccordionNavigation(div, req) {
 
   }
 
+  // Step through the accordion and hide those that are empty
+  $('div.accordion div:empty').each(function() {
+    $(this).prev().hide();
+    $(this).hide();
+  });
+
   // In the event of a redraw go ahead and refresh
   if ($(".accordion").hasClass('ui-accordion')) {
     $(".accordion").accordion("refresh");
