@@ -60,6 +60,11 @@ module LrHelper
     @@failures
   end
 
+  # Pushes patadata to the LR
+  def self.paradata data, user
+
+  end
+
   private
 
   def self.request type, request
