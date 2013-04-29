@@ -877,6 +877,7 @@ function search(query, page, limit) {
   toggleSearchPanel(true);
   toggleSearchMask(true);
   toggleSearchSpinner(true);
+  $('#itemModal').fadeOut();
   // build our filters
   var filters = {};
   // Go through the complete secondary filter list and add them to the filter variable
