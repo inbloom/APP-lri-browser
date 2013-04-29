@@ -59,11 +59,16 @@
     </section>
 
     <section class='bottom'>
-      <div class='searching-mask'></div>
       <div class='container'>
         <%= yield %>
       </div>
     </section>
+
+    <div class='searching-mask'></div>
+
+    <%= render "searchResultItem" %>
+    <%= render "inlineSearchItem" %>
+    <%= render "itemModal" %>
 
   </form>
 </body>
