@@ -917,16 +917,45 @@ function search(query, page, limit) {
 function showItemModal(target) {
   var item = JSON.parse($(target).attr('data-item'));
 
+  var thumbnail = '';
+  if (item['thumbnailUrl'] != undefined) {
+    thumbnail = item['thumbnailUrl'][0]
+  } else {
+    // Figure out which default image to use based on order
+    if ($("#teachersCheckbox").prop('checked')) {
+      thumbnail = '/assets/default-image-teacher.png';
+    } else if ($("#studentsCheckbox").prop('checked')) {
+      thumbnail = '/assets/default-image-students.png';
+    } else if ($("#mediaCheckbox").prop('checked')) {
+      thumbnail = '/assets/default-image-av.png';
+    } else if ($("#pagesCheckbox").prop('checked')) {
+      thumbnail = '/assets/default-image-reading.png';
+    } else {
+      thumbnail = '/assets/default-image-all.png';
+    }
+  }
+
+  var lrt = (item['learningResourceType'] == undefined)?[]:item['learningResourceType'];
+  var eu = (item['educationalUse'] == undefined)?[]:item['educationalUse'];
+  var ieur = (item['intendedEndUserRole'] == undefined)?[]:item['intendedEndUserRole'];
   var author = (item['author'] == undefined || item['author'][0] == undefined || item['author'][0]['properties'] == undefined)?'':item['author'][0]['properties'];
   var description = (item['description'] == undefined)?'':item['description'][0];
   var dateCreated = (item['dateCreated'] == undefined)?'':item['dateCreated'][0];
 
+  $('#itemModal').css('background-image', 'url('+thumbnail+')');
   $('#itemModal').find('h3').html(item['name'][0]);
   $('#itemModal').find('div.content').html(description);
   $('#itemModal').find('div.date').html(dateCreated);
   if (author['name'] != undefined) {
     $('#itemModal').find('h4').html(author['name'][0]);
   }
+
+  if ($.inArray('video', lrt) != -1) $('#itemModal').find('img.media').addClass('show');
+  if ($.inArray('audio', lrt) != -1) $('#itemModal').find('img.media').addClass('show');
+  if ($.inArray('on-line', lrt) != -1) $('#itemModal').find('img.media').addClass('show');
+  if ($.inArray('reading', eu) != -1) $('#itemModal').find('img.reading').addClass('show');
+  if ($.inArray('students', ieur) != -1) $('#itemModal').find('img.students').addClass('show');
+  if ($.inArray('teachers', ieur) != -1) $('#itemModal').find('img.teachers').addClass('show');
 
   $('#itemModal').find('a.go').click(function(e) {
     window.open("/browser/link?url=" + item.url[0], '_blank');
