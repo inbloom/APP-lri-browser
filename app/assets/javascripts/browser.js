@@ -375,7 +375,7 @@ $(function() {
           type : "POST",
           dataType : 'json',
           url  : "/browser/search",
-          data : { query : searchQuery, filters : searchFilters, limit : searchLimit, offset : (searchOffset * searchPage) },
+          data : { query : searchQuery, filters : searchFilters, limit : searchLimit, offset : (searchOffset * searchPage)-1 },
           success : function(xhr) {
             searching = false;
             toggleSearchSpinner(false);
