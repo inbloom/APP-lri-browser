@@ -311,7 +311,7 @@ section.bottom {
   top: 167px;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 35px;
   overflow-x: hidden;
   min-width: 1024px;
 
@@ -801,5 +801,27 @@ div#itemModal {
     font-family: Times Roman;
     .gradient(#0b8aca, #1093d3, #077dc0);
     .drop-shadow(0px, 1px, 1px, 1);
+  }
+}
+
+
+footer {
+  background: black;
+  border-top: 1px solid #939393;
+  color: white;
+  height: 30px;
+  line-height: 30px;
+  position: fixed;
+  bottom: 0;
+  left:0;
+  right:0;
+  padding: 1px 18px;
+  font-size: 12px;
+  a {
+    text-decoration: none;
+    color: #ffffff;
+    &.muted {
+      color: #c6c6c6;
+    }
   }
 }
