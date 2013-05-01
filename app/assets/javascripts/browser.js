@@ -994,7 +994,7 @@ function showItemModal(target) {
   });
 
   $('#itemModal').find('a.email').attr('href', "mailto:?subject=Shared Browser Resource&body=http://browser.inbloom.org/browser/link?url=" + item.url[0]);
-  $('#itemModal').find('a.email').attr('target', '_blank';
+  $('#itemModal').find('a.email').attr('target', '_blank');
   $('#itemModal').find('a.email').attr('rel', item['name'][0]);
   $('#itemModal').find('a.email').click(function(e) {
 
