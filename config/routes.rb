@@ -24,6 +24,7 @@ Browser::Application.routes.draw do
     collection do
       post :search, :path => "/search",   :constraints => { :format => /json/ }
       get  :link,   :path => "/link"
+      post :paradata, :path => "/paradata"
     end
   end
 
