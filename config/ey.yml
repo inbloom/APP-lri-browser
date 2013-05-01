@@ -1,0 +1,3 @@
+environments:
+  env_production:
+    precompile_assets: true                   # enables rails assets precompilation (default: inferred using app/assets and config/application.rb)
