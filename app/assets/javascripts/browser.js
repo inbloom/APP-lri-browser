@@ -964,10 +964,44 @@ function showItemModal(target) {
   if ($.inArray('students', ieur) != -1) $('#itemModal').find('img.students').addClass('show');
   if ($.inArray('teachers', ieur) != -1) $('#itemModal').find('img.teachers').addClass('show');
 
+  $('#itemModal').find('a.go').attr('href', "/browser/link?url=" + item.url[0], '_blank');
   $('#itemModal').find('a.go').click(function(e) {
     window.open("/browser/link?url=" + item.url[0], '_blank');
     $('#itemModal').fadeOut();
     toggleSearchMask(false);
+    return false;
+  });
+
+  $('#itemModal').find('a.bookmark').attr('href', "/browser/link?url=" + item.url[0]);
+  $('#itemModal').find('a.bookmark').attr('rel', item['name'][0]);
+  $('#itemModal').find('a.bookmark').click(function(e) {
+
+console.log('bookmark CODE HERE');
+
+//    $('#itemModal').fadeOut();
+//    toggleSearchMask(false);
+    return false;
+  });
+
+  $('#itemModal').find('a.email').attr('href', "/browser/link?url=" + item.url[0]);
+  $('#itemModal').find('a.email').attr('rel', item['name'][0]);
+  $('#itemModal').find('a.email').click(function(e) {
+
+    console.log('email CODE HERE');
+
+//    $('#itemModal').fadeOut();
+//    toggleSearchMask(false);
+    return false;
+  });
+
+  $('#itemModal').find('a.heart').attr('href', "/browser/link?url=" + item.url[0]);
+  $('#itemModal').find('a.heart').attr('rel', item['name'][0]);
+  $('#itemModal').find('a.heart').click(function(e) {
+
+    console.log('heart CODE HERE');
+
+//    $('#itemModal').fadeOut();
+//    toggleSearchMask(false);
     return false;
   });
 
