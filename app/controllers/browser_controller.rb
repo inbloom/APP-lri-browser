@@ -31,7 +31,7 @@ class BrowserController < ApplicationController
     # define the elasticsearch result "size" (limit)
     limit = params['limit'].to_i
     # define the elasticsearch result "from" (offset)
-    offset = params['offset'].to_i * limit
+    offset = params['offset'].to_i
     # Pass through
     hack = params['hack']
     # Default output

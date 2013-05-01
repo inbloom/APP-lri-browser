@@ -360,6 +360,7 @@ $(function() {
     if ($(".accordion").hasClass('ui-accordion')) {
       $(".accordion").accordion("refresh");
     }
+    adjustItemMargins();
   });
 
   // scroll to bottom firing of the search
@@ -375,7 +376,7 @@ $(function() {
           type : "POST",
           dataType : 'json',
           url  : "/browser/search",
-          data : { query : searchQuery, filters : searchFilters, limit : searchLimit, offset : (searchOffset * searchPage)-1 },
+          data : { query : searchQuery, filters : searchFilters, limit : searchLimit, offset : (searchLimit * searchPage)-1 },
           success : function(xhr) {
             searching = false;
             toggleSearchSpinner(false);
@@ -612,6 +613,8 @@ function renderSearchResults(res, clear) {
 
     $(tmp).appendTo('div.panel._search div.results');
   }
+
+  adjustItemMargins();
 }
 
 // Helper function to truncate the title
@@ -1026,6 +1029,7 @@ function hideItemModal() {
   return false;
 }
 
+// Method that pushes paradata
 function pushParadata(verb, object, success, failure) {
  $.ajax({
     type : "POST",
@@ -1039,4 +1043,17 @@ function pushParadata(verb, object, success, failure) {
       failure;
     }
   });
+}
+
+// Helper to adjust the item margins to fit the screen correctly
+function adjustItemMargins() {
+
+   whole = $('div.results._search').width() / 220;
+   required = 220 * Math.floor(whole);
+   blankspace = $('div.results._search').width() - required;
+   margins = Math.ceil((blankspace / Math.floor(whole)) / 2) + 5;
+
+  $('div.item').css('margin-left', margins);
+  $('div.item').css('margin-right', margins);
+
 }
