@@ -965,7 +965,7 @@ function showItemModal(target) {
   if ($.inArray('teachers', ieur) != -1) $('#itemModal').find('img.teachers').addClass('show');
 
   $('#itemModal').find('a.go').attr('href', "/browser/link?url=" + item.url[0], '_blank');
-  $('#itemModal').find('a.go').click(function(e) {
+  $('#itemModal').find('a.go').unbind().click(function(e) {
     window.open("/browser/link?url=" + item.url[0], '_blank');
     $('#itemModal').fadeOut();
     toggleSearchMask(false);
@@ -974,7 +974,7 @@ function showItemModal(target) {
 
   $('#itemModal').find('a.bookmark').attr('href', "/browser/link?url=" + item.url[0]);
   $('#itemModal').find('a.bookmark').attr('rel', item['name'][0]);
-  $('#itemModal').find('a.bookmark').click(function(e) {
+  $('#itemModal').find('a.bookmark').unbind().click(function(e) {
 
 console.log('bookmark CODE HERE');
 
@@ -985,7 +985,7 @@ console.log('bookmark CODE HERE');
 
   $('#itemModal').find('a.email').attr('href', "/browser/link?url=" + item.url[0]);
   $('#itemModal').find('a.email').attr('rel', item['name'][0]);
-  $('#itemModal').find('a.email').click(function(e) {
+  $('#itemModal').find('a.email').unbind().click(function(e) {
 
     console.log('email CODE HERE');
 
@@ -996,7 +996,7 @@ console.log('bookmark CODE HERE');
 
   $('#itemModal').find('a.heart').attr('href', "/browser/link?url=" + item.url[0]);
   $('#itemModal').find('a.heart').attr('rel', item['name'][0]);
-  $('#itemModal').find('a.heart').click(function(e) {
+  $('#itemModal').find('a.heart').unbind().click(function(e) {
 
     console.log('heart CODE HERE');
 
