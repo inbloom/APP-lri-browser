@@ -985,32 +985,34 @@ function showItemModal(target) {
   $('#itemModal').find('a.bookmark').attr('rel', item['name'][0]);
   $('#itemModal').find('a.bookmark').unbind().click(function(e) {
 
-console.log('bookmark CODE HERE');
-
-//    $('#itemModal').fadeOut();
-//    toggleSearchMask(false);
+    pushParadata(
+      'email',
+      "http://browser.inbloom.org/browser/link?url=" + item.url[0]
+    );
+    alert('Please press CTRL-D to add bookmark');
     return false;
   });
 
-  $('#itemModal').find('a.email').attr('href', "/browser/link?url=" + item.url[0]);
+  $('#itemModal').find('a.email').attr('href', "mailto:?subject=Shared Browser Resource&body=http://browser.inbloom.org/browser/link?url=" + item.url[0]);
+  $('#itemModal').find('a.email').attr('target', '_blank';
   $('#itemModal').find('a.email').attr('rel', item['name'][0]);
-  $('#itemModal').find('a.email').unbind().click(function(e) {
+  $('#itemModal').find('a.email').click(function(e) {
 
-    console.log('email CODE HERE');
-
-//    $('#itemModal').fadeOut();
-//    toggleSearchMask(false);
-    return false;
+    pushParadata(
+      'email',
+      "http://browser.inbloom.org/browser/link?url=" + item.url[0]
+    );
   });
 
   $('#itemModal').find('a.heart').attr('href', "/browser/link?url=" + item.url[0]);
   $('#itemModal').find('a.heart').attr('rel', item['name'][0]);
-  $('#itemModal').find('a.heart').unbind().click(function(e) {
-
-    console.log('heart CODE HERE');
-
-//    $('#itemModal').fadeOut();
-//    toggleSearchMask(false);
+  $('#itemModal').find('a.heart').click(function(e) {
+    
+    pushParadata(
+      'email',
+      "http://browser.inbloom.org/browser/link?url=" + item.url[0]
+    );
+    // @todo: change heart color
     return false;
   });
 
@@ -1022,4 +1024,19 @@ function hideItemModal() {
   $('#itemModal').fadeOut();
   toggleSearchMask(false);
   return false;
+}
+
+function pushParadata(verb, object, success, failure) {
+ $.ajax({
+    type : "POST",
+    dataType : 'json',
+    url  : "/browser/paradata",
+    data : { verb : verb, object : object },
+    success : function(xhr) {
+      success;
+    },
+    error : function(xhr, txtStatus, errThrown) {
+      failure;
+    }
+  });
 }

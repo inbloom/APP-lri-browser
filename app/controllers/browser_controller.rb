@@ -127,6 +127,11 @@ class BrowserController < ApplicationController
   def link
     redirect_to params[:url]
   end
+  
+  def paradata
+    response = LrHelper.publish_paradata params[:verb], params[:object], "#{params[:verb]} of #{params[:object]}"
+    render json: response
+  end
 
 end
 
