@@ -974,6 +974,7 @@ function search(query, page, limit) {
       toggleSearchMask(false);
       toggleSearchSpinner(false);
       renderSearchResults(xhr.hits, true);
+      adjustFacets(xhr.facets);
     },
     error : function(xhr, txtStatus, errThrown) {
       // @TODO what do we do here if something just fails
@@ -1104,7 +1105,6 @@ function pushParadata(verb, object, success, failure) {
 
 // Helper to adjust the item margins to fit the screen correctly
 function adjustItemMargins() {
-
    whole = $('div.results._search').width() / 220;
    required = 220 * Math.floor(whole);
    blankspace = $('div.results._search').width() - required;
@@ -1112,5 +1112,21 @@ function adjustItemMargins() {
 
   $('div.item').css('margin-left', margins);
   $('div.item').css('margin-right', margins);
+}
 
+// Color the facets based on results
+function adjustFacets(facets) {
+  console.log(facets);
+  for (group in facets) {
+    $("div."+group).find("label").addClass('disabled').find('input').prop('disabled',true);
+    for (termObj in facets[group].terms) {
+      var count = facets[group].terms[termObj].count
+      var term = facets[group].terms[termObj].term
+      term = term.toLowerCase().replace(/[\s|\-|\+|\&|\/|\)|\(]/g, '');
+
+      if (count != 0) {
+        $("div."+group).find("label._"+term).removeClass('disabled').find('input').prop('disabled',false);
+      }
+    }
+  }
 }
