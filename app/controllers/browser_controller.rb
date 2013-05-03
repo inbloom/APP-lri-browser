@@ -89,52 +89,52 @@ class BrowserController < ApplicationController
 
     # Build the payload from the various parts
     payload = {
-        'size' => limit,
-        'from' => offset,
-        'query' => {
-            'filtered' => {
-                'query' => query,
-                'filter' => filter
-            }
-        },
-        "facets" : {
-          "schema-org.properties.intendedEndUserRoleintendedEndUserRole" : {
-            "terms" : {
-              "field" : "schema-org.properties.educationalUse",
-              "all_terms" : true
-            }
-          },
-        "schema-org.properties.typicalAgeRange" : {
-          "terms" : {
-            "field" : "schema-org.properties.typicalAgeRange",
-            "all_terms" : true
+      'size' => limit,
+      'from' => offset,
+      'query' => {
+        'filtered' => {
+          'query' => query,
+          'filter' => filter
+        }
+      },
+      "facets" => {
+        "schema-org.properties.intendedEndUserRoleintendedEndUserRole" => {
+          "terms" => {
+            "field" => "schema-org.properties.educationalUse",
+            "all_terms" => true
           }
         },
-        "schema-org.properties.educationalUse" : {
-          "terms" : {
-            "field" : "schema-org.properties.educationalUse",
-            "all_terms" : true
-          }
-        },
-        "schema-org.properties.interactivityType" : {
-          "terms" : {
-            "field" : "schema-org.properties.interactivityType",
-            "all_terms" : true
-          }
-        },
-        "schema-org.properties.learningResourceType" : {
-          "terms" : {
-            "field" : "schema-org.properties.learningResourceType",
-            "all_terms" : true
-          }
-        },
-        "schema-org.properties.mediaType" : {
-          "terms" : {
-            "field" : "schema-org.properties.mediaType",
-            "all_terms" : true
-            }
+      "schema-org.properties.typicalAgeRange" => {
+        "terms" => {
+          "field" => "schema-org.properties.typicalAgeRange",
+          "all_terms" => true
+        }
+      },
+      "schema-org.properties.educationalUse" => {
+        "terms" => {
+          "field" => "schema-org.properties.educationalUse",
+          "all_terms" => true
+        }
+      },
+      "schema-org.properties.interactivityType" => {
+        "terms" => {
+          "field" => "schema-org.properties.interactivityType",
+          "all_terms" => true
+        }
+      },
+      "schema-org.properties.learningResourceType" => {
+        "terms" => {
+          "field" => "schema-org.properties.learningResourceType",
+          "all_terms" => true
+        }
+      },
+      "schema-org.properties.mediaType" => {
+        "terms" => {
+          "field" => "schema-org.properties.mediaType",
+          "all_terms" => true
           }
         }
+      }
     }
 
 #puts "PAYLOAD"; puts Rails.configuration.elastic_search_url; puts payload.to_json
