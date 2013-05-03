@@ -59,12 +59,44 @@
     </section>
 
     <section class='bottom'>
-      <div class='searching-mask'></div>
       <div class='container'>
         <%= yield %>
       </div>
     </section>
 
+    <div class='searching-mask'></div>
+
+    <%= render "searchResultItem" %>
+    <%= render "inlineSearchItem" %>
+    <%= render "itemModal" %>
+
   </form>
+
+  <footer>
+    <div class='pull-left logo'>
+      inBloom is a trademark of inBloom, Inc.
+    </div>
+
+    <div class='pull-right'>
+      <a href="http://www.inbloom.org/terms-of-use">Terms of Use</a> |
+      <a href="http://www.inbloom.org/privacy-policy">Privacy Policy</a>
+    </div>
+  </footer>
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-38234333-2']);
+    _gaq.push(['_setDomainName', 'inbloom.org']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
 </body>
 </html>

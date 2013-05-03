@@ -360,6 +360,7 @@ $(function() {
     if ($(".accordion").hasClass('ui-accordion')) {
       $(".accordion").accordion("refresh");
     }
+    adjustItemMargins();
   });
 
   // scroll to bottom firing of the search
@@ -375,7 +376,7 @@ $(function() {
           type : "POST",
           dataType : 'json',
           url  : "/browser/search",
-          data : { query : searchQuery, filters : searchFilters, limit : searchLimit, offset : (searchOffset * searchPage) },
+          data : { query : searchQuery, filters : searchFilters, limit : searchLimit, offset : (searchLimit * searchPage)-1 },
           success : function(xhr) {
             searching = false;
             toggleSearchSpinner(false);
@@ -481,8 +482,10 @@ function toggleSearchPanel(bool) {
 function toggleSearchMask(bool,modal) {
   if (modal == undefined) modal == false;
   if (!modal) {
+    $('div.searching-mask').unbind();
     $('div.searching-mask').css('background','#fff');
   } else {
+    $('div.searching-mask').unbind().click(function() { hideItemModal(); });
     $('div.searching-mask').css('background','#000');
   }
 
@@ -582,8 +585,10 @@ function renderSearchResults(res, clear) {
     $(tmp).removeClass('hidden');
     $(tmp).css('background-image', 'url('+thumbnail+')');
     $(tmp).find('h3').html(props['name'][0]);
+    $(tmp).attr('data-url', props.url[0]);
     $(tmp).click(function(e) {
-      window.open("/browser/link?url=" + props.url[0], '_blank');
+      var url = $(this).attr('data-url');
+      window.open("/browser/link?url=" + url, '_blank');
       return false;
     });
 
@@ -591,7 +596,7 @@ function renderSearchResults(res, clear) {
       toggleSearchMask(true, true);
       showItemModal(e.target);
       return false;
-    }).data('item',props);
+    }).attr('data-item',JSON.stringify(props));
 
     if (author['name'] != undefined) {
       $(tmp).find('h4').html(author['name'][0]);
@@ -608,6 +613,8 @@ function renderSearchResults(res, clear) {
 
     $(tmp).appendTo('div.panel._search div.results');
   }
+
+  adjustItemMargins();
 }
 
 // Helper function to truncate the title
@@ -673,6 +680,12 @@ function buildAccordionNavigation(div, req) {
     }
 
   }
+
+  // Step through the accordion and hide those that are empty
+  $('div.accordion div:empty').each(function() {
+    $(this).prev().hide();
+    $(this).hide();
+  });
 
   // In the event of a redraw go ahead and refresh
   if ($(".accordion").hasClass('ui-accordion')) {
@@ -798,8 +811,10 @@ function parseInlineSearchResults(results, tmpDotNotation) {
         $(tmp).removeClass('hidden');
         $(tmp).css('background-image', 'url('+thumbnail+')');
         $(tmp).find('h4').html(props['name'][0]);
+        $(tmp).attr('data-url', props.url[0]);
         $(tmp).click(function() {
-          window.open("/browser/link?url=" + props.url[0], '_blank');
+          var url = $(this).attr('data-url');
+          window.open("/browser/link?url=" + url, '_blank');
           return false;
         });
 
@@ -807,8 +822,7 @@ function parseInlineSearchResults(results, tmpDotNotation) {
           toggleSearchMask(true, true);
           showItemModal(e.target);
           return false;
-        }).data('item',props);
-
+        }).attr('data-item',JSON.stringify(props));
 
         if (author['name'] != undefined) {
           $(tmp).find('h5').html(author['name'][0]);
@@ -874,6 +888,7 @@ function search(query, page, limit) {
   toggleSearchPanel(true);
   toggleSearchMask(true);
   toggleSearchSpinner(true);
+  $('#itemModal').fadeOut();
   // build our filters
   var filters = {};
   // Go through the complete secondary filter list and add them to the filter variable
@@ -912,23 +927,95 @@ function search(query, page, limit) {
 
 // Pop the modal for the target.. the data is stored on the target
 function showItemModal(target) {
-  var item = $(target).data('item');
+  var item = JSON.parse($(target).attr('data-item'));
 
+  var thumbnail = '';
+  if (item['thumbnailUrl'] != undefined) {
+    thumbnail = item['thumbnailUrl'][0]
+  } else {
+    // Figure out which default image to use based on order
+    if ($("#teachersCheckbox").prop('checked')) {
+      thumbnail = '/assets/default-image-teacher.png';
+    } else if ($("#studentsCheckbox").prop('checked')) {
+      thumbnail = '/assets/default-image-students.png';
+    } else if ($("#mediaCheckbox").prop('checked')) {
+      thumbnail = '/assets/default-image-av.png';
+    } else if ($("#pagesCheckbox").prop('checked')) {
+      thumbnail = '/assets/default-image-reading.png';
+    } else {
+      thumbnail = '/assets/default-image-all.png';
+    }
+  }
+
+  var lrt = (item['learningResourceType'] == undefined)?[]:item['learningResourceType'];
+  var eu = (item['educationalUse'] == undefined)?[]:item['educationalUse'];
+  var ieur = (item['intendedEndUserRole'] == undefined)?[]:item['intendedEndUserRole'];
   var author = (item['author'] == undefined || item['author'][0] == undefined || item['author'][0]['properties'] == undefined)?'':item['author'][0]['properties'];
   var description = (item['description'] == undefined)?'':item['description'][0];
   var dateCreated = (item['dateCreated'] == undefined)?'':item['dateCreated'][0];
+  var alignments = (item['educationalAlignment'] == undefined?[]:item['educationalAlignment']);
 
+  $('#itemModal').css('background-image', 'url('+thumbnail+')');
   $('#itemModal').find('h3').html(item['name'][0]);
   $('#itemModal').find('div.content').html(description);
   $('#itemModal').find('div.date').html(dateCreated);
   if (author['name'] != undefined) {
     $('#itemModal').find('h4').html(author['name'][0]);
   }
+  $('#itemModal').find('div.standards ul').empty();
+  for(a in alignments) {
+    if (alignments[a].properties != undefined && alignments[a].properties.targetName[0] != undefined) {
+      $('#itemModal').find('div.standards ul').append('<li>'+alignments[a].properties.targetName[0]+'</li>');
+    }
+  }
 
-  $('#itemModal').find('a.go').click(function(e) {
+  if ($.inArray('video', lrt) != -1) $('#itemModal').find('img.media').addClass('show');
+  if ($.inArray('audio', lrt) != -1) $('#itemModal').find('img.media').addClass('show');
+  if ($.inArray('on-line', lrt) != -1) $('#itemModal').find('img.media').addClass('show');
+  if ($.inArray('reading', eu) != -1) $('#itemModal').find('img.reading').addClass('show');
+  if ($.inArray('students', ieur) != -1) $('#itemModal').find('img.students').addClass('show');
+  if ($.inArray('teachers', ieur) != -1) $('#itemModal').find('img.teachers').addClass('show');
+
+  $('#itemModal').find('a.go').attr('href', "/browser/link?url=" + item.url[0], '_blank');
+  $('#itemModal').find('a.go').unbind().click(function(e) {
     window.open("/browser/link?url=" + item.url[0], '_blank');
     $('#itemModal').fadeOut();
     toggleSearchMask(false);
+    return false;
+  });
+
+  $('#itemModal').find('a.bookmark').attr('href', "/browser/link?url=" + item.url[0]);
+  $('#itemModal').find('a.bookmark').attr('rel', item['name'][0]);
+  $('#itemModal').find('a.bookmark').unbind().click(function(e) {
+
+    pushParadata(
+      'email',
+      "http://browser.inbloom.org/browser/link?url=" + item.url[0]
+    );
+    alert('Please press CTRL-D to add bookmark');
+    return false;
+  });
+
+  $('#itemModal').find('a.email').attr('href', "mailto:?subject=Shared Browser Resource&body=http://browser.inbloom.org/browser/link?url=" + item.url[0]);
+  $('#itemModal').find('a.email').attr('target', '_blank');
+  $('#itemModal').find('a.email').attr('rel', item['name'][0]);
+  $('#itemModal').find('a.email').click(function(e) {
+
+    pushParadata(
+      'email',
+      "http://browser.inbloom.org/browser/link?url=" + item.url[0]
+    );
+  });
+
+  $('#itemModal').find('a.heart').attr('href', "/browser/link?url=" + item.url[0]);
+  $('#itemModal').find('a.heart').attr('rel', item['name'][0]);
+  $('#itemModal').find('a.heart').click(function(e) {
+    
+    pushParadata(
+      'email',
+      "http://browser.inbloom.org/browser/link?url=" + item.url[0]
+    );
+    // @todo: change heart color
     return false;
   });
 
@@ -940,4 +1027,33 @@ function hideItemModal() {
   $('#itemModal').fadeOut();
   toggleSearchMask(false);
   return false;
+}
+
+// Method that pushes paradata
+function pushParadata(verb, object, success, failure) {
+ $.ajax({
+    type : "POST",
+    dataType : 'json',
+    url  : "/browser/paradata",
+    data : { verb : verb, object : object },
+    success : function(xhr) {
+      success;
+    },
+    error : function(xhr, txtStatus, errThrown) {
+      failure;
+    }
+  });
+}
+
+// Helper to adjust the item margins to fit the screen correctly
+function adjustItemMargins() {
+
+   whole = $('div.results._search').width() / 220;
+   required = 220 * Math.floor(whole);
+   blankspace = $('div.results._search').width() - required;
+   margins = Math.ceil((blankspace / Math.floor(whole)) / 2) + 5;
+
+  $('div.item').css('margin-left', margins);
+  $('div.item').css('margin-right', margins);
+
 }

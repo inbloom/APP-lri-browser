@@ -95,7 +95,7 @@ header {
     .box-shadow(0px 1px 0px #7d7b7c);
     text-shadow: 1px -1px 2px #000;
     font-size:14px;
-    z-index: 1500;
+    z-index: 500;
     input {
       width: 200px;
       border: 0;
@@ -284,36 +284,36 @@ section.middle {
 
 }
 
+div.searching-mask {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  z-index: 1000;
+  .opacity(0);
+  h1 {
+    color: #ffffff;
+    font-weight: 400;
+    font-size: 80px;
+    text-align: center;
+    letter-spacing: 20px;
+    .font-opensans;
+    .drop-shadow(1px, 1px, 2px, 1);
+  }
+  z-index: 2000;
+}
 
 section.bottom {
   position: absolute;
   top: 167px;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 35px;
   overflow-x: hidden;
   min-width: 1024px;
-
-  div.searching-mask {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #fff;
-    z-index: 1000;
-    .opacity(0);
-    h1 {
-      color: #ffffff;
-      font-weight: 400;
-      font-size: 80px;
-      text-align: center;
-      letter-spacing: 20px;
-      .font-opensans;
-      .drop-shadow(1px, 1px, 2px, 1);
-    }
-  }
 
   div.panel {
     position: absolute;
@@ -691,7 +691,7 @@ section.bottom {
         position:relative;
         background-color: #3BCBDF;
         padding: 20px;
-        margin: 5px -24px 10px -24px;
+        margin: 0 -24px 10px -24px;
         color: white;
         a.close {
           position: absolute;
@@ -720,11 +720,11 @@ div#itemModal {
   width: 350px;
   height: 450px;
   .rounded(10px);
-  z-index: 1000;
+  z-index: 5000;
   .font-opensans;
   .drop-shadow(1px, 1px, 4px, 0.5);
   color: #5b5b5b;
-  background: #f5f5f5;
+  background: #fff;
   background-repeat: no-repeat;
   background-size: 80px 80px;
   a.close {
@@ -765,13 +765,29 @@ div#itemModal {
     top: 115px;
     left: 15px;
     right: 10px;
-    bottom: 30px;
+    bottom: 150px;
     font-size: 12px;
     line-height: 14px;
+    overflow: auto;
+  }
+  div.standards {
+    position: absolute;
+    bottom: 45px;
+    left: 15px;
+    width: 195px;
+    height: 100px;
+    font-size: 12px;
+    ul {
+      margin-left: 0;
+      padding-left: 15px;
+      li {
+        color: #7b2b2b;
+      }
+    }
   }
   div.date {
     position: absolute;
-    bottom: 15px;
+    bottom: 18px;
     left: 15px;
     font-size: 10px;
     font-weight: 800;
@@ -788,12 +804,32 @@ div#itemModal {
       }
     }
   }
+  a.heart, a.email, a.bookmark {
+    position: absolute;
+    bottom: 16px;
+    width: 20px;
+    height: 20px;
+    background-image: url(/assets/modal-icons.png);
+  }
+  a.heart {
+    background-position: -52px 23px;
+    right: 80px;
+  }
+  a.email {
+    background-position: -27px 23px;
+    right: 105px;
+  }
+  a.bookmark {
+    background-position: -5px 23px;
+    right: 129px;
+  }
+
   a.go {
     position: absolute;
     right: 15px;
     bottom: 15px;
     .rounded(5px);
-    padding: 0 7px;
+    padding: 3px 20px;
     font-style: italic;
     color: #fff;
     text-decoration: none;
@@ -801,5 +837,27 @@ div#itemModal {
     font-family: Times Roman;
     .gradient(#0b8aca, #1093d3, #077dc0);
     .drop-shadow(0px, 1px, 1px, 1);
+  }
+}
+
+
+footer {
+  background: black;
+  border-top: 1px solid #939393;
+  color: white;
+  height: 30px;
+  line-height: 30px;
+  position: fixed;
+  bottom: 0;
+  left:0;
+  right:0;
+  padding: 1px 18px;
+  font-size: 12px;
+  a {
+    text-decoration: none;
+    color: #ffffff;
+    &.muted {
+      color: #c6c6c6;
+    }
   }
 }

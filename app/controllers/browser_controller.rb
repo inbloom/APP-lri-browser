@@ -29,9 +29,9 @@ class BrowserController < ApplicationController
   def search
 
     # define the elasticsearch result "size" (limit)
-    limit = params['limit']
+    limit = params['limit'].to_i
     # define the elasticsearch result "from" (offset)
-    offset = params['offset']
+    offset = params['offset'].to_i
     # Pass through
     hack = params['hack']
     # Default output
@@ -99,7 +99,7 @@ class BrowserController < ApplicationController
         }
     }
 
-puts "PAYLOAD"; puts Rails.configuration.elastic_search_url; puts payload.to_json
+#puts "PAYLOAD"; puts Rails.configuration.elastic_search_url; puts payload.to_json
 
     # Okay after all that mess, lets make the request
     request = RestClient::Request.new( :method => :get, :url => Rails.configuration.elastic_search_url, :payload => payload.to_json )
@@ -109,7 +109,7 @@ puts "PAYLOAD"; puts Rails.configuration.elastic_search_url; puts payload.to_jso
       results = JSON.parse(searchResults)
       results[:hack] = hack
 
-puts "RESPONSE"; puts results
+#puts "RESPONSE"; puts results
 
       respond_to do |format|
         format.json { render json: results }
@@ -119,13 +119,18 @@ puts "RESPONSE"; puts results
       respond_to do |format|
         format.json { render json: searchResults }
       end
-puts "ERROR!"; puts e.response
+#puts "ERROR!"; puts e.response
     end
 
   end
   
   def link
     redirect_to params[:url]
+  end
+  
+  def paradata
+    response = LrHelper.publish_paradata params[:verb], params[:object], "#{params[:verb]} of #{params[:object]}"
+    render json: response
   end
 
 end
