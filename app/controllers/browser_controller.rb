@@ -147,7 +147,7 @@ class BrowserController < ApplicationController
       results = JSON.parse(searchResults)
       results[:hack] = hack
 
-#puts "RESPONSE"; puts results
+puts "RESPONSE"; puts results
 
       respond_to do |format|
         format.json { render json: results }
