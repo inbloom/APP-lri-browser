@@ -49,7 +49,10 @@ $(function() {
   // @TODO Remove this and add a function callback to the build Accordion Navigation method to correctly set the first option as desired by client
   setTimeout(function() {
     // Trigger the first element as clicked
-    $(".ui-accordion-content:first a").trigger('click');
+    $('._ccssmath.panel h3')[0].click();
+    $('._ccssmath.panel a')[0].click();
+    $('._ccsselaliteracy.panel h3')[0].click();
+    $('._ccsselaliteracy.panel a')[0].click();
   }, 1000);
 
   // Make Left Handle Draggable
@@ -190,140 +193,183 @@ $(function() {
    *
    */
   $(document).on('click', 'a[rel=navlink]', function() {
-      // Strip away the #
-      var href = $(this).attr('href').replace('#','');
-      // Split the href by dot since its a dotnotation
-      var split = href.split('.');
-      // Find our panel name (strip dashes)
-      var panel = ('_' + split[0] + split[1]).toLowerCase().replace('-','');
-      // Parent Notation -- Massage the dots into an array..ish
-      var parent = '';
-      for (i in split) {
-          if (i == split.length-1) continue;
-          parent += '["' + split[i] + '"]';
-      }
-      // Eval out the parent standard
-      eval("var parentStandard = jsonStandards"+parent+";");
-      // Clicked Notation -- Massage the dots into an array..ish
-      var notation = '["'+href.replace(/\./g,'"]["')+'"]';
-      // Eval out the standard
-      eval("var standard = jsonStandards"+notation+";");
+    // Strip away the #
+    var href = $(this).attr('href').replace('#','');
+    // Split the href by dot since its a dotnotation
+    var split = href.split('.');
+    // Find our panel name (strip dashes)
+    var panel = ('_' + split[0] + split[1]).toLowerCase().replace('-','');
+    // Parent Notation -- Massage the dots into an array..ish
+    var parent = '';
+    for (i in split) {
+        if (i == split.length-1) continue;
+        parent += '["' + split[i] + '"]';
+    }
+    // Eval out the parent standard
+    eval("var parentStandard = jsonStandards"+parent+";");
+    // Keep the dot notation version
+    var dotNotation = href;
+    var parentDotNotation = dotNotation.substr( 0, dotNotation.lastIndexOf('.'));
+    // Clicked Notation -- Massage the dots into an array..ish
+    var notation = '["'+href.replace(/\./g,'"]["')+'"]';
+    // Eval out the standard
+    eval("var standard = jsonStandards"+notation+";");
 
-      // Remove active highlight from all of this panels links and add it to this one.
-      $('div.panel.'+panel+' a[rel=navlink]').removeClass('active');
-      $(this).addClass('active');
+    // Remove active highlight from all of this panels links and add it to this one.
+    $('div.panel.'+panel+' a[rel=navlink]').removeClass('active');
+    $(this).addClass('active');
 
-      // Update the Header information
-      // Set the grade in the panel
-      $('div.results.'+panel+' span.strand').html(parentStandard._text);
-      // Set the domain in the panel
-      $('div.results.'+panel+' span.domain').html(standard._text);
+    // Update the Header information
+    // Set the grade in the panel
+    if (parentStandard._text) {
+      $('div.results.'+panel+' span.strand').html(parentStandard._text).show().prev().show();
+    } else {
+      $('div.results.'+panel+' span.strand').html("").hide().prev().hide();
+    }
+    // Set the domain in the panel
+    if (standard._text) {
+      $('div.results.'+panel+' span.domain').html(standard._text).show().prev().show();
+    } else {
+      $('div.results.'+panel+' span.domain').html("").hide().prev().hide();
+    }
 
-      /** Handle the panels differently based on which one it is.
-       * Okay this sucks, but the irony is that the standards arent standardized so we have to handle them completely differently.
-       *
-       * CCSS.Math ~ Initiative.Framework.Set.Grade.Domain.Cluster.Standard.{Component}
-       * CCSS.ELA ~ Initiative.Framework.{Set}.Domain.Grade.Standard.{Component}
-       *
-       * Initiative : The top level organization that a standar dcan belong to.
-       * Framework : Essentially the subject
-       * Set : Some subjects have subsets of content, optional in ELA and not used that I can tell.
-       * Grade : Grade level
-       * Domain : A grouping under each grade of the specific domain content
-       * Cluster : A subgrouping in each domain of the underlying standards
-       * Standard : The thing students are heald to
-       * Component : A substandard that makes up the standards, optional but used in ELA a lot
-       *
-       * At this time, ELA doesn't have the notion of a cluster but really needs it.
-       * See this mess for more information: http://www.corestandards.org/assets/identifiers_feedback_memo.pdf
-       *
-       */
+    /** Handle the panels differently based on which one it is.
+     * Okay this sucks, but the irony is that the standards arent standardized so we have to handle them completely differently.
+     *
+     * CCSS.Math ~ Initiative.Framework.Set.Grade.Domain.Cluster.Standard.{Component}
+     * CCSS.ELA ~ Initiative.Framework.{Set}.Domain.Grade.Standard.{Component}
+     *
+     * Initiative : The top level organization that a standar dcan belong to.
+     * Framework : Essentially the subject
+     * Set : Some subjects have subsets of content, optional in ELA and not used that I can tell.
+     * Grade : Grade level
+     * Domain : A grouping under each grade of the specific domain content
+     * Cluster : A subgrouping in each domain of the underlying standards
+     * Standard : The thing students are heald to
+     * Component : A substandard that makes up the standards, optional but used in ELA a lot
+     *
+     * At this time, ELA doesn't have the notion of a cluster but really needs it.
+     * See this mess for more information: http://www.corestandards.org/assets/identifiers_feedback_memo.pdf
+     *
+     */
 
-      // An array of dot notations to dynamically load
-      var dynamicLoad = [];
+    // An array of dot notations to dynamically load
+    var dynamicLoad = [];
 
-      // Handle CCSS.Math output
-      if (panel == '_ccssmath') {
-          // Update the standards information in the panel
-          $('div.results.'+panel+' div.domains').empty();
-          for (i in standard) {
-              if (i.charAt(0) == '_') continue;
-              for (t in standard[i]) {
-                  if (t.charAt(0) == '_') continue;
-                  var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
-                  var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
-                  $('<a href="#'+tmpText+'">'+tmpDotNotation+'</a>').appendTo('div.results.'+panel+' div.domains');
-              }
+    // Handle CCSS.Math output
+    if (panel == '_ccssmath') {
+
+      // Update the standards information in the panel
+      $('div.results.'+panel+' div.domains').empty();
+      $('div.results.'+panel+' div.domains').removeClass('hidden');
+      $('div.results.'+panel+' h5').removeClass('hidden');
+      $('div.results.'+panel+' hr').removeClass('hidden');
+
+      // Update the standards information
+      $('div.results.'+panel+' div.content').empty();
+      // Math.Practice behaves differently than the rest of math.. of course..
+      if (parentDotNotation == 'CCSS.Math.Practice') {
+        $('div.results.'+panel+' span.domain').html(dotNotation).show().prev().show();
+        $('<a href="#'+dotNotation+'">'+dotNotation+'</a>').appendTo('div.results.'+panel+' div.domains');
+
+        var className = dotNotation.replace(/\./g,"_");
+        var tmpTextContent = '<ul><li><strong>'+dotNotation+'</strong>: ' + standard._text + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li></ul>';
+        $('div.results.'+panel+' div.content').append(tmpTextContent);
+        dynamicLoad.push(dotNotation);
+
+      } else {
+        for (i in standard) {
+          if (i.charAt(0) == '_') continue;
+          for (t in standard[i]) {
+            if (t.charAt(0) == '_') continue;
+            var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
+            var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+            $('<a href="#'+tmpText+'">'+tmpDotNotation+'</a>').appendTo('div.results.'+panel+' div.domains');
           }
+        }
 
-          // Update the standards information
-          $('div.results.'+panel+' div.content').empty();
-          for (i in standard) {
-              if (i.charAt(0) == '_') continue;
-              var tmpTextContent = '';
-              for (t in standard[i]) {
-                  if (t == '_text') {
-                    var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
-                    eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+";");
-                    tmpTextContent = '<h4>'+tmpStandard+'</h4><ul>' + tmpTextContent;
-                  } else if (t.charAt(0) == '_') {
-                    // Do nothing with these others
-                  } else {
-                      var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
-                      var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
-                      var className = tmpDotNotation.replace(/\./g,"_");
-                      dynamicLoad.push(tmpDotNotation);
-                      eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
-                      tmpTextContent += '<li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li>';
-                  }
-              }
-              tmpTextContent += '</ul>';
-              $('div.results.'+panel+' div.content').append(tmpTextContent);
-          }
-      }
-
-      // Handle CCSS.ELA-Literacy output
-      if (panel == '_ccsselaliteracy') {
-          // Update the standards information in the panel
-          $('div.results.'+panel+' div.domains').empty();
-          for (t in standard) {
-              if (t.charAt(0) == '_') continue;
-              var tmpStandardArrayLocation = notation+'["'+t+'"]';
-              var tmpText = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
-              $('<a href="#'+tmpText+'">'+tmpText+'</a>').appendTo('div.results.'+panel+' div.domains');
-          }
-
-          //Update the standards information
-          $('div.results.'+panel+' div.content').empty();
-          var tmpTextContent = '<ul>';
-          for (i in standard) {
-              if (i.charAt(0) == '_') continue;
-              var tmpStandardArrayLocation = notation+'["'+i+'"]';
+        for (i in standard) {
+          if (i.charAt(0) == '_') continue;
+          var tmpTextContent = '';
+          for (t in standard[i]) {
+            if (t == '_text') {
+              var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
+              eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+";");
+              tmpTextContent = '<h4>'+tmpStandard+'</h4><ul>' + tmpTextContent;
+            } else if (t.charAt(0) == '_') {
+              // Do nothing with these others
+            } else {
+              var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
               var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+              var className = tmpDotNotation.replace(/\./g,"_");
+              dynamicLoad.push(tmpDotNotation);
               eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
-              tmpTextContent += '<li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '</li>';
-
-              for (t in standard[i]) {
-                  if (t.charAt(0) == '_') continue;
-                  var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
-                  var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
-                  var className = tmpDotNotation.replace(/\./g,"_");
-                  dynamicLoad.push(tmpDotNotation);
-                  eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
-                  tmpTextContent += '<ul><li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li></ul>';
-              }
-
+              tmpTextContent += '<li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li>';
+            }
           }
           tmpTextContent += '</ul>';
           $('div.results.'+panel+' div.content').append(tmpTextContent);
+        }
+
+      }
+      if ($('div.results.'+panel+' div.domains').is(':empty')) {
+        $('div.results.'+panel+' div.domains').addClass('hidden');
+        $('div.results.'+panel+' h5').addClass('hidden');
+        $('div.results.'+panel+' hr:first-of-type').addClass('hidden');
       }
 
-      // Fire off the dynamic loads
-      for (i in dynamicLoad) {
-          loadInlineSearchResults(dynamicLoad[i]);
+    }
+
+    // Handle CCSS.ELA-Literacy output
+    if (panel == '_ccsselaliteracy') {
+      // Update the standards information in the panel
+      $('div.results.'+panel+' div.domains').empty();
+      $('div.results.'+panel+' div.domains').removeClass('hidden');
+      $('div.results.'+panel+' h5').removeClass('hidden');
+      $('div.results.'+panel+' hr').removeClass('hidden');
+      for (t in standard) {
+          if (t.charAt(0) == '_') continue;
+          var tmpStandardArrayLocation = notation+'["'+t+'"]';
+          var tmpText = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+          $('<a href="#'+tmpText+'">'+tmpText+'</a>').appendTo('div.results.'+panel+' div.domains');
+      }
+      if ($('div.results.'+panel+' div.domains').is(':empty')) {
+        $('div.results.'+panel+' div.domains').addClass('hidden');
+        $('div.results.'+panel+' h5').addClass('hidden');
+        $('div.results.'+panel+' hr:first-of-type').addClass('hidden');
       }
 
-      return false;
+
+      //Update the standards information
+      $('div.results.'+panel+' div.content').empty();
+      var tmpTextContent = '<ul>';
+      for (i in standard) {
+        if (i.charAt(0) == '_') continue;
+        var tmpStandardArrayLocation = notation+'["'+i+'"]';
+        var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+        eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
+        tmpTextContent += '<li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '</li>';
+
+        for (t in standard[i]) {
+          if (t.charAt(0) == '_') continue;
+          var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
+          var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+          var className = tmpDotNotation.replace(/\./g,"_");
+          dynamicLoad.push(tmpDotNotation);
+          eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
+          tmpTextContent += '<ul><li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li></ul>';
+        }
+      }
+      tmpTextContent += '</ul>';
+      $('div.results.'+panel+' div.content').append(tmpTextContent);
+    }
+
+    // Fire off the dynamic loads
+    for (i in dynamicLoad) {
+      loadInlineSearchResults(dynamicLoad[i]);
+    }
+
+    return false;
   });
 
   // Add an event to the search text area on hitting return it submits
@@ -654,12 +700,23 @@ function buildAccordionNavigation(div, req) {
   // Create navigation for CCSS.Math
   } else if (req == 'ccssmath') {
 
+    // Inject the math Practice standards -- they work completely differently than the rest of math.. of course
     var standard = jsonStandards.CCSS.Math.Practice;
     var title = accordionTitle(standard._text);
-    var linkText = (standard._text != undefined)?standard._text:'undefined';
-    var links = '<p><a href="#CCSS.Math.Practice" rel="navlink">' + linkText + '</a></p>';
+    var links = "";
+
+    for (i in standard._order) {
+      var linkText = standard._order[i].substr( standard._order[i].lastIndexOf(':') + 1, standard._order[i].length )
+      var linkNotation = standard._order[i].substr( standard._order[i].lastIndexOf(':') + 1, standard._order[i].length )
+      var key = standard._order[i].substr( standard._order[i].lastIndexOf('.') + 1, standard._order[i].length )
+      var item = standard[key];
+
+      if (gradeRanges.maximum < item._min || gradeRanges.minimum > item._max) continue;
+      links += '<p><a href="#'+linkNotation+'" rel="navlink">' + linkText + '</a></p>';
+    }
     $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
 
+    // Inject the rest of the math standards
     var standard = jsonStandards.CCSS.Math.Content;
 
     for (i in standard._order) {
