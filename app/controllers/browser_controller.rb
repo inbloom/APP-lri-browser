@@ -98,37 +98,37 @@ class BrowserController < ApplicationController
         }
       },
       "facets" => {
-        "schema-org.properties.intendedEndUserRole" => {
+        "intendedEndUserRole" => {
           "terms" => {
             "field" => "schema-org.properties.intendedEndUserRole.original",
             "all_terms" => true
           }
         },
-      "schema-org.properties.typicalAgeRange" => {
+      "typicalAgeRange" => {
         "terms" => {
           "field" => "schema-org.properties.typicalAgeRange.original",
           "all_terms" => true
         }
       },
-      "schema-org.properties.educationalUse" => {
+      "educationalUse" => {
         "terms" => {
           "field" => "schema-org.properties.educationalUse.original",
           "all_terms" => true
         }
       },
-      "schema-org.properties.interactivityType" => {
+      "interactivityType" => {
         "terms" => {
           "field" => "schema-org.properties.interactivityType.original",
           "all_terms" => true
         }
       },
-      "schema-org.properties.learningResourceType" => {
+      "learningResourceType" => {
         "terms" => {
           "field" => "schema-org.properties.learningResourceType.original",
           "all_terms" => true
         }
       },
-      "schema-org.properties.mediaType" => {
+      "mediaType" => {
         "terms" => {
           "field" => "schema-org.properties.mediaType.original",
           "all_terms" => true
@@ -147,7 +147,7 @@ class BrowserController < ApplicationController
       results = JSON.parse(searchResults)
       results[:hack] = hack
 
-puts "RESPONSE"; puts results
+#puts "RESPONSE"; puts results
 
       respond_to do |format|
         format.json { render json: results }
