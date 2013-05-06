@@ -1116,7 +1116,6 @@ function adjustItemMargins() {
 
 // Color the facets based on results
 function adjustFacets(facets) {
-  console.log(facets);
   for (group in facets) {
     $("div."+group).find("label").addClass('disabled').find('input').prop('disabled',true);
     for (termObj in facets[group].terms) {
