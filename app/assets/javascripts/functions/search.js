@@ -42,12 +42,14 @@ function search(query, page, limit) {
       toggleSearchSpinner(false);
       renderSearchResults(xhr.hits, true);
       adjustFacets(xhr.facets);
+      $('div.subjects button').removeClass('selected');
     },
     error : function(xhr, txtStatus, errThrown) {
       // @TODO what do we do here if something just fails
     }
   });
 
+  return false;
 }
 
 

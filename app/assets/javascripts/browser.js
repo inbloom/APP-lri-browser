@@ -97,13 +97,17 @@ $(function() {
       }
   });
 
-  $(document).on('click', '#_ccssmath', function() {
+  // On click for the mathematics button
+  $('#_ccssmath').on('click', function(e) {
     subject = 'ccssmath';
+    if ($('div._search').is(':visible')) toggleSearchPanel(false);
     setSubject(subject);
     return false;
   });
-  $(document).on('click', '#_ccsselaliteracy', function() {
+  // On click for the language arts button
+  $('#_ccsselaliteracy').on('click', function(e) {
     subject = 'ccsselaliteracy';
+    if ($('div._search').is(':visible')) toggleSearchPanel(false);
     setSubject(subject);
     return false;
   });
@@ -373,9 +377,10 @@ $(function() {
   });
 
   // Add an event to the search text area on hitting return it submits
-  $(document).on('keydown', '#form-search-filter', function(e) {
+  $('#form-search-filter').on('keydown', function(e) {
     if (e.keyCode == 13) {
       search($('#form-search-filter').val());
+      return false;
     }
   });
 
