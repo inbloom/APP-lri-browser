@@ -759,18 +759,19 @@ div#itemModal {
     position: absolute;
     top: 95px;
     left: 15px;
-    right: 3px;
+    right: 15px;
     .font-opensans;
     margin: 0;
     padding: 0;
     color: #0b8aca;
     font-size: 12px;
     line-height: 12px;
+    overflow: hidden;
     font-weight: 600;
   }
   div.content {
     position: absolute;
-    top: 115px;
+    top: 130px;
     left: 15px;
     right: 10px;
     bottom: 150px;
@@ -814,6 +815,22 @@ div#itemModal {
       }
     }
   }
+  a.link {
+    position: absolute;
+    top: 110px;
+    left: 15px;
+    height: 15px;
+    line-height: 15px;
+    overflow: hidden;
+    right: 15px;
+    .font-opensans;
+    margin: 0;
+    padding: 0;
+    color: #0b8aca;
+    font-size: 12px;
+    line-height: 12px;
+    font-weight: 600;
+  }
   a.heart, a.email, a.bookmark {
     position: absolute;
     bottom: 16px;
@@ -830,6 +847,7 @@ div#itemModal {
     right: 105px;
   }
   a.bookmark {
+    display: none;
     background-position: -5px 23px;
     right: 129px;
   }

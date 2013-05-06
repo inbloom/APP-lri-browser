@@ -58,10 +58,12 @@ function showItemModal(target) {
     return false;
   });
 
+  $('#itemModal').find('a.link').attr('href', "/browser/link?url=" + item.url[0]);
+  $('#itemModal').find('a.link').html((item.url[0].length > 45)?(item.url[0].substring(0,45)+'...'):item.url[0]);
+
   $('#itemModal').find('a.bookmark').attr('href', "/browser/link?url=" + item.url[0]);
   $('#itemModal').find('a.bookmark').attr('rel', item['name'][0]);
   $('#itemModal').find('a.bookmark').unbind().click(function(e) {
-
     pushParadata(
         'email',
         "http://browser.inbloom.org/browser/link?url=" + item.url[0]
