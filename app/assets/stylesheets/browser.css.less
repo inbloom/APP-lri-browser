@@ -287,7 +287,7 @@ section.middle {
 div.searching-mask {
   display: none;
   position: absolute;
-  top: 0;
+  top: 105px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -303,6 +303,19 @@ div.searching-mask {
     .font-opensans;
     .drop-shadow(1px, 1px, 2px, 1);
   }
+  z-index: 2000;
+}
+
+div.slider-mask {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 34%;
+  right: 30%;
+  height: 97px;
+  background: #000;
+  z-index: 1000;
+  .opacity(.5);
   z-index: 2000;
 }
 
