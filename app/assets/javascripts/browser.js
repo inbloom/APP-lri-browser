@@ -385,21 +385,21 @@ $(function() {
   });
 
   // If user clicks the X in the search bar or the blue X clear the search
-  $(document).on('click', 'div.panel._search button.close', function(e) {
+  $('div.panel._search button.close').on('click', function(e) {
     toggleSearchPanel(false);
     return false;
   });
-  $(document).on('click', '#superform div.search button', function(e) {
+  $('#superform div.search button').on('click', function(e) {
     toggleSearchPanel(false);
     return false;
   });
 
   // If user clicks the facets button then show them or hide them
-  $(document).on('click', 'div.panel._search button.facets', function(e) {
+  $('div.panel._search button.facets').on('click', function(e) {
     toggleSearchFilters();
     return false;
   });
-  $(document).on('click', 'div.panel._search button.close-facets', function(e) {
+  $('div.panel._search button.close-facets').on('click', function(e) {
     toggleSearchFilters();
     return false;
   });
