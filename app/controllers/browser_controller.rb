@@ -29,9 +29,9 @@ class BrowserController < ApplicationController
   def search
 
     # define the elasticsearch result "size" (limit)
-    limit = params['limit']
+    limit = params['limit'].to_i
     # define the elasticsearch result "from" (offset)
-    offset = params['offset']
+    offset = params['offset'].to_i
     # Pass through
     hack = params['hack']
     # Default output
@@ -52,8 +52,10 @@ class BrowserController < ApplicationController
             'properties.url',
             'properties.useRightsUrl'
         ].include?(key)
+          searchKey = "schema-org.#{key}.original"
           matchTerm = 'term'
         else
+          searchKey = "schema-org.#{key}"
           matchTerm = 'match'
         end
 
@@ -61,12 +63,12 @@ class BrowserController < ApplicationController
           # This is more complex because this filter type needs the keys or'd together
           orFilters = []
           filter.keys.each do |f|
-            orFilters << { 'query' => { matchTerm => { key => f.to_s } } }
+            orFilters << { 'query' => { matchTerm => { searchKey => f.to_s } } }
           end
           filters << { 'or' => orFilters }
         else
           # This should be simple, there is only one of this filter key
-          filters << { 'query' => { matchTerm => { key => filter.keys.first.to_s } } }
+          filters << { 'query' => { matchTerm => { searchKey => filter.keys.first.to_s } } }
         end
       end
 
@@ -87,17 +89,61 @@ class BrowserController < ApplicationController
 
     # Build the payload from the various parts
     payload = {
-        'size' => limit,
-        'from' => offset,
-        'query' => {
-            'filtered' => {
-                'query' => query,
-                'filter' => filter
-            }
+      'size' => limit,
+      'from' => offset,
+      'query' => {
+        'filtered' => {
+          'query' => query,
+          'filter' => filter
         }
+      },
+      "facets" => {
+        "intendedEndUserRole" => {
+          "terms" => {
+            "field" => "schema-org.properties.intendedEndUserRole.original",
+            "global" => true,
+            "all_terms" => true
+          }
+        },
+      "typicalAgeRange" => {
+        "terms" => {
+          "field" => "schema-org.properties.typicalAgeRange.original",
+          "global" => true,
+          "all_terms" => true
+        }
+      },
+      "educationalUse" => {
+        "terms" => {
+          "field" => "schema-org.properties.educationalUse.original",
+          "global" => true,
+          "all_terms" => true
+        }
+      },
+      "interactivityType" => {
+        "terms" => {
+          "field" => "schema-org.properties.interactivityType.original",
+          "global" => true,
+          "all_terms" => true
+        }
+      },
+      "learningResourceType" => {
+        "terms" => {
+          "field" => "schema-org.properties.learningResourceType.original",
+          "global" => true,
+          "all_terms" => true
+        }
+      },
+      "mediaType" => {
+        "terms" => {
+          "field" => "schema-org.properties.mediaType.original",
+          "global" => true,
+          "all_terms" => true
+          }
+        }
+      }
     }
 
-#puts "PAYLOAD"; puts payload.to_json
+#puts "PAYLOAD"; puts Rails.configuration.elastic_search_url; puts payload.to_json
 
     # Okay after all that mess, lets make the request
     request = RestClient::Request.new( :method => :get, :url => Rails.configuration.elastic_search_url, :payload => payload.to_json )
@@ -107,7 +153,7 @@ class BrowserController < ApplicationController
       results = JSON.parse(searchResults)
       results[:hack] = hack
 
-#puts "RESPONSE"; puts results
+#puts "RESPONSE"; puts results.to_json
 
       respond_to do |format|
         format.json { render json: results }
@@ -124,6 +170,11 @@ class BrowserController < ApplicationController
   
   def link
     redirect_to params[:url]
+  end
+  
+  def paradata
+    response = LrHelper.publish_paradata params[:verb], params[:object], "#{params[:verb]} of #{params[:object]}"
+    render json: response
   end
 
 end

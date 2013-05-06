@@ -36,6 +36,6 @@ Browser::Application.configure do
   config.assets.debug = true
 
   # Elastic search server configs
-  config.elastic_search_url = 'http://esearch.agilix.com:9200/lris/lrmi/_search'
+  config.elastic_search_url = 'http://esearch.agilix.com:9200/lris/schema-org/_search'
 
 end

@@ -40,7 +40,7 @@
 
         <div class='search'>
           <input type="text" name="search" id="form-search-filter" placeholder="Search" />
-          <button>&times;</button>
+          <button> </button>
         </div>
 
         <div class='spinner'></div>
@@ -59,12 +59,50 @@
     </section>
 
     <section class='bottom'>
-      <div class='searching-mask'></div>
       <div class='container'>
         <%= yield %>
       </div>
     </section>
 
+    <div class='searching-mask'></div>
+    <div class='slider-mask'></div>
+
+    <%= render "searchResultItem" %>
+    <%= render "inlineSearchItem" %>
+    <%= render "itemModal" %>
+
   </form>
+
+  <footer>
+    <div class='pull-left logo'>
+      inBloom is a trademark of inBloom, Inc.
+    </div>
+
+    <div class='pull-right'>
+      <a href="https://docs.google.com/document/d/1p8GPYcimIPnOW8DRAVAODzp0hnJfMIniqx8wg8wJ9o0/edit?usp=sharing" target="_blank">Help</a> |
+      <a href="#" 
+        onclick="if(confirm('You are now going to the inBloom support website. You\'ll need to register in order to provide a bug or feature report. Registration is free. Click OK to go to http://support.inbloom.org')) { window.location='http://support.inbloom.org';}">
+          Report Issue
+      </a> | 
+      <a href="http://www.inbloom.org/terms-of-use" target="_blank">Terms of Use</a> |
+      <a href="http://www.inbloom.org/privacy-policy" target="_blank">Privacy Policy</a>
+    </div>
+  </footer>
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-38234333-2']);
+    _gaq.push(['_setDomainName', 'inbloom.org']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
 </body>
 </html>

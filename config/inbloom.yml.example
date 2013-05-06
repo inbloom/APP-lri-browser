@@ -1,9 +1,0 @@
-development:
-  client_id: sOmEthiNgHerE
-  shared_secret: SharEdSecrEtGoesH3r3
-test:
-  client_id: 
-  shared_secret: 
-production:
-  client_id: 
-  shared_secret:
