@@ -108,15 +108,15 @@ header {
     }
     button {
       position: absolute;
-      top: 3px;
-      right: 0px;
+      top: 6px;
+      right: 8px;
       border: 0;
-      background: none;
-      font-size: 14px;
-      color: #a8a8a8;
-      font-size: 30px;
-      line-height: 15px;
       display: none;
+      background-image: url(/assets/cancel.jpg);
+      background-repeat: no-repeat;
+      background-size: 16px 16px;
+      width: 16px;
+      height: 16px;
       &:hover {
         color: #444444;
       }
@@ -236,9 +236,9 @@ section.middle {
   div.controls {
     position: absolute;
     left: 50%;
-    margin-left: -512px;
+    margin-left: -440px;
     display: inline;
-    width: 1024px;
+    width: 880px;
     div.control {
       line-height: 65px;
       margin: 0 20px;
@@ -262,22 +262,22 @@ section.middle {
       &.icon-teachers {
         padding-right: 24px;
         background: url(/assets/icon-teacher.png) no-repeat;
-        background-position: right 22px;
+        background-position: right 24px;
       }
       &.icon-students {
         padding-right: 28px;
         background: url(/assets/icon-students.png) no-repeat;
-        background-position: right 22px;
+        background-position: right 24px;
       }
       &.icon-pages {
         padding-right: 26px;
         background: url(/assets/icon-pages.png) no-repeat;
-        background-position: right 22px;
+        background-position: right 24px;
       }
       &.icon-finger {
         padding-right: 20px;
         background: url(/assets/icon-finger.png) no-repeat;
-        background-position: right 20px;
+        background-position: right 22px;
       }
     }
   }
@@ -506,8 +506,11 @@ section.bottom {
             text-decoration: none;
             font-size: 14px;
             font-family: Times Roman;
-            .gradient(#0b8aca, #1093d3, #077dc0);
+            background-color: #0b8aca;
             .drop-shadow(0px, 1px, 1px, 1);
+            &:hover {
+              background-color: #0000ff;
+            }
           }
         }
       }
@@ -685,8 +688,11 @@ section.bottom {
                     text-decoration: none;
                     font-size: 14px;
                     font-family: Times Roman;
-                    .gradient(#0b8aca, #1093d3, #077dc0);
+                    background-color: #0b8aca;
                     .drop-shadow(0px, 1px, 1px, 1);
+                    &:hover {
+                      background-color: #0000ff;
+                    }
                   }
                   div.imgs {
                     padding-left: 5px;
@@ -796,13 +802,18 @@ div#itemModal {
     position: absolute;
     bottom: 45px;
     left: 15px;
-    width: 195px;
+    width: 175px;
     height: 100px;
     font-size: 12px;
     ul {
+      list-style-type: none;
       margin-left: 0;
-      padding-left: 15px;
+      padding-left: 0;
       li {
+        padding-left: 7px;
+        background-image: url(/assets/item_bullet.gif);
+        background-repeat: no-repeat;
+        background-position: 0px 50%;
         color: #7b2b2b;
       }
     }
