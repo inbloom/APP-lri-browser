@@ -101,36 +101,42 @@ class BrowserController < ApplicationController
         "intendedEndUserRole" => {
           "terms" => {
             "field" => "schema-org.properties.intendedEndUserRole.original",
+            "global" => true,
             "all_terms" => true
           }
         },
       "typicalAgeRange" => {
         "terms" => {
           "field" => "schema-org.properties.typicalAgeRange.original",
+          "global" => true,
           "all_terms" => true
         }
       },
       "educationalUse" => {
         "terms" => {
           "field" => "schema-org.properties.educationalUse.original",
+          "global" => true,
           "all_terms" => true
         }
       },
       "interactivityType" => {
         "terms" => {
           "field" => "schema-org.properties.interactivityType.original",
+          "global" => true,
           "all_terms" => true
         }
       },
       "learningResourceType" => {
         "terms" => {
           "field" => "schema-org.properties.learningResourceType.original",
+          "global" => true,
           "all_terms" => true
         }
       },
       "mediaType" => {
         "terms" => {
           "field" => "schema-org.properties.mediaType.original",
+          "global" => true,
           "all_terms" => true
           }
         }
@@ -147,7 +153,7 @@ class BrowserController < ApplicationController
       results = JSON.parse(searchResults)
       results[:hack] = hack
 
-#puts "RESPONSE"; puts results
+#puts "RESPONSE"; puts results.to_json
 
       respond_to do |format|
         format.json { render json: results }
