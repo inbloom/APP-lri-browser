@@ -488,23 +488,27 @@ function setSubject(subject, rate) {
   if (!$('div.panel._search').is(':visible')) {
     // Transition old panel off
     if (subject == 'ccssmath') {
-        $('div.panel._ccsselaliteracy').stop().animate({left:$(document).width()},rate,'easeInOutCubic',function() {
-          $(this).hide();
-        });
-        $('div.panel._ccssmath').show().animate({left:0},rate,'easeInOutCubic');
-        $('div.panel._search').stop().hide();
+      $('div.panel._ccsselaliteracy').stop().animate({left:$(document).width()},rate,'easeInOutCubic',function() {
+        $(this).hide();
+      });
+      $('div.panel._ccssmath').show().animate({left:0},rate,'easeInOutCubic', function() {
+        // Refresh inline results
+        refreshInlineSearchResults();
+      });
+      $('div.panel._search').stop().hide();
     } else if (subject == 'ccsselaliteracy') {
-        $('div.panel._ccsselaliteracy').show().animate({left:0},rate,'easeInOutCubic');
-        $('div.panel._ccssmath').stop().animate({left:-$(document).width()},rate,'easeInOutCubic',function() {
-          $(this).hide();
-        });
-        $('div.panel._search').stop().hide();
+      $('div.panel._ccssmath').stop().animate({left:-$(document).width()},rate,'easeInOutCubic',function() {
+        $(this).hide();
+      });
+      $('div.panel._ccsselaliteracy').show().animate({left:0},rate,'easeInOutCubic', function() {
+        // Refresh inline results
+        refreshInlineSearchResults();
+      });
+      $('div.panel._search').stop().hide();
     }
   } else {
     // @TODO Refire the search cause they just changed subject while search was showing
   }
-  // Refresh inline results
-  refreshInlineSearchResults();
 }
 
 // Toggle the visibility of the search panel, OR show/hide it based on bool
