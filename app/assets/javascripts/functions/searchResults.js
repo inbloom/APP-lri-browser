@@ -77,7 +77,7 @@ function renderSearchResults(res, clear) {
 // If search is showing, refresh it.
 function refreshSearchResults() {
   if ($('div.panel._search').is(':visible')) {
-    search($('#form-search-filter').val());
+    search($('#form-search-filter').val(), 1, 24);
   }
 }
 
