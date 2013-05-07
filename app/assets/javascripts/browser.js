@@ -115,22 +115,22 @@ $(function() {
   // Primary filter checkboxes on clicks
   // Refresh the inline results (which might be off screen)
   // and refresh the search results (which will only refresh in visible)
-  $(document).on('click', '#teachersCheckbox', function(e) {
+  $('#teachersCheckbox').on('click', function(e) {
     $('#teachersSecondaryCheckbox').prop('checked', e.target.checked);
     refreshInlineSearchResults();
     refreshSearchResults();
   });
-  $(document).on('click', '#studentsCheckbox', function(e) {
+  $('#studentsCheckbox').on('click', function(e) {
     $('#studentsSecondaryCheckbox').prop('checked', e.target.checked);
     refreshInlineSearchResults();
     refreshSearchResults();
   });
-  $(document).on('click', '#pagesCheckbox', function(e) {
+  $('#pagesCheckbox').on('click', function(e) {
     $('#readingSecondaryCheckbox').prop('checked', e.target.checked);
     refreshInlineSearchResults();
     refreshSearchResults();
   });
-  $(document).on('click', '#mediaCheckbox', function(e) {
+  $('#mediaCheckbox').on('click', function(e) {
     $('#audioSecondaryCheckbox').prop('checked', e.target.checked);
     $('#videoSecondaryCheckbox').prop('checked', e.target.checked);
     $('#onlineSecondaryCheckbox').prop('checked', e.target.checked);
@@ -144,7 +144,7 @@ $(function() {
   });
 
   // Secondary filter checkboxes on clicks
-  $(document).on('click', 'input.secondaryCheckbox', function(e) {
+  $('input.secondaryCheckbox').on('click', function(e) {
     refreshSearchResults();
 
     // If a primary should be unchecked, then do it
