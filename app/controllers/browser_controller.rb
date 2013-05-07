@@ -84,7 +84,6 @@ class BrowserController < ApplicationController
        # if not filter is present then just match against query
     else
       query = { 'match' => { '_all' => params['query'] } }
-      filter = { 'limit' => { 'value' => 100 } }
     end
 
     # Build the payload from the various parts
@@ -143,7 +142,7 @@ class BrowserController < ApplicationController
       }
     }
 
-#puts "PAYLOAD"; puts Rails.configuration.elastic_search_url; puts payload.to_json
+puts "PAYLOAD"; puts Rails.configuration.elastic_search_url; puts payload.to_json
 
     # Okay after all that mess, lets make the request
     request = RestClient::Request.new( :method => :get, :url => Rails.configuration.elastic_search_url, :payload => payload.to_json )
@@ -153,7 +152,7 @@ class BrowserController < ApplicationController
       results = JSON.parse(searchResults)
       results[:hack] = hack
 
-#puts "RESPONSE"; puts results.to_json
+puts "RESPONSE"; puts results.to_json
 
       respond_to do |format|
         format.json { render json: results }

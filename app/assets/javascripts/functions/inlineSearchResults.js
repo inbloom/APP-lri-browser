@@ -159,7 +159,9 @@ function parseInlineSearchResults(results, tmpDotNotation) {
 // Steps through inlineResults and refreshes them based on the class
 function refreshInlineSearchResults() {
   $("div.inlineResults").each(function() {
-    var tmpDotNotation = $(this).attr('class').replace('inlineResults','').replace('loading','').replace('empty','').replace(/^\s+_/,'').replace(/\s+$/,'').replace(/_/g,'.');
-    loadInlineSearchResults(tmpDotNotation);
+    if ($(this).is(':visible')) {
+      var tmpDotNotation = $(this).attr('class').replace('inlineResults','').replace('loading','').replace('empty','').replace(/^\s+_/,'').replace(/\s+$/,'').replace(/_/g,'.');
+      loadInlineSearchResults(tmpDotNotation);
+    }
   });
 }
