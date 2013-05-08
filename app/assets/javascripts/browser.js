@@ -288,7 +288,7 @@ $(function() {
             if (t.charAt(0) == '_') continue;
             var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
             var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
-            $('<a href="#'+tmpText+'">'+tmpDotNotation+'</a>').appendTo('div.results.'+panel+' div.domains');
+            $('<a href="#'+tmpDotNotation+'">'+tmpDotNotation+'</a>').appendTo('div.results.'+panel+' div.domains');
           }
         }
 
@@ -308,7 +308,7 @@ $(function() {
               var className = tmpDotNotation.replace(/\./g,"_");
               dynamicLoad.push(tmpDotNotation);
               eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
-              tmpTextContent += '<li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li>';
+              tmpTextContent += '<li><strong><a name="'+tmpDotNotation+'">'+tmpDotNotation+'</a></strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li>';
             }
           }
           tmpTextContent += '</ul>';
@@ -351,8 +351,10 @@ $(function() {
         if (i.charAt(0) == '_') continue;
         var tmpStandardArrayLocation = notation+'["'+i+'"]';
         var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+        var className = tmpDotNotation.replace(/\./g,"_");
+        dynamicLoad.push(tmpDotNotation);
         eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
-        tmpTextContent += '<li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '</li>';
+        tmpTextContent += '<li><strong><a name="'+tmpDotNotation+'">'+tmpDotNotation+'</a></strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li>';
 
         for (t in standard[i]) {
           if (t.charAt(0) == '_') continue;
@@ -361,7 +363,7 @@ $(function() {
           var className = tmpDotNotation.replace(/\./g,"_");
           dynamicLoad.push(tmpDotNotation);
           eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
-          tmpTextContent += '<ul><li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li></ul>';
+          tmpTextContent += '<ul><li><strong><a name="'+tmpDotNotation+'">'+tmpDotNotation+'</a></strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li></ul>';
         }
       }
       tmpTextContent += '</ul>';
