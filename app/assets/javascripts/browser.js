@@ -53,6 +53,7 @@ $(function() {
     $('._ccssmath.panel a')[0].click();
     $('._ccsselaliteracy.panel h3')[0].click();
     $('._ccsselaliteracy.panel a')[0].click();
+    $('._ccsselaliteracy.panel').hide();
   }, 1000);
 
   // Make Left Handle Draggable
@@ -351,10 +352,16 @@ $(function() {
         if (i.charAt(0) == '_') continue;
         var tmpStandardArrayLocation = notation+'["'+i+'"]';
         var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+
         var className = tmpDotNotation.replace(/\./g,"_");
-        dynamicLoad.push(tmpDotNotation);
         eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
-        tmpTextContent += '<li><strong><a name="'+tmpDotNotation+'">'+tmpDotNotation+'</a></strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li>';
+
+        if (Object.keys(standard[i]['_order']).length == 0) {
+          dynamicLoad.push(tmpDotNotation);
+          tmpTextContent += '<li><strong><a name="'+tmpDotNotation+'">'+tmpDotNotation+'</a></strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li>';
+        } else {
+          tmpTextContent += '<li><strong><a name="'+tmpDotNotation+'">'+tmpDotNotation+'</a></strong>: ' + tmpStandard + '</li>';
+        }
 
         for (t in standard[i]) {
           if (t.charAt(0) == '_') continue;
@@ -619,7 +626,6 @@ function truncateString(string, length) {
   if (string.length <= length + 1) return string;
   return string.substring(0, length-2) + '&hellip;'
 }
-
 
 
 

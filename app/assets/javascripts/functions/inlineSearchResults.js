@@ -6,6 +6,11 @@ function loadInlineSearchResults(tmpDotNotation, page, limit) {
   var className = tmpDotNotation.replace(/\./g,"_");
   $('div.inlineResults._'+className).addClass('loading').removeClass('empty').empty();
 
+  // Dont load it if its hidden
+  if (!$('div.inlineResults._'+className).is(':visible')) {
+    return false;
+  }
+
   var query = '';
   var page = (page != undefined)?page:1;
   var limit = (limit != undefined)?limit:inlineSearchLimit;
