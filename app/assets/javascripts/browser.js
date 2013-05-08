@@ -1,3 +1,4 @@
+var jsonStandards;
 // Now set some stuff on ready
 $(function() {
   // Some initial global values
@@ -31,30 +32,42 @@ $(function() {
     12 : {'minimum':-27,'maximum':42, 'leftBoundary': 375, 'rightBoundary': 405}
   }
 
-  // Now turn on the UI and set defaults
-  setTimeout(function(){
-    setGradeRange(gradeRanges);
-    setGradeRange(gradeRanges);
-    setSubject(subject, 0);
-    // Build the accordion based on dynamic content (that's hard coded for the time being until we learn to get it from the lri)
-    buildAccordionNavigation($('div.accordion._ccssmath'), 'ccssmath');
-    buildAccordionNavigation($('div.accordion._ccsselaliteracy'), 'ccsselaliteracy');
-    // Initialization of the accordion
-    $(".accordion").accordion({
-      heightStyle: 'content',
-      animate: 'easeInOutCubic'
-    });
-  },500);
+  toggleSearchMask(true,true);
+  $.ajax({
+    dataType: 'json',
+    url: 'ccss-sorted.json',
+    success: function(xhr) {
+      jsonStandards = xhr;
 
-  // @TODO Remove this and add a function callback to the build Accordion Navigation method to correctly set the first option as desired by client
-  setTimeout(function() {
-    // Trigger the first element as clicked
-    $('._ccssmath.panel h3')[0].click();
-    $('._ccssmath.panel a')[0].click();
-    $('._ccsselaliteracy.panel h3')[0].click();
-    $('._ccsselaliteracy.panel a')[0].click();
-    $('._ccsselaliteracy.panel').hide();
-  }, 1000);
+      // Now turn on the UI and set defaults
+      setTimeout(function(){
+        setGradeRange(gradeRanges);
+        setGradeRange(gradeRanges);
+        setSubject(subject, 0);
+        // Build the accordion based on dynamic content (that's hard coded for the time being until we learn to get it from the lri)
+        buildAccordionNavigation($('div.accordion._ccssmath'), 'ccssmath');
+        buildAccordionNavigation($('div.accordion._ccsselaliteracy'), 'ccsselaliteracy');
+        // Initialization of the accordion
+        $(".accordion").accordion({
+          heightStyle: 'content',
+          animate: 'easeInOutCubic'
+        });
+      },500);
+
+      // @TODO Remove this and add a function callback to the build Accordion Navigation method to correctly set the first option as desired by client
+      setTimeout(function() {
+        // Trigger the first element as clicked
+        $('._ccssmath.panel h3')[0].click();
+        $('._ccssmath.panel a')[0].click();
+        $('._ccsselaliteracy.panel h3')[0].click();
+        $('._ccsselaliteracy.panel a')[0].click();
+        $('._ccsselaliteracy.panel').hide();
+      }, 1000);
+
+      toggleSearchMask(false);
+    }
+  });
+
 
   // Make Left Handle Draggable
   $('div.slider-handle-left').draggable({
