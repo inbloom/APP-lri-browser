@@ -356,7 +356,7 @@ $(function() {
         var className = tmpDotNotation.replace(/\./g,"_");
         eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
 
-        if (Object.keys(standard[i]['_order']).length == 0) {
+        if ($.isEmptyObject(standard[i]['_order'])) {
           dynamicLoad.push(tmpDotNotation);
           tmpTextContent += '<li><strong><a name="'+tmpDotNotation+'">'+tmpDotNotation+'</a></strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li>';
         } else {
