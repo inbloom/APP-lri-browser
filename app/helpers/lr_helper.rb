@@ -55,8 +55,8 @@ module LrHelper
 
   def self.request type, request
     # OAuth stuff..
-    consumer = OAuth::Consumer.new 'agilixtagger@gmail.com', 'kf4ER109bnp8dzK8YzoBkm5EeTF1HV2k', { :site => 'http://lrnode.inbloom.org' }
-    token = OAuth::AccessToken.new(consumer, 'node_sign_token', 'qMiy1Mc6NGYeJNX1nP6DBtfWAx1mhZQf')
+    consumer = OAuth::Consumer.new 'tagger@inbloom.org', 'ut51n1FsP1CwPkkJxH+bPA2CwMp4DsRu', { :site => 'http://lrnode.inbloom.org' }
+    token = OAuth::AccessToken.new(consumer, 'node_sign_token', 'f9Ow52bglXLDCV40sS9AVP0eQutvQj1u')
 
     # do the request by type!
     case type
