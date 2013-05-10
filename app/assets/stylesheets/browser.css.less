@@ -24,6 +24,10 @@ div.container {
   display: none;
 }
 
+.placeholder {
+  color: #aaa;
+}
+
 header {
   position: relative;
   right: 0;
@@ -236,9 +240,9 @@ section.middle {
   div.controls {
     position: absolute;
     left: 50%;
-    margin-left: -440px;
+    margin-left: -475px;
     display: inline;
-    width: 880px;
+    width: 950px;
     div.control {
       line-height: 65px;
       margin: 0 20px;
@@ -325,7 +329,10 @@ section.bottom {
   left: 0;
   right: 0;
   bottom: 35px;
+  overflow-y: auto;
   overflow-x: hidden;
+  -ms-overflow-y: auto;
+  -ms-overflow-x: hidden;
   min-width: 1024px;
 
   div.panel {
@@ -437,7 +444,8 @@ section.bottom {
           width: 205px;
           height: 270px;
           .rounded(5px);
-          .drop-shadow(1px, 1px, 4px, 0.5);
+          .drop-shadow(1px, 1px, 4px, 0.3);
+          border: 1px solid #aaa;
           margin: 26px 10px 0 10px;
           float: left;
           background-repeat: no-repeat;
