@@ -1,3 +1,12 @@
+// Fix for IE8
+Object.keys = Object.keys || function(o) {
+  var res = [];
+  for(var name in o) {
+    if (o.hasOwnProperty(name)) res.push(name);
+  }
+  return res;
+}
+
 var jsonStandards;
 // Now set some stuff on ready
 $(function() {
