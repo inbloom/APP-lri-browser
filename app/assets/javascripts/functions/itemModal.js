@@ -21,9 +21,6 @@ function showItemModal(target) {
     }
   }
 
-console.log(item);
-
-
   var lrt = (item['learningResourceType'] == undefined)?[]:item['learningResourceType'];
   var eu = (item['educationalUse'] == undefined)?[]:item['educationalUse'];
   var ieur = (item['intendedEndUserRole'] == undefined)?[]:item['intendedEndUserRole'];

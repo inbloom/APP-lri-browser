@@ -115,8 +115,10 @@ function parseInlineSearchResults(results, tmpDotNotation) {
         $(tmp).find('h4').html(props['name'][0]);
         $(tmp).attr('data-url', props.url[0]);
         $(tmp).click(function() {
-          var url = $(this).attr('data-url');
-          window.open("/browser/link?url=" + url, '_blank');
+          if ($(this).attr('data-url') != undefined) {
+            var url = $(this).attr('data-url');
+            window.open("/browser/link?url=" + url, '_blank');
+          }
           return false;
         });
 
