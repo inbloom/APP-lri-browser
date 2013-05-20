@@ -14,7 +14,8 @@ function buildAccordionNavigation(div, req) {
       var title = accordionTitle(standard[i]._text);
       var links = "";
 
-      for (var s = 0; s < Object.keys(standard[i]._order).length; s++) {
+      for (var s = 0; s < 25; s++) {
+
         if (standard[i]._order[s] == undefined) continue;
 
         var key = standard[i]._order[s].substr( standard[i]._order[s].lastIndexOf('.') + 1, standard[i]._order[s].length )
@@ -37,7 +38,7 @@ function buildAccordionNavigation(div, req) {
     var title = accordionTitle(standard._text);
     var links = "";
 
-    for (var i = 0; i < Object.keys(standard._order).length; i++) {
+    for (var i = 0; i < 25; i++) {
       if (standard._order[i] == undefined) continue;
 
       var linkText = standard._order[i].substr( standard._order[i].lastIndexOf(':') + 1, standard._order[i].length )
@@ -53,7 +54,10 @@ function buildAccordionNavigation(div, req) {
     // Inject the rest of the math standards
     var standard = jsonStandards.CCSS.Math.Content;
 
-    for (var i = 0; i < Object.keys(standard._order).length; i++) {
+//    for (i in standard._order) { // This doesn't work in firefox, it gets them out of order.
+//    for (var i = 0; i < Object.keys(standard._order).length; i++) {  // Nope, this wont work either the keys are not sequential
+    for (var i = 0; i < 25; i++) {
+
       if (standard._order[i] == undefined) continue;
 
       var key = standard._order[i].substr( standard._order[i].lastIndexOf('.') + 1, standard._order[i].length )
