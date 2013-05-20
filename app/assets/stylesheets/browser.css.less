@@ -28,6 +28,10 @@ div.container {
   color: #aaa;
 }
 
+.twisty {
+  cursor: pointer;
+}
+
 header {
   position: relative;
   right: 0;
@@ -814,7 +818,7 @@ div#itemModal {
     top: 130px;
     left: 15px;
     right: 10px;
-    bottom: 150px;
+    bottom: 175px;
     font-size: 12px;
     line-height: 14px;
     overflow: auto;
@@ -824,7 +828,7 @@ div#itemModal {
     bottom: 45px;
     left: 15px;
     width: 175px;
-    height: 100px;
+    height: 125px;
     font-size: 12px;
     overflow: auto;
     ul {
@@ -837,6 +841,43 @@ div#itemModal {
         background-repeat: no-repeat;
         background-position: 0px 50%;
         color: #7b2b2b;
+      }
+    }
+  }
+  div.metadata {
+    position: absolute;
+    bottom: 45px;
+    left: 190px;
+    width: 150px;
+    height: 125px;
+    font-size: 12px;
+    overflow: auto;
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding-left: 0;
+      li {
+        padding-left: 10px;
+        background-image: url(/assets/item_bullet.gif);
+        background-repeat: no-repeat;
+        background-position: 1px 50%;
+        color: #7b2b2b;
+        ul {
+          display: none;
+          li {
+            cursor: auto;
+            font-size:10px;
+            padding-left: 5px;
+            background: none;
+          }
+        }
+        &.open {
+          background-image: url(/assets/item_bullet_open.gif);
+          background-position: 0px 7px;
+          ul {
+            display: block;
+          }
+        }
       }
     }
   }
