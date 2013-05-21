@@ -43,9 +43,11 @@ function renderSearchResults(res, clear) {
     $(tmp).css('background-image', 'url('+thumbnail+')');
     $(tmp).find('h3').html(props['name'][0]);
     $(tmp).attr('data-url', props.url[0]);
-    $(tmp).click(function(e) {
-      var url = $(this).attr('data-url');
-      window.open("/browser/link?url=" + url, '_blank');
+    $(tmp).click(function() {
+      if ($(this).attr('data-url') != undefined) {
+        var url = $(this).attr('data-url');
+        window.open("/browser/link?url=" + url, '_blank');
+      }
       return false;
     });
 
@@ -77,7 +79,7 @@ function renderSearchResults(res, clear) {
 // If search is showing, refresh it.
 function refreshSearchResults() {
   if ($('div.panel._search').is(':visible')) {
-    search($('#form-search-filter').val());
+    search($('#form-search-filter').val(), 1, 24);
   }
 }
 

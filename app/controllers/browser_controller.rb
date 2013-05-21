@@ -84,7 +84,6 @@ class BrowserController < ApplicationController
        # if not filter is present then just match against query
     else
       query = { 'match' => { '_all' => params['query'] } }
-      filter = { 'limit' => { 'value' => 100 } }
     end
 
     # Build the payload from the various parts

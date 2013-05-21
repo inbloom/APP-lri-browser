@@ -1,3 +1,13 @@
+// Fix for IE8
+Object.keys = Object.keys || function(o) {
+  var res = [];
+  for(var name in o) {
+    if (o.hasOwnProperty(name)) res.push(name);
+  }
+  return res;
+}
+
+var jsonStandards;
 // Now set some stuff on ready
 $(function() {
   // Some initial global values
@@ -31,29 +41,42 @@ $(function() {
     12 : {'minimum':-27,'maximum':42, 'leftBoundary': 375, 'rightBoundary': 405}
   }
 
-  // Now turn on the UI and set defaults
-  setTimeout(function(){
-    setGradeRange(gradeRanges);
-    setGradeRange(gradeRanges);
-    setSubject(subject, 0);
-    // Build the accordion based on dynamic content (that's hard coded for the time being until we learn to get it from the lri)
-    buildAccordionNavigation($('div.accordion._ccssmath'), 'ccssmath');
-    buildAccordionNavigation($('div.accordion._ccsselaliteracy'), 'ccsselaliteracy');
-    // Initialization of the accordion
-    $(".accordion").accordion({
-      heightStyle: 'content',
-      animate: 'easeInOutCubic'
-    });
-  },500);
+  toggleSearchMask(true,true);
+  $.ajax({
+    dataType: 'json',
+    url: 'ccss-sorted.json',
+    success: function(xhr) {
+      jsonStandards = xhr;
 
-  // @TODO Remove this and add a function callback to the build Accordion Navigation method to correctly set the first option as desired by client
-  setTimeout(function() {
-    // Trigger the first element as clicked
-    $('._ccssmath.panel h3')[0].click();
-    $('._ccssmath.panel a')[0].click();
-    $('._ccsselaliteracy.panel h3')[0].click();
-    $('._ccsselaliteracy.panel a')[0].click();
-  }, 1000);
+      // Now turn on the UI and set defaults
+      setTimeout(function(){
+        setGradeRange(gradeRanges);
+        setGradeRange(gradeRanges);
+        setSubject(subject, 0);
+        // Build the accordion based on dynamic content (that's hard coded for the time being until we learn to get it from the lri)
+        buildAccordionNavigation($('div.accordion._ccssmath'), 'ccssmath');
+        buildAccordionNavigation($('div.accordion._ccsselaliteracy'), 'ccsselaliteracy');
+        // Initialization of the accordion
+        $(".accordion").accordion({
+          heightStyle: 'content',
+          animate: 'easeInOutCubic'
+        });
+      },500);
+
+      // @TODO Remove this and add a function callback to the build Accordion Navigation method to correctly set the first option as desired by client
+      setTimeout(function() {
+        // Trigger the first element as clicked
+        $('._ccssmath.panel h3')[0].click();
+        $('._ccssmath.panel a')[0].click();
+        $('._ccsselaliteracy.panel h3')[0].click();
+        $('._ccsselaliteracy.panel a')[0].click();
+        $('._ccsselaliteracy.panel').hide();
+      }, 1000);
+
+      toggleSearchMask(false);
+    }
+  });
+
 
   // Make Left Handle Draggable
   $('div.slider-handle-left').draggable({
@@ -115,22 +138,22 @@ $(function() {
   // Primary filter checkboxes on clicks
   // Refresh the inline results (which might be off screen)
   // and refresh the search results (which will only refresh in visible)
-  $(document).on('click', '#teachersCheckbox', function(e) {
+  $('#teachersCheckbox').on('click', function(e) {
     $('#teachersSecondaryCheckbox').prop('checked', e.target.checked);
     refreshInlineSearchResults();
     refreshSearchResults();
   });
-  $(document).on('click', '#studentsCheckbox', function(e) {
+  $('#studentsCheckbox').on('click', function(e) {
     $('#studentsSecondaryCheckbox').prop('checked', e.target.checked);
     refreshInlineSearchResults();
     refreshSearchResults();
   });
-  $(document).on('click', '#pagesCheckbox', function(e) {
+  $('#pagesCheckbox').on('click', function(e) {
     $('#readingSecondaryCheckbox').prop('checked', e.target.checked);
     refreshInlineSearchResults();
     refreshSearchResults();
   });
-  $(document).on('click', '#mediaCheckbox', function(e) {
+  $('#mediaCheckbox').on('click', function(e) {
     $('#audioSecondaryCheckbox').prop('checked', e.target.checked);
     $('#videoSecondaryCheckbox').prop('checked', e.target.checked);
     $('#onlineSecondaryCheckbox').prop('checked', e.target.checked);
@@ -144,7 +167,7 @@ $(function() {
   });
 
   // Secondary filter checkboxes on clicks
-  $(document).on('click', 'input.secondaryCheckbox', function(e) {
+  $('input.secondaryCheckbox').on('click', function(e) {
     refreshSearchResults();
 
     // If a primary should be unchecked, then do it
@@ -288,7 +311,7 @@ $(function() {
             if (t.charAt(0) == '_') continue;
             var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
             var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
-            $('<a href="#'+tmpText+'">'+tmpDotNotation+'</a>').appendTo('div.results.'+panel+' div.domains');
+            $('<a href="#'+tmpDotNotation+'">'+tmpDotNotation+'</a>').appendTo('div.results.'+panel+' div.domains');
           }
         }
 
@@ -296,19 +319,46 @@ $(function() {
           if (i.charAt(0) == '_') continue;
           var tmpTextContent = '';
           for (t in standard[i]) {
+            var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
             if (t == '_text') {
-              var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
               eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+";");
               tmpTextContent = '<h4>'+tmpStandard+'</h4><ul>' + tmpTextContent;
-            } else if (t.charAt(0) == '_') {
-              // Do nothing with these others
             } else {
-              var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
+              if (t.charAt(0) == '_') continue;
+
+              // convert the array like string into a real dotnotation
               var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+              // generate a valid class name based on the dot notation
               var className = tmpDotNotation.replace(/\./g,"_");
+              // Push this notation onto the load stack so that it gets inline loaded
               dynamicLoad.push(tmpDotNotation);
+              // Get our text out into the tmp var
               eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
-              tmpTextContent += '<li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li>';
+              // Add the formatted text to the list item for pasting
+              tmpTextContent += '<li><strong><a name="'+tmpDotNotation+'">'+tmpDotNotation+'</a></strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div>';
+
+              var tmpTextChildren = '';
+              for (s in standard[i][t]) {
+                var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]["'+s+'"]';
+                if (t == '_text') {
+                  eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+";");
+                  tmpTextChildren += '<h4>'+tmpStandard+'</h4>' + tmpTextContent;
+                } else {
+                  if (s.charAt(0) == '_') continue;
+                  // convert the array like string into a real dotnotation
+                  var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+                  // generate a valid class name based on the dot notation
+                  var className = tmpDotNotation.replace(/\./g,"_");
+                  // Push this notation onto the load stack so that it gets inline loaded
+                  dynamicLoad.push(tmpDotNotation);
+                  // Get our text out into the tmp var
+                  eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
+                  // Add the formatted text to the list item for pasting
+                  tmpTextChildren += '<ul><li><strong><a name="'+tmpDotNotation+'">'+tmpDotNotation+'</a></strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li></ul>';
+                }
+              }
+
+              tmpTextContent += tmpTextChildren + '</li>';
             }
           }
           tmpTextContent += '</ul>';
@@ -343,7 +393,6 @@ $(function() {
         $('div.results.'+panel+' hr:first-of-type').addClass('hidden');
       }
 
-
       //Update the standards information
       $('div.results.'+panel+' div.content').empty();
       var tmpTextContent = '<ul>';
@@ -351,8 +400,16 @@ $(function() {
         if (i.charAt(0) == '_') continue;
         var tmpStandardArrayLocation = notation+'["'+i+'"]';
         var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+
+        var className = tmpDotNotation.replace(/\./g,"_");
         eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
-        tmpTextContent += '<li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '</li>';
+
+        if ($.isEmptyObject(standard[i]['_order'])) {
+          dynamicLoad.push(tmpDotNotation);
+          tmpTextContent += '<li><strong><a name="'+tmpDotNotation+'">'+tmpDotNotation+'</a></strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li>';
+        } else {
+          tmpTextContent += '<li><strong><a name="'+tmpDotNotation+'">'+tmpDotNotation+'</a></strong>: ' + tmpStandard + '</li>';
+        }
 
         for (t in standard[i]) {
           if (t.charAt(0) == '_') continue;
@@ -361,7 +418,7 @@ $(function() {
           var className = tmpDotNotation.replace(/\./g,"_");
           dynamicLoad.push(tmpDotNotation);
           eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
-          tmpTextContent += '<ul><li><strong>'+tmpDotNotation+'</strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li></ul>';
+          tmpTextContent += '<ul><li><strong><a name="'+tmpDotNotation+'">'+tmpDotNotation+'</a></strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li></ul>';
         }
       }
       tmpTextContent += '</ul>';
@@ -442,6 +499,21 @@ $(function() {
     }
   });
 
+
+  $('[placeholder]').focus(function() {
+    var input = $(this);
+    if (input.val() == input.attr('placeholder')) {
+      input.val('');
+      input.removeClass('placeholder');
+    }
+  }).blur(function() {
+        var input = $(this);
+        if (input.val() == '' || input.val() == input.attr('placeholder')) {
+          input.addClass('placeholder');
+          input.val(input.attr('placeholder'));
+        }
+      }).blur();
+
 });
 
 // Set grade range and the slider
@@ -488,13 +560,23 @@ function setSubject(subject, rate) {
   if (!$('div.panel._search').is(':visible')) {
     // Transition old panel off
     if (subject == 'ccssmath') {
-        $('div.panel._ccsselaliteracy').stop().animate({left:$(document).width()},rate,'easeInOutCubic',function() { });
-        $('div.panel._ccssmath').show().animate({left:0},rate,'easeInOutCubic');
-        $('div.panel._search').stop().hide();
+      $('div.panel._ccsselaliteracy').stop().animate({left:$(document).width()},rate,'easeInOutCubic',function() {
+        $(this).hide();
+      });
+      $('div.panel._ccssmath').show().animate({left:0},rate,'easeInOutCubic', function() {
+        // Refresh inline results
+        refreshInlineSearchResults();
+      });
+      $('div.panel._search').stop().hide();
     } else if (subject == 'ccsselaliteracy') {
-        $('div.panel._ccsselaliteracy').show().animate({left:0},rate,'easeInOutCubic');
-        $('div.panel._ccssmath').stop().animate({left:-$(document).width()},rate,'easeInOutCubic',function() { });
-        $('div.panel._search').stop().hide();
+      $('div.panel._ccssmath').stop().animate({left:-$(document).width()},rate,'easeInOutCubic',function() {
+        $(this).hide();
+      });
+      $('div.panel._ccsselaliteracy').show().animate({left:0},rate,'easeInOutCubic', function() {
+        // Refresh inline results
+        refreshInlineSearchResults();
+      });
+      $('div.panel._search').stop().hide();
     }
   } else {
     // @TODO Refire the search cause they just changed subject while search was showing
@@ -607,7 +689,6 @@ function truncateString(string, length) {
   if (string.length <= length + 1) return string;
   return string.substring(0, length-2) + '&hellip;'
 }
-
 
 
 
