@@ -319,19 +319,46 @@ $(function() {
           if (i.charAt(0) == '_') continue;
           var tmpTextContent = '';
           for (t in standard[i]) {
+            var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
             if (t == '_text') {
-              var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
               eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+";");
               tmpTextContent = '<h4>'+tmpStandard+'</h4><ul>' + tmpTextContent;
-            } else if (t.charAt(0) == '_') {
-              // Do nothing with these others
             } else {
-              var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]';
+              if (t.charAt(0) == '_') continue;
+
+              // convert the array like string into a real dotnotation
               var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+              // generate a valid class name based on the dot notation
               var className = tmpDotNotation.replace(/\./g,"_");
+              // Push this notation onto the load stack so that it gets inline loaded
               dynamicLoad.push(tmpDotNotation);
+              // Get our text out into the tmp var
               eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
-              tmpTextContent += '<li><strong><a name="'+tmpDotNotation+'">'+tmpDotNotation+'</a></strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li>';
+              // Add the formatted text to the list item for pasting
+              tmpTextContent += '<li><strong><a name="'+tmpDotNotation+'">'+tmpDotNotation+'</a></strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div>';
+
+              var tmpTextChildren = '';
+              for (s in standard[i][t]) {
+                var tmpStandardArrayLocation = notation+'["'+i+'"]["'+t+'"]["'+s+'"]';
+                if (t == '_text') {
+                  eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+";");
+                  tmpTextChildren += '<h4>'+tmpStandard+'</h4>' + tmpTextContent;
+                } else {
+                  if (s.charAt(0) == '_') continue;
+                  // convert the array like string into a real dotnotation
+                  var tmpDotNotation = tmpStandardArrayLocation.replace(/\"\]\[\"/g,'.').replace(/\"\]/g,'').replace(/\[\"/g,'');
+                  // generate a valid class name based on the dot notation
+                  var className = tmpDotNotation.replace(/\./g,"_");
+                  // Push this notation onto the load stack so that it gets inline loaded
+                  dynamicLoad.push(tmpDotNotation);
+                  // Get our text out into the tmp var
+                  eval("var tmpStandard = jsonStandards"+tmpStandardArrayLocation+"['_text'];");
+                  // Add the formatted text to the list item for pasting
+                  tmpTextChildren += '<ul><li><strong><a name="'+tmpDotNotation+'">'+tmpDotNotation+'</a></strong>: ' + tmpStandard + '<div class="floater"><div class="inlineResults _'+className+'" data-hack="0"></div></div></li></ul>';
+                }
+              }
+
+              tmpTextContent += tmpTextChildren + '</li>';
             }
           }
           tmpTextContent += '</ul>';
@@ -365,7 +392,6 @@ $(function() {
         $('div.results.'+panel+' h5').addClass('hidden');
         $('div.results.'+panel+' hr:first-of-type').addClass('hidden');
       }
-
 
       //Update the standards information
       $('div.results.'+panel+' div.content').empty();
