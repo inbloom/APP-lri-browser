@@ -1,8 +1,17 @@
 
 // Build out the accordion navigation based on which standard
 function buildAccordionNavigation(div, req) {
+
+  // Set the index of the active accordion item
+  var accordionIndex = 0;
+
+  // Get the index for this item before we clear it so we can put it back!
+  if ($(".accordion._"+req).hasClass('ui-accordion')) {
+    accordionIndexKey = $('.accordion._'+req+ ' h3').eq($('.accordion._'+req).accordion('option','active')).attr('rel');
+  }
+
   // Clear the div
-  $(div).empty();
+  $(div).empty().hide();
 
   // Create navigation for CCSS.ELA-Literacy
   if (req == 'ccsselaliteracy') {
@@ -27,7 +36,7 @@ function buildAccordionNavigation(div, req) {
         links += '<p><a href="#CCSS.ELA-Literacy.'+i+'.'+key+'" rel="navlink">' + linkText + '</a></p>';
       }
 
-      $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
+      $('<h3 rel="'+i+'">' + title + '</h3><div>' + links + '</div>').appendTo(div);
     }
 
     // Create navigation for CCSS.Math
@@ -49,7 +58,7 @@ function buildAccordionNavigation(div, req) {
       if (gradeRanges.maximum < item._min || gradeRanges.minimum > item._max) continue;
       links += '<p><a href="#'+linkNotation+'" rel="navlink">' + linkText + '</a></p>';
     }
-    $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
+    $('<h3 rel="Practice">' + title + '</h3><div>' + links + '</div>').appendTo(div);
 
     // Inject the rest of the math standards
     var standard = jsonStandards.CCSS.Math.Content;
@@ -72,8 +81,7 @@ function buildAccordionNavigation(div, req) {
         var linkText = (item[s]._text != undefined)?item[s]._text:s;
         links += '<p><a href="#CCSS.Math.Content.'+key+'.'+s+'" rel="navlink">' + linkText + '</a></p>';
       }
-
-      $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
+      $('<h3 rel="'+key+'">' + title + '</h3><div>' + links + '</div>').appendTo(div);
     }
 
   }
@@ -85,9 +93,21 @@ function buildAccordionNavigation(div, req) {
   });
 
   // In the event of a redraw go ahead and refresh
-  if ($(".accordion").hasClass('ui-accordion')) {
-    $(".accordion").accordion("refresh");
+  if ($('.accordion._'+req).hasClass('ui-accordion')) {
+    $('.accordion._'+req).accordion("refresh");
+    // Remove animation for time being
+    $('.accordion._'+req).accordion('option', 'animate', 0);
+    // And set the index back to what it was
+    $('.accordion._'+req+' h3[rel='+accordionIndexKey+']').click();
+    // reset the click if it went missing
+    if ($('.accordion._'+req).accordion('option','active') == 0) {
+      $('.accordion._'+req).accordion('option','active',1);
+    }
+    // put the animation back
+    $('.accordion._'+req).accordion('option', 'animate', 250);
   }
+
+  $(div).show();
 
 }
 

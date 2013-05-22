@@ -41,6 +41,8 @@ $(function() {
     12 : {'minimum':-27,'maximum':42, 'leftBoundary': 375, 'rightBoundary': 405}
   }
 
+
+
   toggleSearchMask(true,true);
   $.ajax({
     dataType: 'json',
@@ -59,7 +61,9 @@ $(function() {
         // Initialization of the accordion
         $(".accordion").accordion({
           heightStyle: 'content',
-          animate: 'easeInOutCubic'
+          animate: 250,
+          active: false,
+          collapsible: true
         });
       },500);
 
@@ -689,6 +693,4 @@ function truncateString(string, length) {
   if (string.length <= length + 1) return string;
   return string.substring(0, length-2) + '&hellip;'
 }
-
-
 
