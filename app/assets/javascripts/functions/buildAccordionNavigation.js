@@ -2,12 +2,9 @@
 // Build out the accordion navigation based on which standard
 function buildAccordionNavigation(div, req) {
 
-  // Set the index of the active accordion item
-  var accordionIndex = 0;
-
   // Get the index for this item before we clear it so we can put it back!
   if ($(".accordion._"+req).hasClass('ui-accordion')) {
-    accordionIndexKey = $('.accordion._'+req+ ' h3').eq($('.accordion._'+req).accordion('option','active')).attr('rel');
+    var accordionIndexKey = $('.accordion._'+req+ ' h3').eq($('.accordion._'+req).accordion('option','active')).attr('rel');
   }
 
   // Clear the div
@@ -41,6 +38,10 @@ function buildAccordionNavigation(div, req) {
 
     // Create navigation for CCSS.Math
   } else if (req == 'ccssmath') {
+
+    if (accordionIndexKey != undefined) {
+      console.log(accordionIndexKey);
+    }
 
     // Inject the math Practice standards -- they work completely differently than the rest of math.. of course
     var standard = jsonStandards.CCSS.Math.Practice;
@@ -97,12 +98,8 @@ function buildAccordionNavigation(div, req) {
     $('.accordion._'+req).accordion("refresh");
     // Remove animation for time being
     $('.accordion._'+req).accordion('option', 'animate', 0);
-    // And set the index back to what it was
-    $('.accordion._'+req+' h3[rel='+accordionIndexKey+']').click();
-    // reset the click if it went missing
-    if ($('.accordion._'+req).accordion('option','active') == 0) {
-      $('.accordion._'+req).accordion('option','active',1);
-    }
+    // Okay find the index of this header item
+    $('.accordion._'+req+' h3[rel='+accordionIndexKey+']:not(.ui-accordion-header-active)').click();
     // put the animation back
     $('.accordion._'+req).accordion('option', 'animate', 250);
   }
