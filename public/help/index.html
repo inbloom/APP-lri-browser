@@ -1,36 +1,373 @@
 <html>
    <head>
       <title>inBloom Browser 1.2 User Guide</title>
-      <style type="text/css">ol{margin:0;padding:0}.c25{list-style-type:disc;margin-left:15;padding:0}.c14{max-width:468pt;background-color:#ffffff;padding:72pt 72pt 72pt 72pt}.c5{list-style-type:circle;margin-left:40;padding:0}.c30{list-style-type:square;margin-left:70;padding:0}.c2{color:#5cc7de;font-size:18pt}.c26{padding-top:18pt;padding-bottom:4pt}.c0{height:10pt;direction:ltr}.c11{color:#1155cc;text-decoration:underline}.c15{padding-left:0pt;margin-left:90pt}.c12{text-indent:-70pt;margin-left:99pt}.c4{line-height:1.0;padding-top:10pt}.c28{vertical-align:super;font-size:12pt}.c20{padding-left:0pt;margin-left:108pt}.c1{color:#222222;background-color:#ffffff}.c9{color:inherit;text-decoration:inherit}.c24{color:#d9d9d9;font-size:22pt}.c31{padding-left:0pt;margin-left:54pt}.c8{font-weight:bold}.c13{text-indent:0pt}.c29{color:#cccccc}.c19{margin-left:215pt}.c10{margin-left:36pt}.c17{margin-left:-4pt}.c23{font-size:16pt}.c27{height:13pt}.c22{font-size:14pt}.c3{border-collapse:collapse}.c6{font-style:italic}.c21{font-size:11pt}.c33{font-size:20pt}.c16{background-color:#ffffff}.c7{direction:ltr;margin-left:210;margin-right:250}.c18{font-family:"Trebuchet MS"}.c32{color:#222222}.title{padding-top:0pt;line-height:1.15;text-align:left;color:#000000;font-size:21pt;font-family:"Trebuchet MS";padding-bottom:0pt}.subtitle{padding-top:0pt;line-height:1.15;text-align:left;color:#666666;font-style:italic;font-size:13pt;font-family:"Trebuchet MS";padding-bottom:10pt}li{color:#000000;font-family:"Arial"}p{color:#000000;margin:0;font-family:"Arial"}h1{padding-top:10pt;line-height:1.0;text-align:left;color:#000000;font-size:24pt;font-family:"Trebuchet MS";padding-bottom:0pt}h2{padding-top:10pt;line-height:1.15;text-align:left;color:#434343;font-size:13pt;font-family:"Trebuchet MS";padding-bottom:0pt}h3{padding-top:8pt;line-height:1.15;text-align:left;color:#666666;font-size:12pt;font-family:"Trebuchet MS";font-weight:bold;padding-bottom:0pt}h4{padding-top:8pt;line-height:1.15;text-align:left;color:#666666;font-size:11pt;text-decoration:underline;font-family:"Trebuchet MS";padding-bottom:0pt}h5{padding-top:8pt;line-height:1.15;text-align:left;color:#666666;font-size:11pt;font-family:"Trebuchet MS";padding-bottom:0pt}h6{padding-top:8pt;line-height:1.15;text-align:left;color:#666666;font-style:italic;font-size:11pt;font-family:"Trebuchet MS";padding-bottom:0pt}</style>
+      <style type="text/css">
+      
+      /* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+	font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
+	line-height: 1.5em;
+	font-size: 87.5%;
+}
+ol, ul {
+	list-style: none;
+	list-style-type: disc
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+  ol
+{
+	margin: 0;
+	padding: 0;
+}
+.c25
+{
+	list-style-type: disc;
+	margin-left: 21px;
+	padding: 0;
+}
+.c14
+{
+	background-color: #ffffff;
+	max-width: 468pt;
+	padding: 72pt 72pt 72pt 72pt;
+}
+.c5
+{
+	list-style-type: disc;
+	margin-left: 40;
+	padding: 0;
+}
+.c30
+{
+	list-style-type: disc;
+	margin-left: 70;
+	padding: 0;
+}
+.c2
+{
+	color: #5cc7de;
+	font-size: 18pt;
+}
+.c26
+{
+	padding-bottom: 4pt;
+	padding-top: 18pt;
+}
+.c0
+{
+	direction: ltr;
+	height: 10pt;
+}
+.c11
+{
+	color: #1155cc;
+	text-decoration: underline;
+}
+.c15
+{
+	margin-left: 90pt;
+	padding-left: 0pt;
+}
+.c12
+{
+	margin-left: 99pt;
+	text-indent: -130pt;
+}
+.c4
+{
+	line-height: 1.0;
+	padding-top: 5pt;
+}
+.c28
+{
+	font-size: 85%;
+	vertical-align: super;
+}
+.c20
+{
+	margin-left: 108pt;
+	padding-left: 0pt;
+}
+.c1
+{
+	background-color: #ffffff;
+	color: #222222;
+}
+.c9
+{
+	color: inherit;
+	text-decoration: inherit;
+}
+.c24
+{
+	color: #d9d9d9;
+	font-size: 18pt;
+}
+.c31
+{
+	margin-left: 54pt;
+	padding-left: 0pt;
+}
+.c8
+{
+	font-weight: bold;
+	line-height: 200%;
+	border-bottom: 3px solid #ccc;
+	display: block;
+	font-size: 1.5em
+}
+
+ol .c8 {
+	border: 0;
+	font-size: 100%;
+}
+.c13
+{
+	text-indent: 0pt;
+}
+.c29
+{
+	color: #cccccc;
+}
+.c19
+{
+	margin-left: 215pt;
+}
+.c10
+{
+	margin-left: 36pt;
+	font-size: 85%
+}
+.c17
+{
+	margin-left: -4pt;
+}
+.c23
+{
+	font-size: 16pt;
+}
+.c27
+{
+	height: 13pt;
+}
+.c22
+{
+	font-size: 1.4em;
+	margin-bottom: 0.5em;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;}
+.c3
+{
+	border-collapse: collapse;
+}
+.c6
+{
+	font-style: italic;
+}
+.c21
+{
+	font-size: 11pt;
+}
+.c33
+{
+	font-size: 20pt;
+}
+.c16
+{
+	background-color: #ffffff;
+}
+.c7
+{
+	direction: ltr;
+	margin-left: 210;
+	margin-right: 250;
+	
+}
+
+p.c7 {
+	font-size: 100%
+}
+.c18
+{
+}
+.c32
+{
+	color: #222222;
+}
+.title
+{
+	color: #000000;
+	font-size: 21pt;
+	line-height: 1.15;
+	padding-bottom: 0pt;
+	padding-top: 0pt;
+	text-align: left;
+}
+.subtitle
+{
+	color: #666666;
+	font-size: 13pt;
+	font-style: italic;
+	line-height: 1.15;
+	padding-bottom: 10pt;
+	padding-top: 0pt;
+	text-align: left;
+}
+li
+{
+	color: #000000;
+}
+p
+{
+	color: #000000;
+	margin: 0;
+}
+h1
+{
+	color: #000000;
+	font-size: 2.5em;
+	line-height: 1.0;
+	padding-bottom: 0pt;
+	padding-top: 10pt;
+	text-align: left;
+}
+h2
+{
+	color: #434343;
+	font-size: 1.4em;
+	line-height: 1.15;
+	padding-bottom: 0pt;
+	padding-top: 10pt;
+	text-align: left;
+}
+h3
+{
+	color: #666666;
+	font-size: 12pt;
+	font-weight: bold;
+	line-height: 1.15;
+	padding-bottom: 0pt;
+	padding-top: 8pt;
+	text-align: left;
+}
+h4
+{
+	color: #666666;
+	font-size: 11pt;
+	line-height: 1.15;
+	padding-bottom: 0pt;
+	padding-top: 8pt;
+	text-align: left;
+	text-decoration: underline;
+}
+h5
+{
+	color: #666666;
+	font-size: 11pt;
+	line-height: 1.15;
+	padding-bottom: 0pt;
+	padding-top: 8pt;
+	text-align: left;
+}
+h6
+{
+	color: #666666;
+	font-size: 11pt;
+	font-style: italic;
+	line-height: 1.15;
+	padding-bottom: 0pt;
+	padding-top: 8pt;
+	text-align: left;
+}
+.description
+{
+	font-size: 85%;
+}
+
+img.headerlogo {
+	position: absolute;
+	margin: 4px 39px
+}
+
+#wrap {
+	width: 1220px;
+	margin: 20px auto 0 auto
+}
+
+#main {
+	padding: 22px 28px 
+}
+      </style>
    </head>
-   <body style="margin:0">
+   <body>
    
-         <div style="background:black; width:100%">
-         <img src="images/black_spacer.png">
-         <img src="images/inbloom-logo.png">
+         <div style="background:black; height:61px; width:100%">
+         <img class="headerlogo" src="images/inbloom-logo.png">
       </div>
       
       <div>
          <p class="c0 c4 c17"><span></span></p>
       </div>
-      <p class="c4 c7 c12"><span class="c24">BROWSER</span></p>
-      <p class="c0 c4"><span></span></p>
-      <a href="#" name="id.qcf0dh95842v"></a>
+      <p class="c4 c7 c12"><span class="c24">BROWSER</span>
+            <a href="#" name="id.qcf0dh95842v"></a>
+	</p>
+	<div id="wrap">
       <h1 class="c7"><a name="h.b7mwjhbvfoqx"></a><span class="c32">inBloom Browser 1.2 User Guide</span></h1>
+      <div id="main">
       <p class="c0"><span class="c22 c6 c29"></span></p>
-      <p class="c7 c19"><span class="c22">Get Started with InBloom Browser</span></p>
-      <h2 class="c7 c27"><a name="h.b5t569wupie5"></a></h2>
-      <ol class="c25" start="1">
-         <li class="c7 c13"><span class="c11 c21"><a class="c9" href="#id.oswvpb4j5qic">About inBloom Browser</a></span><span><br>This section introduces the inBloom Browser Version 1.2.</span></li>
+      <p class="c7 c19"><a name="h.b5t569wupie5"></a><span class="c22">Getting Started with InBloom Browser</span></p>
+      <p>&nbsp;</p>
+        <ol class="c25" start="1">
+         <li class="c7 c13"><span class="c11 c21"><a class="c9" href="#id.oswvpb4j5qic">About inBloom Browser</a></span><span class="description"><br>This section introduces the inBloom Browser Version 1.2.</span></li>
       </ol>
       <p class="c0"><span></span></p>
       <ol class="c25" start="2">
-         <li class="c13 c7"><span class="c11 c21"><a class="c9" href="#id.rrj91gd44rk0">Version 1.2 Release Notes</a></span><span><br>This section outlines features of Browser version 1.2 such as browsing and searching.<br><br>It also discusses the relationship between Browser and the Learning Registry; between Browser and the Learning Resource Metadata Initiative; and between Browser and the Learning Registry Index.</span></li>
+         <li class="c13 c7"><span class="c11 c21"><a class="c9" href="#id.rrj91gd44rk0">Version 1.2 Release Notes</a></span><span class="description"><br>This section outlines features of Browser version 1.2 such as browsing and searching.<br>It also discusses the relationship between Browser and the Learning Registry; between Browser and the Learning Resource Metadata Initiative; and between Browser and the Learning Registry Index.</span></li>
       </ol>
       <p class="c0"><span></span></p>
       <ol class="c25" start="3">
          <li class="c13 c7">
-            <span class="c11 c21"><a class="c9" href="#id.605woh1kxv1w">Browser FAQ</a></span><span><br>This section details Frequently Asked Questions about Browser.</span>
+            <span class="c11 c21"><a class="c9" href="#id.605woh1kxv1w">Browser FAQ</a></span><span class="description"><br>This section details Frequently Asked Questions about Browser.</span>
             <hr style="page-break-before:always;display:none;">
          </li>
       </ol>
@@ -48,10 +385,8 @@
       <p class="c0"><span class="c18"></span></p>
       <p class="c0"><span class="c18"></span></p>
       <hr style="page-break-before:always;display:none;">
-      <h2 class="c27 c7"><a name="h.sihcg7bf4v6w"></a></h2>
-      <h2 class="c7"><a name="h.eksygud8k680"></a><span class="c11"><a class="c9" href="#id.qcf0dh95842v">Back to Table of Contents</a></span></h2>
       <a href="#" name="id.rrj91gd44rk0"></a>
-      <h2 class="c7"><a name="h.uj35wvjtri84"></a><span class="c2">Version 1.2 Release Notes</span></h2>
+      <h2 class="c7"><a name="h.uj35wvjtri84"></a><span class="c32 c33">Version 1.2 Release Notes</span></h2>
       <p class="c0"><span></span></p>
       <p class="c7"><span>May 6, 2013</span></p>
       <p class="c0"><span></span></p>
@@ -73,7 +408,7 @@
          <li class="c31 c7"><span>Click on any of the primary filters:</span></li>
       </ol>
       <ol class="c5" start="1">
-         <li class="c15 c7"><span class="c8">For Teachers</span><span>.</span></li>
+         <li class="c15 c7"><span class="c8">For Teachers</span></li>
       </ol>
       <ol class="c30" start="1">
          <li class="c20 c7"><span>Shows resources specifically tagged as intended for teachers.</span></li>
@@ -130,44 +465,46 @@
       <p class="c7"><span>The Browser also uses Google Analytics for standard web analytics.</span></p>
       <h2 class="c7"><a name="h.k2ar1gq8wshj"></a><span class="c11"><a class="c9" href="#id.qcf0dh95842v">Back to Table of Contents</a></span></h2>
       <a href="#" name="id.605woh1kxv1w"></a>
-      <h2 class="c7"><a name="h.7utqmjwlfkz"></a><span class="c2">Browser FAQ</span></h2>
+      <h2 class="c7"><a name="h.7utqmjwlfkz"></a><span class="c32 c33">Browser FAQ</span></h2>
       <p class="c0"><span class="c18 c23"></span></p>
-      <p class="c7"><span class="c1">Q: What is the Browser?</span></p>
-      <p class="c7"><span class="c1">A: The Browser is a web application that allows users to search for educational resources that are tagged with the Learning Registry Metadata Index (LRMI) meta data schema. Standards may or may not be aligned with the Common Core State Standards (CCSS).</span></p>
+      <p class="c7"><span class="c1"><strong><strong><strong>Q:</strong></strong></strong> What is the Browser?</span></p>
+      <p class="c7"><span class="c1"><strong>A:</strong> The Browser is a web application that allows users to search for educational resources that are tagged with the Learning Registry Metadata Index (LRMI) meta data schema. Standards may or may not be aligned with the Common Core State Standards (CCSS).</span></p>
       <p class="c0"><span class="c1"></span></p>
-      <p class="c7"><span class="c1">Q: What problem is Browser solving?</span></p>
-      <p class="c7"><span class="c1">A: Browser and the software infrastructure upon which it rests have been developed to make it easier to find educational resources on the web than existing search engine technologies.</span></p>
+      <p class="c7"><span class="c1"><strong>Q:</strong> What problem is Browser solving?</span></p>
+      <p class="c7"><span class="c1"><strong>A:</strong> Browser and the software infrastructure upon which it rests have been developed to make it easier to find educational resources on the web than existing search engine technologies.</span></p>
       <p class="c0"><span class="c1"></span></p>
-      <p class="c7"><span class="c1">Q: What is the Learning Resource Metadata Initiative (LRMI)?</span></p>
-      <p class="c7"><span class="c1">A: LRMI is a project co-led by the Association of Educational Publishers and Creative Commons to create a standard metadata framework for tagging educational resources on the web for search, discovery, and delivery of educational content that is easier to find than current search engine technologies. For details, see </span><span class="c11 c16"><a class="c9" href="http://www.lrmi.net">http://www.lrmi.net</a></span><span class="c1">. &nbsp;Most of LRMI has been adopted by schema.org, an effort by search engines to develop schemata that can make web pages more accurate so that search results are more targeted.</span></p>
+      <p class="c7"><span class="c1"><strong>Q:</strong> What is the Learning Resource Metadata Initiative (LRMI)?</span></p>
+      <p class="c7"><span class="c1"><strong>A:</strong> LRMI is a project co-led by the Association of Educational Publishers and Creative Commons to create a standard metadata framework for tagging educational resources on the web for search, discovery, and delivery of educational content that is easier to find than current search engine technologies. For details, see </span><span class="c11 c16"><a class="c9" href="http://www.lrmi.net">http://www.lrmi.net</a></span><span class="c1">. &nbsp;Most of LRMI has been adopted by schema.org, an effort by search engines to develop schemata that can make web pages more accurate so that search results are more targeted.</span></p>
       <p class="c0"><span class="c1"></span></p>
-      <p class="c7"><span class="c1">Q: What is the Learning Registry (LR)?</span></p>
-      <p class="c7"><span class="c1">A: The LR is a repository for information on educational resources. It&rsquo;s a joint venture between the Department of Defense and the Department of Education. See: &nbsp;</span><span class="c11 c16"><a class="c9" href="http://www.learningregistry.org/">http://www.learningregistry.org/</a></span><span class="c1">&nbsp;for more information.</span></p>
+      <p class="c7"><span class="c1"><strong>Q:</strong> What is the Learning Registry (LR)?</span></p>
+      <p class="c7"><span class="c1"><strong>A:</strong> The LR is a repository for information on educational resources. It&rsquo;s a joint venture between the Department of Defense and the Department of Education. See: &nbsp;</span><span class="c11 c16"><a class="c9" href="http://www.learningregistry.org/">http://www.learningregistry.org/</a></span><span class="c1">&nbsp;for more information.</span></p>
       <p class="c0"><span class="c1"></span></p>
-      <p class="c7"><span class="c1">Q: What are the Common Core State Standards (CCSS)?</span></p>
-      <p class="c7"><span class="c1">A: The Common Core State Standards (CCSS) are an enumerated list of learning objectives that, taken as a whole, are minimum proficiency standards needed by a graduating US high-school senior to be ready for university study. The CCSS was developed by the Council of Chief State School Officers and has been adopted by a majority of states. &nbsp;See</span><span class="c1"><a class="c9" href="http://corestandards.org/">&nbsp;</a></span><span class="c11 c16"><a class="c9" href="http://corestandards.org/">http://corestandards.org</a></span><span class="c1">&nbsp;for more information.</span></p>
+      <p class="c7"><span class="c1"><strong>Q:</strong> What are the Common Core State Standards (CCSS)?</span></p>
+      <p class="c7"><span class="c1"><strong>A:</strong> The Common Core State Standards (CCSS) are an enumerated list of learning objectives that, taken as a whole, are minimum proficiency standards needed by a graduating US high-school senior to be ready for university study. The CCSS was developed by the Council of Chief State School Officers and has been adopted by a majority of states. &nbsp;See</span><span class="c1"><a class="c9" href="http://corestandards.org/">&nbsp;</a></span><span class="c11 c16"><a class="c9" href="http://corestandards.org/">http://corestandards.org</a></span><span class="c1">&nbsp;for more information.</span></p>
       <p class="c0"><span class="c1"></span></p>
-      <p class="c7"><span class="c1">Q: What is the Learning Registry Index (LRI)?</span></p>
-      <p class="c7"><span class="c1">A: The LRI is infrastructure software produced by inBloom that is used by application developers to create a variety of programs from information contained in the Learning Registry. Currently, it provides access to information about learning resources that are tagged with LRMI meta data. The resources may or may not be aligned with the Common Core State Standards (CCSS). The LRI can provide text searches on all LRMI tagged learning resources that are in the Learning Registry. &nbsp;If a resource is also aligned with a CCSS standard, the LRI can also provide relationships via a graph database.</span></p>
+      <p class="c7"><span class="c1"><strong>Q:</strong> What is the Learning Registry Index (LRI)?</span></p>
+      <p class="c7"><span class="c1"><strong>A:</strong> The LRI is infrastructure software produced by inBloom that is used by application developers to create a variety of programs from information contained in the Learning Registry. Currently, it provides access to information about learning resources that are tagged with LRMI meta data. The resources may or may not be aligned with the Common Core State Standards (CCSS). The LRI can provide text searches on all LRMI tagged learning resources that are in the Learning Registry. &nbsp;If a resource is also aligned with a CCSS standard, the LRI can also provide relationships via a graph database.</span></p>
       <p class="c0"><span class="c1"></span></p>
-      <p class="c7"><span class="c1">Q: How can users tag information on learning resources so that they appear in the Browser?</span></p>
-      <p class="c7"><span class="c1">A: Anyone can tag educational resources by using Tagger, an inBloom program that can be found at </span><span class="c11 c16"><a class="c9" href="http://tagger.inbloom.org">http://tagger.inbloom.org</a></span><span class="c1">. To publish metadata tags on learning resources to the LR, the user will need to register for a free inBloom account by visiting </span><span class="c11 c16"><a class="c9" href="https://www.inbloom.org/for-developers">https://www.inbloom.org/for-developers</a></span><span class="c1">.</span></p>
+      <p class="c7"><span class="c1"><strong>Q:</strong> How can users tag information on learning resources so that they appear in the Browser?</span></p>
+      <p class="c7"><span class="c1"><strong>A:</strong> Anyone can tag educational resources by using Tagger, an inBloom program that can be found at </span><span class="c11 c16"><a class="c9" href="http://tagger.inbloom.org">http://tagger.inbloom.org</a></span><span class="c1">. To publish metadata tags on learning resources to the LR, the user will need to register for a free inBloom account by visiting </span><span class="c11 c16"><a class="c9" href="https://www.inbloom.org/for-developers">https://www.inbloom.org/for-developers</a></span><span class="c1">.</span></p>
       <p class="c0"><span class="c1"></span></p>
-      <p class="c7"><span class="c1">Q: I&rsquo;m a developer. How can developers find out more about the LRI?</span></p>
-      <p class="c7"><span class="c1">A: You can find out about the LRI and inBloom&rsquo;s open source software initiatives at the inBloom developer website at</span><span class="c1"><a class="c9" href="https://www.inbloom.org/for-developers">&nbsp;</a></span><span class="c11 c16"><a class="c9" href="https://www.inbloom.org/for-developers">https://www.inbloom.org/for-developers</a></span><span class="c1">.</span></p>
+      <p class="c7"><span class="c1"><strong>Q:</strong> I&rsquo;m a developer. How can developers find out more about the LRI?</span></p>
+      <p class="c7"><span class="c1"><strong>A:</strong> You can find out about the LRI and inBloom&rsquo;s open source software initiatives at the inBloom developer website at</span><span class="c1"><a class="c9" href="https://www.inbloom.org/for-developers">&nbsp;</a></span><span class="c11 c16"><a class="c9" href="https://www.inbloom.org/for-developers">https://www.inbloom.org/for-developers</a></span><span class="c1">.</span></p>
       <p class="c0"><span class="c1"></span></p>
-      <p class="c7"><span class="c1">Q: Does the Browser track any of my information as I use it?<br>A: The Browser does track information, but only anonymously. &nbsp;The Browser does store paradata in the LR. &nbsp;For example, the Browser does store all free text searches into the LR so that developers in the future can use that paradata to provide insight into the most popular items being searched. &nbsp;The Browser also uses Google Analytics to provide usage insight to inBloom.</span></p>
+      <p class="c7"><span class="c1"><strong>Q:</strong> Does the Browser track any of my information as I use it?<br><strong>A:</strong> The Browser does track information, but only anonymously. &nbsp;The Browser does store paradata in the LR. &nbsp;For example, the Browser does store all free text searches into the LR so that developers in the future can use that paradata to provide insight into the most popular items being searched. &nbsp;The Browser also uses Google Analytics to provide usage insight to inBloom.</span></p>
       <p class="c0"><span class="c1"></span></p>
       <p class="c0"><span class="c1"></span></p>
-      <p class="c7"><span class="c1">Q: Why are only Mathematics and Language Arts selectable filters for learning standards?</span></p>
-      <p class="c7"><span class="c1">A: The LRI Browser and the LRI infrastructure currently only &ldquo;knows&rdquo; about the CCSS Standards. CCSS standards only currently exist for Mathematics and Language Arts.</span></p>
+      <p class="c7"><span class="c1"><strong>Q:</strong> Why are only Mathematics and Language Arts selectable filters for learning standards?</span></p>
+      <p class="c7"><span class="c1"><strong>A:</strong> The LRI Browser and the LRI infrastructure currently only &ldquo;knows&rdquo; about the CCSS Standards. CCSS standards only currently exist for Mathematics and Language Arts.</span></p>
       <p class="c0"><span class="c1"></span></p>
-      <p class="c7"><span class="c1">Q: Why did you choose the specific filters that appear on the &ldquo;filters&rdquo; button when performing a text search?</span></p>
-      <p class="c7"><span class="c1">A: The filter categories are defined the LRMI. &nbsp;The choices within those categories are LRMI defined vocabularies for each of those categories.</span></p>
+      <p class="c7"><span class="c1"><strong>Q:</strong> Why did you choose the specific filters that appear on the &ldquo;filters&rdquo; button when performing a text search?</span></p>
+      <p class="c7"><span class="c1"><strong>A:</strong> The filter categories are defined the LRMI. &nbsp;The choices within those categories are LRMI defined vocabularies for each of those categories.</span></p>
       <p class="c0"><span class="c1"></span></p>
-      <p class="c7"><span class="c1">Q: Why don&rsquo;t I see any results?</span></p>
-      <p class="c7"><span class="c1">A: If you do not see any results, then there are no LRMI resources in the LR that are tagged with the keywords you were searching for or aligned to the CCSS standard that you are viewing. These empty searches are opportunities for educational publishers, teachers, curriculum specialists, etc., to tag information for those particular searches, thereby assuring that others will be able to view their favorite resources.</span></p>
+      <p class="c7"><span class="c1"><strong>Q:</strong> Why don&rsquo;t I see any results?</span></p>
+      <p class="c7"><span class="c1"><strong>A:</strong> If you do not see any results, then there are no LRMI resources in the LR that are tagged with the keywords you were searching for or aligned to the CCSS standard that you are viewing. These empty searches are opportunities for educational publishers, teachers, curriculum specialists, etc., to tag information for those particular searches, thereby assuring that others will be able to view their favorite resources.</span></p>
       <p class="c0"><span></span></p>
       <p class="c0"><span></span></p>
+      </div>
+	</div>
    </body>
 </html>
