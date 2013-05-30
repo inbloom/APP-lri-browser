@@ -673,6 +673,21 @@ function toggleSearchSpinner(bool) {
 // Toggle the search filters in/out
 function toggleSearchFilters() {
   if($('div._facets').is(':visible')) {
+
+    // Uncheck on close
+    $("div._facets").find('input').prop('checked',false);
+
+    // If a primary should be unchecked, then do it
+    $('#audioSecondaryCheckbox').prop('checked', $('#mediaCheckbox').prop('checked'));
+    $('#onlineSecondaryCheckbox').prop('checked', $('#mediaCheckbox').prop('checked'));
+    $('#videoSecondaryCheckbox').prop('checked', $('#mediaCheckbox').prop('checked'));
+    $('#readingSecondaryCheckbox').prop('checked', $('#pagesCheckbox').prop('checked'));
+    $('#studentsSecondaryCheckbox').prop('checked', $('#studentsCheckbox').prop('checked'));
+    $('#teachersSecondaryCheckbox').prop('checked', $('#teachersCheckbox').prop('checked'));
+
+    // Refresh!
+    refreshSearchResults();
+
     $('button.close-facets').stop().animate({left:-46},500,'easeInOutCubic',function() { $(this).hide(); });
     $('div._facets').stop().animate({left:-220},500,'easeInOutCubic',function() { $(this).hide(); });
     $('div.results._search').stop().css({left:245}).show().animate({left:20},500,'easeInOutCubic',function() {
