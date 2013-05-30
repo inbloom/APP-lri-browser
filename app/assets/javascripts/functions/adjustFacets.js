@@ -1,7 +1,7 @@
 // Color the facets based on results
 function adjustFacets(facets) {
   for (group in facets) {
-    $("div."+group).find("label").addClass('disabled').find('input').prop('disabled',true);
+    $("div."+group).find("label").addClass('disabled').find('input:not(:checked)').prop('disabled',true);
     for (termObj in facets[group].terms) {
       var count = facets[group].terms[termObj].count
       var term = facets[group].terms[termObj].term
