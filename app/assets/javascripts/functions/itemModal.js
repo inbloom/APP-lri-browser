@@ -95,6 +95,39 @@ function showItemModal(target) {
     return false;
   });
 
+  // METADATA
+
+  var metadata = (item['publisher'] == undefined || item['publisher'][0] == undefined)?'':item['publisher'][0]['properties']['name'];
+  if (metadata == '') {
+    $('#itemModal').find('div.metadata li.publisher').hide();
+  } else {
+    $('#itemModal').find('div.metadata li.publisher').show().find('span').html(metadata);
+  }
+
+  // Language
+  var metadata = (item['inLanguage'] == undefined)?'':item['inLanguage'];
+  if (metadata == '') {
+    $('#itemModal').find('div.metadata li.language').hide();
+  } else {
+    metadata = metadata.join(', ');
+    metadata = metadata.replace(/en-US/g,'English');
+    metadata = metadata.replace(/es-ES/g,'Spanish');
+    $('#itemModal').find('div.metadata li.language').show().find('span').html(metadata);
+  }
+
+  updateMetadata('topic', item);
+  updateMetadata('useRightsUrl', item);
+  updateMetadata('isBasedOnUrl', item);
+  updateMetadata('intendedEndUserRole', item);
+  updateMetadata('typicalAgeRange', item);
+  updateMetadata('educationalUse', item);
+  updateMetadata('learningResourceType', item);
+  updateMetadata('interactivityType', item);
+  updateMetadata('mediaType', item);
+  updateMetadata('groupType', item);
+
+  $('#itemModal').find('div.metadata li.twisty')[0].click();
+
   $('#itemModal').fadeIn();
 }
 
@@ -104,3 +137,13 @@ function hideItemModal() {
   toggleSearchMask(false);
   return false;
 }
+
+function updateMetadata(key, item) {
+  var metadata = (item[key] == undefined)?'':item[key];
+  if (metadata == '') {
+    $('#itemModal').find('div.metadata li.'+key).hide();
+  } else {
+    $('#itemModal').find('div.metadata li.'+key).show().find('span').html(metadata.join(', '));
+  }
+}
+

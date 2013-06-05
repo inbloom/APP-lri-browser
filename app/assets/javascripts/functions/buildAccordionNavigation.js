@@ -1,8 +1,15 @@
 
 // Build out the accordion navigation based on which standard
 function buildAccordionNavigation(div, req) {
+
+  // Get the index for this item before we clear it so we can put it back!
+  if ($(".accordion._"+req).hasClass('ui-accordion')) {
+    var accordionIndexKey = $('.accordion._'+req+ ' h3').eq($('.accordion._'+req).accordion('option','active')).attr('rel');
+    var accordionActiveLink = $('.accordion._'+req+ ' a[rel=navlink].active').attr('href');
+  }
+
   // Clear the div
-  $(div).empty();
+  $(div).empty().hide();
 
   // Create navigation for CCSS.ELA-Literacy
   if (req == 'ccsselaliteracy') {
@@ -14,7 +21,10 @@ function buildAccordionNavigation(div, req) {
       var title = accordionTitle(standard[i]._text);
       var links = "";
 
-      for (s in standard[i]._order) {
+      for (var s = 0; s < 25; s++) {
+
+        if (standard[i]._order[s] == undefined) continue;
+
         var key = standard[i]._order[s].substr( standard[i]._order[s].lastIndexOf('.') + 1, standard[i]._order[s].length )
         var item = standard[i][key];
 
@@ -24,18 +34,19 @@ function buildAccordionNavigation(div, req) {
         links += '<p><a href="#CCSS.ELA-Literacy.'+i+'.'+key+'" rel="navlink">' + linkText + '</a></p>';
       }
 
-      $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
+      $('<h3 rel="'+i+'">' + title + '</h3><div>' + links + '</div>').appendTo(div);
     }
 
     // Create navigation for CCSS.Math
   } else if (req == 'ccssmath') {
-
     // Inject the math Practice standards -- they work completely differently than the rest of math.. of course
     var standard = jsonStandards.CCSS.Math.Practice;
     var title = accordionTitle(standard._text);
     var links = "";
 
-    for (i in standard._order) {
+    for (var i = 0; i < 25; i++) {
+      if (standard._order[i] == undefined) continue;
+
       var linkText = standard._order[i].substr( standard._order[i].lastIndexOf(':') + 1, standard._order[i].length )
       var linkNotation = standard._order[i].substr( standard._order[i].lastIndexOf(':') + 1, standard._order[i].length )
       var key = standard._order[i].substr( standard._order[i].lastIndexOf('.') + 1, standard._order[i].length )
@@ -44,12 +55,17 @@ function buildAccordionNavigation(div, req) {
       if (gradeRanges.maximum < item._min || gradeRanges.minimum > item._max) continue;
       links += '<p><a href="#'+linkNotation+'" rel="navlink">' + linkText + '</a></p>';
     }
-    $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
+    $('<h3 rel="Practice">' + title + '</h3><div>' + links + '</div>').appendTo(div);
 
     // Inject the rest of the math standards
     var standard = jsonStandards.CCSS.Math.Content;
 
-    for (i in standard._order) {
+//    for (i in standard._order) { // This doesn't work in firefox, it gets them out of order.
+//    for (var i = 0; i < Object.keys(standard._order).length; i++) {  // Nope, this wont work either the keys are not sequential
+    for (var i = 0; i < 25; i++) {
+
+      if (standard._order[i] == undefined) continue;
+
       var key = standard._order[i].substr( standard._order[i].lastIndexOf('.') + 1, standard._order[i].length )
       var item = standard[key];
 
@@ -62,8 +78,7 @@ function buildAccordionNavigation(div, req) {
         var linkText = (item[s]._text != undefined)?item[s]._text:s;
         links += '<p><a href="#CCSS.Math.Content.'+key+'.'+s+'" rel="navlink">' + linkText + '</a></p>';
       }
-
-      $('<h3>' + title + '</h3><div>' + links + '</div>').appendTo(div);
+      $('<h3 rel="'+key+'">' + title + '</h3><div>' + links + '</div>').appendTo(div);
     }
 
   }
@@ -75,9 +90,23 @@ function buildAccordionNavigation(div, req) {
   });
 
   // In the event of a redraw go ahead and refresh
-  if ($(".accordion").hasClass('ui-accordion')) {
-    $(".accordion").accordion("refresh");
+  if ($('.accordion._'+req).hasClass('ui-accordion')) {
+    $('.accordion._'+req).accordion("refresh");
+    $('.accordion._'+req).accordion({
+      active: false,
+      collapsible: true
+    });
+    // Remove animation for time being
+    $('.accordion._'+req).accordion('option', 'animate', 0);
+    // Okay find the index of this header item
+    $('.accordion._'+req+' h3[rel='+accordionIndexKey+']:not(.ui-accordion-header-active)').click();
+    // put the animation back
+    $('.accordion._'+req).accordion('option', 'animate', 250);
+    // Reactivate the currently activated thingy
+    $('.accordion._'+req+' a[href="'+accordionActiveLink+'"]').addClass('active');
   }
+
+  $(div).show();
 
 }
 

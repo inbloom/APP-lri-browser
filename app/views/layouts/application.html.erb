@@ -6,6 +6,9 @@
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:600italic,700italic,400,300,600,700' rel='stylesheet' type='text/css'>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+  <!--[if lt IE 9]>
+  <script src="/assets/html5shiv.js"></script>
+  <![endif]-->
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 </head>
 <body>
@@ -39,7 +42,7 @@
         </div>
 
         <div class='search'>
-          <input type="text" name="search" id="form-search-filter" placeholder="Search" />
+          <input type="text" name="search" id="form-search-filter" placeholder="Search for Learning Resources" />
           <button> </button>
         </div>
 
@@ -79,7 +82,7 @@
     </div>
 
     <div class='pull-right'>
-      <a href="https://docs.google.com/document/d/1p8GPYcimIPnOW8DRAVAODzp0hnJfMIniqx8wg8wJ9o0/edit?usp=sharing" target="_blank">Help</a> |
+      <a href="/help/index.html" target="_blank">Help</a> |
       <a href="#" 
         onclick="if(confirm('You are now going to the inBloom support website. You\'ll need to register in order to provide a bug or feature report. Registration is free. Click OK to go to http://support.inbloom.org')) { window.location='http://support.inbloom.org';}">
           Report Issue

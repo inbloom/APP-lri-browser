@@ -6,6 +6,11 @@ function loadInlineSearchResults(tmpDotNotation, page, limit) {
   var className = tmpDotNotation.replace(/\./g,"_");
   $('div.inlineResults._'+className).addClass('loading').removeClass('empty').empty();
 
+  // Dont load it if its hidden
+  if (!$('div.inlineResults._'+className).is(':visible')) {
+    return false;
+  }
+
   var query = '';
   var page = (page != undefined)?page:1;
   var limit = (limit != undefined)?limit:inlineSearchLimit;
@@ -110,8 +115,10 @@ function parseInlineSearchResults(results, tmpDotNotation) {
         $(tmp).find('h4').html(props['name'][0]);
         $(tmp).attr('data-url', props.url[0]);
         $(tmp).click(function() {
-          var url = $(this).attr('data-url');
-          window.open("/browser/link?url=" + url, '_blank');
+          if ($(this).attr('data-url') != undefined) {
+            var url = $(this).attr('data-url');
+            window.open("/browser/link?url=" + url, '_blank');
+          }
           return false;
         });
 
@@ -159,7 +166,9 @@ function parseInlineSearchResults(results, tmpDotNotation) {
 // Steps through inlineResults and refreshes them based on the class
 function refreshInlineSearchResults() {
   $("div.inlineResults").each(function() {
-    var tmpDotNotation = $(this).attr('class').replace('inlineResults','').replace('loading','').replace('empty','').replace(/^\s+_/,'').replace(/\s+$/,'').replace(/_/g,'.');
-    loadInlineSearchResults(tmpDotNotation);
+    if ($(this).is(':visible')) {
+      var tmpDotNotation = $(this).attr('class').replace('inlineResults','').replace('loading','').replace('empty','').replace(/^\s+_/,'').replace(/\s+$/,'').replace(/_/g,'.');
+      loadInlineSearchResults(tmpDotNotation);
+    }
   });
 }
