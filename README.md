@@ -1,4 +1,0 @@
-browser
-=======
-
-inBloom Browser
