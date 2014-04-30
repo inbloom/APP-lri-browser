@@ -261,7 +261,4 @@ vendor
   vendor/rails/. This directory is in the load path.
 
  
-Licensing
-=========
-lri-browser is licensed under the Apache License, Version 2.0.See LICENSE-2.0 
-for full license text. 
+
