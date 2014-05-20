@@ -260,5 +260,6 @@ vendor
   subdirectory. If the app has frozen rails, those gems also go here, under
   vendor/rails/. This directory is in the load path.
 
- 
+== Licensing
+APP-lri-browser is licensed under the Apache License, Version 2.0. See LICENSE-2.0.txt for full license text.
 
